@@ -1,5 +1,7 @@
 # Násobilka s Lulu a Oskarem
 
+**Živá verze: https://motoanalytik-create.github.io/nasobilka/**
+
 Webová appka na trénink malé násobilky (1×1 až 10×10) pro děti na prvním stupni.
 
 Není postavená na správnosti, ale na **reakčním čase**: správná odpověď za šest vteřin
