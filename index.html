@@ -1,0 +1,3196 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>Násobilka s Lulu a Oskarem</title>
+<style>
+/* ============================================================
+   PALETA — světlý režim
+   ============================================================ */
+:root {
+  --paper:#ECEFE9; --backdrop:#E2E7DF; --card:#FFFFFF; --card-2:#F5F8F3;
+  --ink:#14313B; --ink-soft:#4A6570; --muted:#7C8F94;
+  --line:#DBE2D9; --line-soft:#E7ECE4;
+  --accent:#0E7C86; --accent-ink:#FFFFFF; --accent-soft:#D6E9EA; --accent-dim:#0B646C;
+  --saffron:#C98A12; --saffron-bg:#F7E4B8; --saffron-ink:#6B4703;
+  --jade:#23864B; --jade-bg:#CFEBD9; --jade-ink:#FFFFFF;
+  --stone:#E3E7DF; --stone-ink:#A9B5AC;
+  --berry:#B84A63;
+  --wool:#F0E4CE; --wool-2:#DCCBAE;
+  --hide:#6E4C35; --hide-2:#543826; --hide-3:#E6D8C2; --mane:#33241A;
+  --shadow-sm:0 1px 2px rgba(20,49,59,.07);
+  --shadow-md:0 2px 4px rgba(20,49,59,.06), 0 10px 28px rgba(20,49,59,.10);
+  --shadow-lg:0 8px 20px rgba(20,49,59,.10), 0 32px 60px rgba(20,49,59,.16);
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px;
+  --sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --num: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --scale: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#0F1A1E; --backdrop:#0A1316; --card:#16252B; --card-2:#1C2F36;
+    --ink:#E7EFEC; --ink-soft:#A9C0C5; --muted:#7F979D;
+    --line:#25393F; --line-soft:#1E3138;
+    --accent:#3EB2BB; --accent-ink:#06242A; --accent-soft:#12363B; --accent-dim:#57C6CE;
+    --saffron:#EFBE55; --saffron-bg:#3D2F10; --saffron-ink:#F6DFA8;
+    --jade:#4FC07C; --jade-bg:#14361F; --jade-ink:#06210F;
+    --stone:#1E3037; --stone-ink:#4E666E;
+    --berry:#DE8098;
+    --wool:#E8DCC5; --wool-2:#CBB99A;
+    --hide:#8A6144; --hide-2:#6B4830; --hide-3:#DCCDB4; --mane:#463226;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow-md:0 2px 4px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.45);
+    --shadow-lg:0 8px 20px rgba(0,0,0,.4), 0 32px 60px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#0F1A1E; --backdrop:#0A1316; --card:#16252B; --card-2:#1C2F36;
+  --ink:#E7EFEC; --ink-soft:#A9C0C5; --muted:#7F979D;
+  --line:#25393F; --line-soft:#1E3138;
+  --accent:#3EB2BB; --accent-ink:#06242A; --accent-soft:#12363B; --accent-dim:#57C6CE;
+  --saffron:#EFBE55; --saffron-bg:#3D2F10; --saffron-ink:#F6DFA8;
+  --jade:#4FC07C; --jade-bg:#14361F; --jade-ink:#06210F;
+  --stone:#1E3037; --stone-ink:#4E666E;
+  --berry:#DE8098;
+  --wool:#E8DCC5; --wool-2:#CBB99A;
+  --hide:#8A6144; --hide-2:#6B4830; --hide-3:#DCCDB4; --mane:#463226;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow-md:0 2px 4px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.45);
+  --shadow-lg:0 8px 20px rgba(0,0,0,.4), 0 32px 60px rgba(0,0,0,.55);
+}
+:root[data-text="velke"] { --scale: 1.18; }
+
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; margin:0; overscroll-behavior:none; }
+body {
+  background:var(--backdrop); color:var(--ink);
+  font-family:var(--sans); font-size:calc(17px * var(--scale));
+  line-height:1.45; -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+  -webkit-user-select:none; user-select:none;
+  -webkit-text-size-adjust:100%;   /* iOS „Větší text" nesmí rozsypat mřížku */
+}
+button { font-family:inherit; color:inherit; border:0; background:none; cursor:pointer; }
+h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
+
+#app { min-height:100dvh; display:flex; flex-direction:column; }
+
+.obr { display:none; flex:1; flex-direction:column; }
+.obr.je-videt { display:flex; }
+
+/* ---------- horní lišta ---------- */
+.lista {
+  display:flex; align-items:center; gap:10px;
+  padding:max(10px, env(safe-area-inset-top)) 14px 10px;
+  min-height:56px;
+}
+.lista-mezera { flex:1; }
+.ikonbtn {
+  width:44px; height:44px; border-radius:14px;
+  display:grid; place-items:center; color:var(--ink-soft);
+  background:var(--card); box-shadow:var(--shadow-sm);
+  transition:transform .12s ease, background .12s ease;
+}
+.ikonbtn:active { transform:scale(.92); }
+.ikonbtn svg { width:22px; height:22px; }
+.ikonbtn.je-vyp { color:var(--muted); opacity:.6; }
+
+.nadpis-lista { font-size:calc(19px * var(--scale)); font-weight:800; }
+
+/* ---------- postup relace ---------- */
+.postup { flex:1; display:flex; align-items:center; gap:10px; }
+.postup-drah { flex:1; height:10px; border-radius:99px; background:var(--stone); overflow:hidden; }
+.postup-vypln { height:100%; border-radius:99px; background:var(--accent); transition:width .35s cubic-bezier(.2,.8,.2,1); }
+.postup-text { font-variant-numeric:tabular-nums; font-size:calc(14px * var(--scale)); color:var(--muted); font-weight:700; min-width:52px; text-align:right; }
+
+/* ---------- obsah ---------- */
+.telo { flex:1; display:flex; flex-direction:column; padding:0 14px calc(14px + env(safe-area-inset-bottom)); gap:14px; min-height:0; }
+.telo.stred { justify-content:center; align-items:center; }
+.svitek { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; min-height:0; }
+
+.karta { background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-md); padding:20px; }
+
+/* ---------- otázka ---------- */
+.jeviste {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(8px, 2vh, 20px); min-height:0; position:relative;
+}
+.otazka {
+  font-family:var(--num); font-weight:600;
+  font-size:clamp(46px, min(13vw, 11vh), 104px);
+  letter-spacing:.01em; line-height:1; text-align:center;
+  font-variant-numeric:tabular-nums; display:flex; align-items:center; gap:.18em;
+  color:var(--ink);
+}
+.otazka .diri {
+  display:inline-grid; place-items:center;
+  min-width:1.1em; padding:0 .1em;
+  border-radius:.18em; background:var(--accent-soft);
+  color:var(--accent); border:.06em dashed var(--accent);
+}
+.otazka-popis { font-size:calc(16px * var(--scale)); color:var(--muted); font-weight:700; text-align:center; }
+
+/* velké číslo pro mapu */
+.velke-cislo {
+  font-family:var(--num); font-weight:600;
+  font-size:clamp(52px, min(15vw, 12vh), 112px); line-height:1;
+  color:var(--accent); font-variant-numeric:tabular-nums;
+}
+
+/* ---------- odpočet ---------- */
+.odpocet { height:8px; border-radius:99px; background:var(--stone); overflow:hidden; width:100%; max-width:640px; margin:0 auto; flex:none; }
+.odpocet-vypln { height:100%; width:100%; border-radius:99px; background:var(--accent); transform-origin:left center; transform:scaleX(1); }
+.odpocet.je-schovany { visibility:hidden; }
+
+/* ---------- volby ---------- */
+.volby { display:grid; gap:12px; width:100%; max-width:640px; margin:0 auto; flex:none; }
+.volby.tri { grid-template-columns:repeat(3, 1fr); }
+.volby.ctyri { grid-template-columns:repeat(2, 1fr); }
+@media (min-width:760px) and (orientation:landscape) { .volby.ctyri { grid-template-columns:repeat(4, 1fr); } }
+.volba {
+  min-height:clamp(72px, 11vh, 104px);
+  border-radius:var(--r-lg); background:var(--card); box-shadow:var(--shadow-md);
+  font-family:var(--num); font-weight:600; font-variant-numeric:tabular-nums;
+  font-size:clamp(30px, 7.5vw, 52px); color:var(--ink);
+  display:grid; place-items:center;
+  transition:transform .12s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+  border:2px solid transparent;
+}
+.volba:active { transform:scale(.96); }
+.volba.je-spravna { background:var(--jade); color:var(--jade-ink); border-color:var(--jade); }
+.volba.je-vybrana { background:var(--saffron-bg); color:var(--saffron-ink); border-color:var(--saffron); }
+.volba[disabled] { cursor:default; }
+.volby.je-zamknuta .volba:not(.je-spravna):not(.je-vybrana) { opacity:.35; }
+
+/* ---------- klávesnice ---------- */
+.displej {
+  font-family:var(--num); font-weight:600; font-variant-numeric:tabular-nums;
+  font-size:clamp(46px, min(13vw, 11vh), 104px); line-height:1;
+  min-width:2.2em; min-height:1.1em; padding:0 .16em;
+  border-radius:.16em; background:var(--accent-soft); color:var(--accent);
+  display:inline-grid; place-items:center;
+}
+.displej.je-prazdny::after { content:"?"; opacity:.45; }
+.klavesnice {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  width:100%; max-width:420px; margin:0 auto; flex:none;
+}
+.klavesa {
+  /* Výška se NEODVOZUJE od šířky. V portrétu je výšky dost, šířky ne. */
+  min-height:64px; height:clamp(64px, 10vh, 88px);
+  border-radius:var(--r-md); background:var(--card); box-shadow:var(--shadow-sm);
+  font-family:var(--num); font-weight:600; font-size:clamp(26px, 6vw, 38px);
+  display:grid; place-items:center; transition:transform .1s ease, background .1s ease;
+}
+@media (max-height:640px) { .klavesa { min-height:56px; height:56px; } }
+.klavesa:active { transform:scale(.94); background:var(--accent-soft); }
+.klavesa.smaz { color:var(--ink-soft); }
+.klavesa.smaz svg { width:30px; height:30px; }
+.klavesa.prazdna { visibility:hidden; }
+
+/* ---------- maskot ---------- */
+.maskot { width:clamp(64px, 15vh, 132px); height:auto; display:block; }
+.maskot-box { display:grid; place-items:center; flex:none; }
+.maskot .eye-happy { opacity:0; }
+.maskot.raduje .eye-open { opacity:0; }
+.maskot.raduje .eye-happy { opacity:1; }
+.maskot.raduje { animation:skok .42s cubic-bezier(.3,1.4,.5,1); }
+.maskot.mysli { animation:kyv 2.6s ease-in-out infinite; transform-origin:60% 90%; }
+@keyframes skok { 0%{transform:translateY(0) scale(1)} 40%{transform:translateY(-14%) scale(1.06)} 100%{transform:translateY(0) scale(1)} }
+@keyframes kyv { 0%,100%{transform:rotate(-1.2deg)} 50%{transform:rotate(1.2deg)} }
+@media (prefers-reduced-motion:reduce) { .maskot.raduje, .maskot.mysli { animation:none; } }
+
+/* ---------- bublina ---------- */
+.bublina {
+  background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-md);
+  padding:14px 18px; font-weight:700; color:var(--ink-soft); text-align:center;
+  font-size:calc(17px * var(--scale)); max-width:520px;
+}
+
+/* ---------- tlačítka ---------- */
+.tl {
+  min-height:64px; padding:0 28px; border-radius:var(--r-lg);
+  background:var(--accent); color:var(--accent-ink);
+  font-weight:800; font-size:calc(19px * var(--scale));
+  display:inline-grid; place-items:center; box-shadow:var(--shadow-md);
+  transition:transform .12s ease; width:100%; max-width:420px;
+}
+.tl:active { transform:scale(.97); }
+.tl.tiche { background:var(--card); color:var(--ink); }
+.tl.mala { min-height:52px; font-size:calc(16px * var(--scale)); }
+
+/* ---------- domů: dlaždice ---------- */
+.dlazdice { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; width:100%; max-width:620px; margin:0 auto; }
+.dlazdice .siroka { grid-column:1 / -1; }
+.dlazd {
+  background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-md);
+  padding:20px; display:flex; flex-direction:column; gap:6px; align-items:flex-start;
+  transition:transform .12s ease; text-align:left; min-height:104px; justify-content:center;
+}
+.dlazd:active { transform:scale(.97); }
+.dlazd .emo { font-size:30px; line-height:1; }
+.dlazd .nadp { font-weight:800; font-size:calc(19px * var(--scale)); }
+.dlazd .pod { font-size:calc(14px * var(--scale)); color:var(--muted); font-weight:600; }
+.dlazd.hlavni { background:var(--accent); color:var(--accent-ink); min-height:132px; }
+.dlazd.hlavni .pod { color:var(--accent-ink); opacity:.8; }
+
+/* ---------- mřížka / mapa ---------- */
+.mrizka-obal { width:100%; display:flex; justify-content:center; }
+/* Přehledová mapa je obrázek pokroku, ne ovládací prvek — malá políčka nevadí,
+   ale posouvat se musí uvnitř sebe, ne celou stránkou. */
+.mrizka-svitek { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:4px; }
+.mrizka-svitek > .mrizka { min-width:340px; }
+@media (max-width:480px) { .mrizka { gap:3px; } }
+.mrizka {
+  display:grid; grid-template-columns:repeat(11, 1fr);
+  gap:clamp(2px, .5vw, 5px); width:100%;
+  max-width:min(96vw, 62vh, 560px);
+}
+/* V režimu „najdi výsledek" se kreslí jen odemčené řady a sloupce a mřížka
+   dostane celou zbylou výšku obrazovky — políčko není čtverec, roztáhne se.
+   Nic se nesmí schovat pod okraj: na odpověď je pět vteřin, není čas scrollovat. */
+.levy { display:flex; flex-direction:column; gap:14px; flex:1 1 auto; min-height:0; }
+.telo.s-mapou .levy { flex:0 0 auto; }
+.telo.s-mapou .jeviste { flex:0 0 auto; }
+.telo.s-mapou .jeviste .maskot-box { display:none; }
+.telo.s-mapou #tr-odpoved { flex:1 1 auto; min-height:0; display:flex; }
+.telo.s-mapou .mrizka-obal { flex:1; min-height:0; align-items:stretch; }
+
+/* Na šířku (telefon otočený naležato) je výšky málo a šířky dost:
+   otázka doleva, odpověď doprava. Otočení uprostřed příkladu tím nic nerozbije —
+   odpočet je CSS přechod, ten změnu rozměru přežije. */
+@media (orientation:landscape) and (max-height:560px) {
+  #obr-trenink .telo { flex-direction:row; align-items:stretch; gap:16px; }
+  #obr-trenink .levy { flex:0 0 36%; min-width:180px; justify-content:center; }
+  #obr-trenink .jeviste { flex:1 1 auto; }
+  #obr-trenink #tr-odpoved { flex:1 1 auto; min-height:0; display:flex;
+                             flex-direction:column; justify-content:center; }
+  #obr-trenink .telo.s-mapou .levy { flex:0 0 30%; }
+  #obr-trenink .jeviste .maskot-box { display:none; }
+  #obr-trenink .volby { max-width:none; }
+  #obr-trenink .klavesnice { max-width:320px; }
+  #obr-trenink .mrizka.v-treninku .bunka { min-height:38px; }
+  .oprava .veta { font-size:clamp(30px, 6vw, 52px); }
+}
+.mrizka.v-treninku {
+  max-width:min(100%, 560px); gap:clamp(3px, 1.1vw, 8px);
+  height:100%; align-content:stretch;
+}
+.mrizka.v-treninku .bunka {
+  aspect-ratio:auto; min-height:44px;
+  font-size:clamp(15px, 4.4vw, 26px); border-radius:clamp(8px, 2vw, 14px);
+}
+.mrizka.v-treninku .bunka.hlavicka { min-height:0; font-size:clamp(13px, 3.6vw, 20px); }
+/* na úzkém telefonu ať mřížka využije i vodorovné okraje */
+@media (max-width:480px) { .telo.s-mapou #tr-odpoved { margin:0 -8px; } }
+.bunka {
+  aspect-ratio:1; border-radius:clamp(4px, 1vw, 9px);
+  display:grid; place-items:center;
+  font-family:var(--num); font-weight:600; font-variant-numeric:tabular-nums;
+  font-size:clamp(9px, 2.1vw, 17px); line-height:1;
+  background:var(--stone); color:var(--stone-ink);
+  transition:transform .12s ease, background .2s ease;
+}
+.bunka.hlavicka { background:transparent; color:var(--ink-soft); font-weight:800; font-size:clamp(9px, 2.2vw, 18px); }
+.bunka.rohova { background:transparent; }
+.bunka.uci-se { background:var(--saffron-bg); color:var(--saffron-ink); }
+.bunka.zvladnuta { background:var(--jade-bg); color:var(--jade); font-size:clamp(11px, 2.6vw, 22px); }
+.bunka.klikaci { cursor:pointer; box-shadow:var(--shadow-sm); }
+.bunka.klikaci:active { transform:scale(.9); }
+.bunka.nedostupna { opacity:.42; }
+.bunka.trefa { background:var(--jade); color:var(--jade-ink); animation:puls .4s ease; }
+.bunka.vedle { background:var(--saffron-bg); border:2px solid var(--saffron); }
+.bunka.ukaz { background:var(--jade); color:var(--jade-ink); animation:puls .5s ease 2; }
+.bunka.zvyraz { outline:3px solid var(--accent); outline-offset:1px; }
+@keyframes puls { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+
+.legenda { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; font-size:calc(13px * var(--scale)); color:var(--muted); font-weight:700; }
+.legenda span { display:flex; align-items:center; gap:6px; }
+.legenda i { width:16px; height:16px; border-radius:5px; display:block; }
+
+/* ---------- pokrok ---------- */
+.statrada { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:12px; }
+.stat { background:var(--card); border-radius:var(--r-md); box-shadow:var(--shadow-sm); padding:16px; }
+.stat .cis { font-family:var(--num); font-weight:600; font-size:calc(34px * var(--scale)); line-height:1.1; color:var(--accent); font-variant-numeric:tabular-nums; }
+.stat .pop { font-size:calc(13px * var(--scale)); color:var(--muted); font-weight:700; margin-top:4px; }
+.sbirka { display:flex; flex-wrap:wrap; gap:6px; }
+.sbirka .kus { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; font-size:21px; background:var(--jade-bg); }
+.sbirka .kus.prazdny { background:var(--stone); opacity:.5; font-size:15px; color:var(--stone-ink); }
+.tyden { display:flex; gap:8px; align-items:flex-end; height:110px; }
+.tyden .den { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; justify-content:flex-end; height:100%; }
+.tyden .sloup { width:100%; max-width:34px; border-radius:8px 8px 4px 4px; background:var(--accent); min-height:5px; transition:height .3s ease; }
+.tyden .sloup.nula { background:var(--stone); }
+.tyden .lab { font-size:calc(12px * var(--scale)); color:var(--muted); font-weight:700; }
+.seznam-drhne { display:flex; flex-direction:column; gap:8px; }
+.drhne-radek { display:flex; align-items:center; gap:12px; background:var(--card-2); border-radius:var(--r-sm); padding:10px 14px; }
+.drhne-radek .pr { font-family:var(--num); font-weight:600; font-size:calc(22px * var(--scale)); font-variant-numeric:tabular-nums; }
+.drhne-radek .cas { margin-left:auto; font-size:calc(13px * var(--scale)); color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums; }
+
+/* ---------- objevovna ---------- */
+.rozklady { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.rozklad {
+  background:var(--card); border-radius:var(--r-md); box-shadow:var(--shadow-sm);
+  padding:12px 18px; font-family:var(--num); font-weight:600; font-size:calc(24px * var(--scale));
+  font-variant-numeric:tabular-nums; border:2px solid transparent; transition:transform .12s ease;
+}
+.rozklad:active { transform:scale(.95); }
+.rozklad.je-vybrany { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
+.tecky { display:grid; gap:clamp(3px,1vw,7px); justify-content:center; }
+.tecky i { width:clamp(9px,2.4vw,20px); height:clamp(9px,2.4vw,20px); border-radius:50%; background:var(--accent); display:block; }
+.tecky.je-ctverec i { background:var(--saffron); }
+
+/* ---------- oslava ---------- */
+.oslava { display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center; }
+.oslava h2 { font-size:calc(30px * var(--scale)); }
+.odemceno { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.odemceno .kus { width:56px; height:56px; border-radius:16px; background:var(--jade-bg); display:grid; place-items:center; font-size:30px; animation:pop .5s cubic-bezier(.3,1.5,.5,1) backwards; }
+@keyframes pop { from{transform:scale(0) rotate(-25deg); opacity:0} to{transform:scale(1) rotate(0); opacity:1} }
+
+/* ---------- overlay ---------- */
+.zaves {
+  position:fixed; inset:0; background:color-mix(in srgb, var(--backdrop) 88%, transparent);
+  backdrop-filter:blur(6px); display:none; place-items:center; padding:20px; z-index:40;
+}
+.zaves.je-videt { display:grid; }
+.zaves-karta { background:var(--card); border-radius:var(--r-xl); box-shadow:var(--shadow-lg); padding:28px 24px; max-width:520px; width:100%; text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px; }
+
+/* ---------- oprava (chyba / čas) ---------- */
+.oprava { display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; }
+.oprava .veta {
+  font-family:var(--num); font-weight:600; font-variant-numeric:tabular-nums;
+  font-size:clamp(38px, min(11vw, 9vh), 78px); line-height:1;
+  color:var(--ink); background:var(--saffron-bg); border-radius:var(--r-lg);
+  padding:.18em .3em;
+}
+.oprava .hlaska { font-weight:700; color:var(--ink-soft); font-size:calc(18px * var(--scale)); }
+
+/* ---------- pomocné ---------- */
+.tip { background:var(--saffron-bg); color:var(--saffron-ink); border-radius:var(--r-md); padding:14px 18px; font-weight:700; font-size:calc(16px * var(--scale)); text-align:center; }
+.sekce-nadpis { font-weight:800; font-size:calc(15px * var(--scale)); color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
+.mimo { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.stack { display:flex; flex-direction:column; gap:16px; }
+.radek { display:flex; align-items:center; gap:12px; }
+.centr { display:flex; flex-direction:column; align-items:center; gap:14px; }
+
+.nast-radek { display:flex; align-items:center; gap:12px; font-weight:700; min-height:48px; }
+.nast-radek > span:first-child { flex:1; }
+.prep {
+  min-height:40px; padding:0 16px; border-radius:12px; background:var(--card-2);
+  color:var(--ink-soft); font-weight:800; font-size:calc(15px * var(--scale));
+  box-shadow:var(--shadow-sm); min-width:96px;
+}
+.prep.je-zap { background:var(--accent); color:var(--accent-ink); }
+
+#testy-vystup { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:13px; white-space:pre-wrap; padding:16px; line-height:1.5; }
+</style>
+
+<div id="app">
+
+  <!-- ============ ÚVOD ============ -->
+  <section class="obr" id="obr-uvod">
+    <div class="telo stred">
+      <div class="centr" style="max-width:560px">
+        <div class="maskot-box" id="uvod-lulu"></div>
+        <h1 style="font-size:calc(30px * var(--scale)); text-align:center">Ahoj, já jsem Lulu!</h1>
+        <div class="bublina" id="uvod-text">
+          Naučíme se násobilku tak, že ti bude naskakovat sama od sebe.<br>
+          Nejdřív ti ukážu, kolik toho už umíš.
+        </div>
+        <div id="uvod-varovani" style="display:none"></div>
+        <button class="tl" id="uvod-dal">Jdeme na to</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ „JE JICH JEN 36" ============ -->
+  <section class="obr" id="obr-tricetsest">
+    <div class="telo stred">
+      <div class="centr" style="max-width:560px">
+        <div class="maskot-box" id="ts-oskar"></div>
+        <div style="font-family:var(--num); font-weight:600; font-size:clamp(72px,20vw,140px); line-height:1; color:var(--accent)">36</div>
+        <div class="bublina" id="ts-text"></div>
+        <button class="tl" id="ts-dal">Ukaž mi mapu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOMŮ ============ -->
+  <section class="obr" id="obr-domu">
+    <div class="lista">
+      <div class="nadpis-lista">Násobilka</div>
+      <div class="lista-mezera"></div>
+      <button class="ikonbtn" id="btn-zvuk" aria-label="Zvuk"></button>
+      <button class="ikonbtn" id="btn-nastaveni" aria-label="Nastavení"></button>
+    </div>
+    <div class="telo">
+      <div class="svitek">
+        <div class="stack" style="max-width:620px; margin:0 auto; padding-bottom:20px">
+          <div class="radek" style="justify-content:center; gap:16px">
+            <div class="maskot-box" id="domu-lulu" style="width:96px"></div>
+            <div class="bublina" style="flex:1" id="domu-pozdrav"></div>
+          </div>
+          <div id="domu-varovani" style="display:none"></div>
+          <div class="dlazdice">
+            <button class="dlazd hlavni siroka" id="dl-trenink">
+              <span class="emo">🎯</span>
+              <span class="nadp">Trénink</span>
+              <span class="pod" id="dl-trenink-pod">5 minut s Lulu</span>
+            </button>
+            <button class="dlazd" id="dl-mapa">
+              <span class="emo">🗺️</span>
+              <span class="nadp">Mapa</span>
+              <span class="pod" id="dl-mapa-pod"></span>
+            </button>
+            <button class="dlazd" id="dl-pokrok">
+              <span class="emo">🏅</span>
+              <span class="nadp">Pokrok</span>
+              <span class="pod" id="dl-pokrok-pod"></span>
+            </button>
+            <button class="dlazd siroka" id="dl-objevovna">
+              <span class="emo">🔭</span>
+              <span class="nadp">Objevovna</span>
+              <span class="pod">Hraj si s čísly. Bez času, bez hodnocení.</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZAHŘÍVACÍ KOLO — úvod řady ============ -->
+  <section class="obr" id="obr-radaUvod">
+    <div class="telo stred">
+      <div class="centr" style="max-width:560px">
+        <div class="maskot-box" id="rada-lulu"></div>
+        <h2 id="rada-nadpis" style="font-size:calc(26px * var(--scale)); text-align:center"></h2>
+        <div class="tip" id="rada-tip"></div>
+        <button class="tl" id="rada-dal">Zkusit</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZAVEDENÍ NOVÉHO FAKTU ============ -->
+  <section class="obr" id="obr-zavedeni">
+    <div class="telo stred">
+      <div class="centr" style="max-width:560px; width:100%">
+        <div class="maskot-box" id="zav-lulu"></div>
+        <div class="otazka-popis">Nový příklad</div>
+        <div class="otazka" id="zav-priklad"></div>
+        <div class="tip" id="zav-tip" style="display:none"></div>
+        <div class="otazka-popis" id="zav-vyzva">Napiš ho po mně</div>
+        <div class="displej je-prazdny" id="zav-displej"></div>
+        <div class="klavesnice" id="zav-klavesnice"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRÉNINK ============ -->
+  <section class="obr" id="obr-trenink">
+    <div class="lista">
+      <button class="ikonbtn" id="tr-zpet" aria-label="Zpět domů"></button>
+      <div class="postup">
+        <div class="postup-drah"><div class="postup-vypln" id="tr-postup"></div></div>
+        <div class="postup-text" id="tr-postup-text">0/40</div>
+      </div>
+      <button class="ikonbtn" id="tr-zvuk" aria-label="Zvuk"></button>
+    </div>
+    <div class="telo">
+      <div class="levy">
+        <div class="jeviste" id="tr-jeviste">
+          <div class="maskot-box" id="tr-lulu"></div>
+          <div id="tr-zadani"></div>
+        </div>
+        <div class="odpocet" id="tr-odpocet"><div class="odpocet-vypln" id="tr-odpocet-vypln"></div></div>
+      </div>
+      <div id="tr-odpoved"></div>
+    </div>
+  </section>
+
+  <!-- ============ KONEC RELACE ============ -->
+  <section class="obr" id="obr-konec">
+    <div class="telo stred">
+      <div class="svitek" style="width:100%; display:flex; align-items:center; justify-content:center">
+        <div class="oslava" style="max-width:560px; width:100%; padding:20px 0">
+          <div class="maskot-box" id="konec-lulu"></div>
+          <h2 id="konec-nadpis">Hotovo!</h2>
+          <div class="bublina" id="konec-text"></div>
+          <div class="statrada" style="width:100%" id="konec-staty"></div>
+          <div id="konec-odemceno"></div>
+          <button class="tl" id="konec-mapa">Podívat se do mapy</button>
+          <button class="tl tiche mala" id="konec-domu">Domů</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAPA ============ -->
+  <section class="obr" id="obr-mapa">
+    <div class="lista">
+      <button class="ikonbtn" id="mapa-zpet" aria-label="Zpět"></button>
+      <div class="nadpis-lista">Mapa</div>
+      <div class="lista-mezera"></div>
+    </div>
+    <div class="telo">
+      <div class="svitek">
+        <div class="stack" style="max-width:620px; margin:0 auto; align-items:center; padding-bottom:20px">
+          <div class="radek" style="gap:14px; width:100%">
+            <div class="maskot-box" id="mapa-oskar" style="width:84px; flex:none"></div>
+            <div class="bublina" style="flex:1" id="mapa-bublina"></div>
+          </div>
+          <div class="mrizka-obal"><div class="mrizka" id="mapa-mrizka"></div></div>
+          <div class="legenda">
+            <span><i style="background:var(--stone)"></i> ještě neznáme</span>
+            <span><i style="background:var(--saffron-bg)"></i> učíme se</span>
+            <span><i style="background:var(--jade-bg)"></i> umím zpaměti</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POKROK ============ -->
+  <section class="obr" id="obr-pokrok">
+    <div class="lista">
+      <button class="ikonbtn" id="pokrok-zpet" aria-label="Zpět"></button>
+      <div class="nadpis-lista">Pokrok</div>
+      <div class="lista-mezera"></div>
+    </div>
+    <div class="telo">
+      <div class="svitek">
+        <div class="stack" style="max-width:620px; margin:0 auto; padding-bottom:24px" id="pokrok-obsah"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OBJEVOVNA ============ -->
+  <section class="obr" id="obr-objevovna">
+    <div class="lista">
+      <button class="ikonbtn" id="obj-zpet" aria-label="Zpět"></button>
+      <div class="nadpis-lista">Objevovna</div>
+      <div class="lista-mezera"></div>
+      <button class="ikonbtn" id="obj-prepni" aria-label="Přepnout zadávání"></button>
+    </div>
+    <div class="telo">
+      <div class="svitek">
+        <div class="stack" style="max-width:620px; margin:0 auto; align-items:center; padding-bottom:24px">
+          <div class="bublina">Klepni na políčko a ukážu ti, jak se to číslo dá poskládat.</div>
+          <div id="obj-vstup" style="width:100%; display:flex; justify-content:center"></div>
+          <div id="obj-vysledek" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTY ============ -->
+  <section class="obr" id="obr-testy">
+    <div class="lista"><div class="nadpis-lista">Testy logiky</div></div>
+    <div class="telo"><div class="svitek"><div id="testy-vystup"></div></div></div>
+  </section>
+
+  <!-- ============ NASTAVENÍ ============ -->
+  <div class="zaves" id="zaves-nastaveni">
+    <div class="zaves-karta" style="text-align:left; align-items:stretch; gap:12px">
+      <div class="radek">
+        <h2 style="font-size:calc(22px * var(--scale))">Nastavení</h2>
+        <div class="lista-mezera"></div>
+        <button class="ikonbtn" id="nast-zavri" aria-label="Zavřít"></button>
+      </div>
+      <div class="nast-radek"><span>Zvuk</span><button class="prep" id="nast-zvuk"></button></div>
+      <div class="nast-radek"><span>Mluvené slovo</span><button class="prep" id="nast-rec"></button></div>
+      <div class="nast-radek"><span>Velké písmo</span><button class="prep" id="nast-pismo"></button></div>
+      <div class="nast-radek"><span>Vzhled</span><button class="prep" id="nast-motiv"></button></div>
+
+      <div class="sekce-nadpis" style="margin-top:8px">Záloha postupu</div>
+      <div style="font-size:calc(14px * var(--scale)); color:var(--muted); font-weight:600; line-height:1.4">
+        Safari na iPadu a iPhonu umí smazat uložený postup, když se aplikace týden nepoužije.
+        Uložte si zálohu, ať o zvířátka nepřijdete.
+      </div>
+      <button class="tl tiche mala" id="nast-zaloha" style="max-width:none">Zálohovat postup</button>
+      <button class="tl tiche mala" id="nast-obnova" style="max-width:none">Obnovit ze zálohy</button>
+      <div id="nast-hlaska" style="font-size:calc(14px * var(--scale)); font-weight:700; color:var(--accent); min-height:1.4em"></div>
+      <button class="tl tiche mala" id="nast-reset" style="max-width:none; color:var(--berry)">Začít úplně od začátku</button>
+    </div>
+  </div>
+
+  <!-- ============ PŘIDEJ NA PLOCHU (jen iOS Safari, jednorázově) ============ -->
+  <div class="zaves" id="zaves-plocha">
+    <div class="zaves-karta">
+      <div class="maskot-box" id="plocha-lulu" style="width:96px"></div>
+      <h2 style="font-size:calc(22px * var(--scale))">Přidej mě na plochu</h2>
+      <div style="color:var(--ink-soft); font-weight:700; line-height:1.5">
+        Klepni dole na <b>Sdílet</b> a pak na <b>Přidat na plochu</b>.<br>
+        Budu se otvírat jedním ťuknutím a hlavně si tak spolehlivě zapamatuju tvůj postup.
+      </div>
+      <button class="tl" id="plocha-ok">Rozumím</button>
+      <button class="tl tiche mala" id="plocha-pozdeji">Připomeň mi to později</button>
+    </div>
+  </div>
+
+  <!-- ============ PAUZA ============ -->
+  <div class="zaves" id="zaves-pauza">
+    <div class="zaves-karta">
+      <div style="font-size:44px">⏸️</div>
+      <h2 style="font-size:calc(24px * var(--scale))">Pauza</h2>
+      <div style="color:var(--ink-soft); font-weight:700">Až budeš chtít, jedeme dál.</div>
+      <button class="tl" id="pauza-dal">Pokračovat</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+"use strict";
+
+/* ============================================================================
+   1) KONFIGURACE — všechno laditelné je tady, nikde jinde v souboru.
+   ============================================================================ */
+var K = {
+  /* --- časové limity (sekundy) ---
+     Záměrně stejné na všech třech úrovních. Pět vteřin nestačí na dopočítání
+     ani na jedné z nich; jednotný limit znamená, že přechod na psaní nepřinese
+     kromě jiného vstupu i skokové zrychlení. */
+  limitStage1: 5,
+  limitStage2: 5,
+  limitStage3: 5,
+  limitZahrivaci: 5,
+
+  /* --- dávkování --- */
+  maxAktivnichFaktu: 6,       // kolik faktů se smí učit současně
+  stageProUvolneni: 3,        // aktivní fakt uvolní místo, až dosáhne této úrovně…
+  boxProUvolneni: 4,          // …a tohoto boxu
+
+  /* --- postupová logika --- */
+  spravneProPostup: 3,        // správně a včas v řadě → stage++
+  chybProPokles: 2,           // chyb / vypršení v řadě → stage--
+
+  /* --- relace ---
+     První kolo dne je plné. Kdo chce pokračovat, dostane kratší — pokračování
+     nemá být znovu celých pět minut, to je cesta k přesycení. Poslední hodnota
+     platí pro třetí a každé další kolo téhož dne. */
+  delkyRelaci: [40, 20, 10],
+  maxMinutRelace: 6,          // tvrdý strop, kdyby se zasekla
+  podilKonceRelace: 0.75,     // od jaké části relace se doplňují fakty z boxu 3
+
+  /* --- možnosti (úroveň 1) --- */
+  moznostiNovyFakt: 3,        // nově zavedený fakt → 3 tlačítka
+  moznostiJindy: 4,           // od druhé relace dál → 4 tlačítka
+
+  /* --- reverzní tvar (□ × 8 = 56) --- */
+  reverzVeStage1: 0.5,        // u faktů, které už byly minimálně ve stage 2
+  reverzVeStage3: 0.25,       // navíc: kontrola u dobře zvládnutých faktů (box ≥ 3)
+
+  /* --- Leitner --- */
+  boxVRelaci: { 0: 3, 1: 3, 2: 8 },        // za kolik příkladů se fakt vrátí
+  boxDny: { 4: 1, 5: 3 },                   // za kolik dní
+
+  novychNaPriklad: 10,        // kolik příkladů relace připadá na jeden nový fakt:
+                              // 40 → 4 nové, 20 → 2, 10 → 1. Kratší kolo tedy
+                              // neznamená jen míň otázek, ale i míň nového učiva.
+  novyKazdych: 8,             // nejdřív po tolika příkladech smí přibýt další
+  minAktivnichFaktu: 3,       // pod tímhle počtem se nový fakt zavádí rychleji:
+  novyKazdychNaStart: 3,      // jeden jediný fakt dokola není vybavování z paměti,
+                              // jen ozvěna v krátkodobé paměti
+  minFrontyVRelaci: 5,        // absolutní minimum příkladů ve frontě
+  maxOpakovaniPrikladu: 5,    // kolikrát nejvíc se má příklad v relaci objevit; z toho
+                              // se dopočítá, kolik jich musí být ve frontě (40 / 5 = 8)
+  zNejstarsichVybirat: 3,     // z kolika nejdéle neviděných se losuje (1 = tvrdá rotace)
+  prolozeniJinym: 0.35,       // jak často mezi splatné příklady vklouzne opakování.
+                              // Škáluje se: čím míň je zrovna splatných, tím větší
+                              // hrozí zacyklení, tím častěji se proloží. 0 = nikdy.
+
+  /* --- ostatní --- */
+  minSirkaPolicka: 44,        // pod tuhle šířku (px) políčko mapy nesmí klesnout;
+                              // když se odemčené řady přestanou vejít, ukáže se jen výřez
+  rychlaOdpovedMs: 2500,      // pod tímhle to bereme jako „z paměti"
+  animaceSpravneMs: 420,      // jak dlouho maskot slaví
+  pauzaPoSpravneMs: 260       // než přijde další otázka
+};
+
+/* ============================================================================
+   2) ČISTÁ LOGIKA — bez DOM, bez globálního stavu. Testovatelné (viz §12).
+   ============================================================================ */
+var L = {};
+
+L.idFaktu = function (a, b) {
+  return Math.min(a, b) + "x" + Math.max(a, b);
+};
+
+L.pocetCifer = function (n) { return String(Math.abs(n)).length; };
+
+/* Všech 55 faktů 1×1 až 10×10 jako neuspořádané dvojice. */
+L.vsechnyFakty = function () {
+  var out = [];
+  for (var a = 1; a <= 10; a++) {
+    for (var b = a; b <= 10; b++) {
+      out.push({
+        id: L.idFaktu(a, b), a: a, b: b, product: a * b,
+        status: "nova", stage: 1, maxStage: 1, box: 0,
+        streak: 0, errStreak: 0,
+        nextDue: null, dueAt: null, konecRelace: false,
+        videnoRelaci: 0, posledniTs: 0, history: []
+      });
+    }
+  }
+  return out;
+};
+
+/* Fakty řad ×1 a ×10 — triviální, jdou v zahřívacím kole rovnou na zelenou. */
+L.jeTrivialni = function (f) { return f.a === 1 || f.b === 1 || f.a === 10 || f.b === 10; };
+
+/* Jádro k naučení: řady 2–9. Mělo by jich být 36. */
+L.jeJadro = function (f) { return !L.jeTrivialni(f); };
+
+/* Pořadí zavádění podle §6. */
+L.PORADI_RAD = [2, 5, "ctverce", 3, 4, 9, 6, 7, 8];
+
+L.poradiZavedeni = function () {
+  var out = [], mam = {};
+  function pridej(a, b) {
+    var id = L.idFaktu(a, b);
+    if (mam[id]) return;
+    if (a < 2 || a > 9 || b < 2 || b > 9) return;   // jen jádro
+    mam[id] = true; out.push(id);
+  }
+  for (var i = 0; i < L.PORADI_RAD.length; i++) {
+    var rada = L.PORADI_RAD[i];
+    if (rada === "ctverce") {
+      for (var c = 2; c <= 9; c++) pridej(c, c);
+    } else {
+      for (var x = 2; x <= 9; x++) pridej(rada, x);
+    }
+  }
+  return out;
+};
+
+/* --- pozice správné odpovědi: rovnoměrně, ne náhodně (§5.5) --- */
+L.novyPozicniStav = function () { return { 2: [0,0], 3: [0,0,0], 4: [0,0,0,0] }; };
+
+L.vyberPozici = function (pocet, pozicniStav, rnd) {
+  var pocty = pozicniStav[pocet];
+  if (!pocty) { pocty = []; for (var j = 0; j < pocet; j++) pocty.push(0); pozicniStav[pocet] = pocty; }
+  var min = Infinity, kand = [];
+  for (var i = 0; i < pocet; i++) {
+    if (pocty[i] < min) { min = pocty[i]; kand = [i]; }
+    else if (pocty[i] === min) kand.push(i);
+  }
+  var p = kand[Math.floor(rnd() * kand.length) % kand.length];
+  pocty[p]++;
+  return p;
+};
+
+/* --- distraktory (§5) ---
+   tvar: "soucin"   → ptáme se na a×b
+         "cinitelA" → □ × b = a·b, odpověď je a
+         "cinitelB" → a × □ = a·b, odpověď je b            */
+L.generujMoznosti = function (a, b, tvar, pocet, pozicniStav, rnd) {
+  rnd = rnd || Math.random;
+  var soucin = a * b;
+  var spravna, zakazane, poolA = [], poolB = [], poolC = [];
+  var i, x, y, p;
+
+  if (tvar === "soucin") {
+    spravna = soucin;
+    zakazane = [a, b];                                   // odpovědi na jiný tvar téže otázky
+    if (b > 1) poolA.push(a * (b - 1));
+    if (b < 10) poolA.push(a * (b + 1));
+    if (a > 1) poolA.push((a - 1) * b);
+    if (a < 10) poolA.push((a + 1) * b);
+    for (x = 1; x <= 10; x++) for (y = x; y <= 10; y++) {
+      p = x * y;
+      if (p !== soucin && Math.abs(p - soucin) <= 15) poolB.push(p);
+    }
+    poolB.sort(function (m, n) { return Math.abs(m - soucin) - Math.abs(n - soucin); });
+    var kroky = [a, b, 1, 2, 3, 10, 11, 20];
+    for (i = 0; i < kroky.length; i++) { poolC.push(soucin + kroky[i], soucin - kroky[i]); }
+  } else {
+    var skryty = (tvar === "cinitelA") ? a : b;
+    var videny = (tvar === "cinitelA") ? b : a;
+    spravna = skryty;
+    zakazane = [videny, soucin];
+    poolA = [skryty - 1, skryty + 1, skryty - 2, skryty + 2];
+    for (x = 1; x <= 10; x++) if (x !== skryty) poolB.push(x);
+    poolB.sort(function (m, n) { return Math.abs(m - skryty) - Math.abs(n - skryty); });
+    poolC = poolB.slice();
+  }
+
+  var cifer = L.pocetCifer(spravna);
+  zakazane = zakazane.filter(function (v) { return v !== spravna; });
+
+  var vybrane = [];
+  function jeOk(v) {
+    return v > 0 && Number.isInteger(v) && L.pocetCifer(v) === cifer &&
+           v !== spravna && zakazane.indexOf(v) < 0 && vybrane.indexOf(v) < 0;
+  }
+  function ber(pool, kolik, michat) {
+    var kop = pool.filter(jeOk);
+    if (michat) kop = L.zamichej(kop, rnd);
+    // duplicity uvnitř poolu odfiltruje jeOk při přidávání
+    for (var j = 0; j < kop.length && kolik > 0; j++) {
+      if (jeOk(kop[j])) { vybrane.push(kop[j]); kolik--; }
+    }
+    return kolik;
+  }
+
+  var potreba = pocet - 1;
+  var zPoolA = Math.min(potreba - 1, 2);         // 4 možnosti → 2, 3 možnosti → 1
+  ber(poolA, zPoolA, true);
+  // „klasická záměna": bereme z bližší poloviny poolu B, ale ne úplně deterministicky
+  ber(L.zamichej(poolB.slice(0, Math.max(4, Math.ceil(poolB.length / 2))), rnd), 1, false);
+  var zbyva = potreba - vybrane.length;
+  if (zbyva > 0) zbyva = ber(poolB, zbyva, true);
+  if (zbyva > 0) zbyva = ber(poolC, zbyva, true);
+  if (zbyva > 0) {                                // úplná nouze: dopočítáme cokoli se stejným počtem cifer
+    var dolni = Math.pow(10, cifer - 1), horni = Math.pow(10, cifer) - 1;
+    if (cifer === 1) dolni = 1;
+    for (var v = dolni; v <= horni && zbyva > 0; v++) {
+      if (jeOk(v)) { vybrane.push(v); zbyva--; }
+    }
+  }
+
+  var moznosti = L.zamichej(vybrane.slice(0, potreba), rnd);
+  var pozice = L.vyberPozici(pocet, pozicniStav, rnd);
+  moznosti.splice(pozice, 0, spravna);
+  return { moznosti: moznosti, spravna: spravna, pozice: pozice, tvar: tvar };
+};
+
+L.zamichej = function (pole, rnd) {
+  rnd = rnd || Math.random;
+  var a = pole.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(rnd() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+};
+
+/* --- který tvar otázky použít --- */
+L.vyberTvar = function (f, stage, rnd) {
+  rnd = rnd || Math.random;
+  var lzeReverz = f.a >= 2 && f.a <= 9 && f.b >= 2 && f.b <= 9 && f.maxStage >= 2;
+  if (!lzeReverz) return "soucin";
+  if (stage === 1 && rnd() < K.reverzVeStage1) return rnd() < 0.5 ? "cinitelA" : "cinitelB";
+  if (stage === 3 && f.maxStage >= 3 && f.box >= 3 && rnd() < K.reverzVeStage3) {
+    return rnd() < 0.5 ? "cinitelA" : "cinitelB";
+  }
+  return "soucin";
+};
+
+/* Ze seřazeného seznamu vezmeme náhodně jeden z několika prvních. Pořadí podle
+   naléhavosti zůstává, ale nevzniká přesná rotace, na kterou si dítě zvykne
+   dřív než na násobilku. */
+L.zNejstarsich = function (pole, rnd) {
+  if (pole.length <= 1) return pole[0];
+  var kolik = Math.min(pole.length, Math.max(1, K.zNejstarsichVybirat));
+  return pole[Math.floor((rnd || Math.random)() * kolik)];
+};
+
+/* --- výběr dalšího faktu (§7) --- */
+L.vyberDalsiFakt = function (fakty, frontaIds, ctx) {
+  var rnd = ctx.rnd || Math.random;
+  var kand = [];
+  for (var i = 0; i < frontaIds.length; i++) {
+    var f = fakty[frontaIds[i]];
+    if (f) kand.push(f);
+  }
+  if (!kand.length) return null;
+  var jine = kand.filter(function (f) { return f.id !== ctx.posledniId; });
+  var zdroj = jine.length ? jine : kand;      // nikdy dvakrát po sobě, pokud je z čeho brát
+
+  var vRelaci = zdroj.filter(function (f) { return f.dueAt != null && f.dueAt <= ctx.index; });
+  if (vRelaci.length) {
+    // Fakty v boxu 1 se vracejí každé tři příklady, takže jsou pořád všechny
+    // splatné a relace se zacyklí — k zásobě na opakování se jinak vůbec
+    // nedostane. Zvlášť v pokračovacím kole, kde se zrovna učí jen dva příklady
+    // a vzniká z nich přesné střídání. Proto mezi ně sem tam pustíme opakování:
+    // čím míň je splatných, tím větší hrozí zacyklení a tím častěji proložíme.
+    var ostatni = zdroj.filter(function (f) { return vRelaci.indexOf(f) < 0; });
+    if (ostatni.length) {
+      var sance = K.prolozeniJinym;
+      if (vRelaci.length <= 2) sance *= 1.4;
+      else if (vRelaci.length >= 4) sance *= 0.5;
+      if (rnd() < sance) {
+        ostatni.sort(function (m, n) { return m.posledniTs - n.posledniTs; });
+        return L.zNejstarsich(ostatni, rnd);
+      }
+    }
+    vRelaci.sort(function (m, n) { return m.dueAt - n.dueAt || m.posledniTs - n.posledniTs; });
+    return L.zNejstarsich(vRelaci, rnd);
+  }
+  var konecOd = (ctx.konecOd != null) ? ctx.konecOd : L.konecOd(K.delkyRelaci[0]);
+  if (ctx.index >= konecOd) {
+    var konec = zdroj.filter(function (f) { return f.konecRelace; });
+    if (konec.length) {
+      konec.sort(function (m, n) { return m.posledniTs - n.posledniTs; });
+      return L.zNejstarsich(konec, rnd);
+    }
+  }
+  // Fakt, který má v téhle relaci naplánovaný odstup (box 1 = za tři příklady,
+  // box 2 = za osm, box 3 = ke konci relace), se nesmí vrátit dřív. Bez téhle
+  // podmínky ho hned zpátky podstrčilo pravidlo pro mezidenní opakování —
+  // odstupy z §7 se tím úplně obcházely a relace se zacyklila na dvou příkladech.
+  var due = zdroj.filter(function (f) {
+    if (f.dueAt != null && f.dueAt > ctx.index) return false;
+    if (f.konecRelace && ctx.index < konecOd) return false;
+    return f.nextDue != null && f.nextDue <= ctx.ted;
+  });
+  if (due.length) {
+    due.sort(function (m, n) { return m.nextDue - n.nextDue || m.posledniTs - n.posledniTs; });
+    return L.zNejstarsich(due, rnd);
+  }
+  var zbytek = zdroj.slice();
+  zbytek.sort(function (m, n) { return m.posledniTs - n.posledniTs; });
+  return L.zNejstarsich(zbytek, rnd);
+};
+
+/* --- naplánování faktu podle boxu --- */
+L.naplanuj = function (f, ctx) {
+  f.dueAt = null; f.konecRelace = false;
+  if (f.box <= 2) {
+    f.dueAt = ctx.index + (K.boxVRelaci[f.box] != null ? K.boxVRelaci[f.box] : 3);
+    f.nextDue = ctx.ted;
+  } else if (f.box === 3) {
+    f.konecRelace = true;
+    f.nextDue = ctx.ted;
+  } else {
+    var dny = K.boxDny[f.box] != null ? K.boxDny[f.box] : 3;
+    f.nextDue = ctx.ted + dny * 86400000;
+  }
+};
+
+/* --- vyhodnocení odpovědi: postupová logika (§4) + Leitner (§7) --- */
+L.poOdpovedi = function (f, vysledek, ctx) {
+  var uspech = vysledek.correct && !vysledek.timedOut;
+  if (uspech) {
+    f.streak++; f.errStreak = 0;
+    f.box = Math.min(5, f.box + 1);
+    if (f.streak >= K.spravneProPostup && f.stage < 3) {
+      f.stage++; f.streak = 0;
+      // Nová úroveň = nová dovednost: boxy se počítají znovu od začátku.
+      // Bez tohohle by fakt nasbíral box 4 už při klikání a zezelenal by
+      // v okamžiku, kdy poprvé dosáhne úrovně 3 — aniž by ji kdy zkusil.
+      f.box = 1;
+    }
+  } else {
+    f.streak = 0; f.errStreak++;
+    f.box = 1;                                          // chyba i vypršení → vždycky box 1
+    if (f.errStreak >= K.chybProPokles) {
+      f.stage = Math.max(1, f.stage - 1);
+      f.errStreak = 0;
+    }
+  }
+  if (f.stage > f.maxStage) f.maxStage = f.stage;
+  f.posledniTs = ctx.ted;
+  f.videnoRelaci++;
+  f.history.push({ ts: ctx.ted, mode: vysledek.mode, correct: !!vysledek.correct,
+                   latencyMs: vysledek.latencyMs, timedOut: !!vysledek.timedOut });
+  while (f.history.length > 10) f.history.shift();
+  L.naplanuj(f, ctx);
+  if (f.stage >= K.stageProUvolneni && f.box >= K.boxProUvolneni) f.status = "zvladnuta";
+  else if (f.status === "zvladnuta" && L.jeJadro(f)) f.status = "aktivni";
+  // Triviální fakt (řada ×1 nebo ×10) zůstává v opakování a nezabírá místo
+  // v šesti aktivních — na to je učivo řad 2–9.
+  return f;
+};
+
+/* --- rozměry relace odvozené od toho, kolikátá je dnes --- */
+L.delkaRelace = function (poradiDnes) {
+  var d = K.delkyRelaci;
+  var i = Math.min(Math.max(0, poradiDnes || 0), d.length - 1);
+  return d[i];
+};
+L.maxNovych = function (delka) { return Math.max(1, Math.round(delka / K.novychNaPriklad)); };
+L.minFronty = function (delka) {
+  return Math.max(K.minFrontyVRelaci, Math.ceil(delka / K.maxOpakovaniPrikladu));
+};
+L.konecOd = function (delka) { return Math.round(delka * K.podilKonceRelace); };
+
+/* Kdy se smí zavést nový fakt. Čistá funkce, ať se dá otestovat bez DOM. */
+L.maZavestNovy = function (stav, index, novychVRelaci, delkaFronty, maxNovych) {
+  if (maxNovych == null) maxNovych = L.maxNovych(K.delkyRelaci[0]);
+  if (!stav.poradi.length) return false;
+  if (stav.aktivni.length >= K.maxAktivnichFaktu) return false;
+  if (novychVRelaci >= maxNovych) return false;
+  if (stav.aktivni.length === 0) return true;
+  if (delkaFronty === 0) return true;
+  var kazdych = (stav.aktivni.length < K.minAktivnichFaktu) ? K.novyKazdychNaStart : K.novyKazdych;
+  return index > 0 && index % kazdych === 0;
+};
+
+/* --- správa seznamu aktivních faktů (§6) — čistá, aby šla otestovat --- */
+L.lzeZavest = function (stav) {
+  return stav.poradi.length > 0 && stav.aktivni.length < K.maxAktivnichFaktu;
+};
+
+L.zavedNovy = function (stav, ctx) {
+  if (!L.lzeZavest(stav)) return null;
+  var id = stav.poradi.shift();
+  var f = stav.fakty[id];
+  if (!f) return null;
+  f.status = "aktivni";
+  if (f.box < 1) f.box = 1;
+  L.naplanuj(f, ctx);
+  if (stav.aktivni.indexOf(id) < 0) stav.aktivni.push(id);
+  return f;
+};
+
+/* Zvládnutý fakt opouští seznam aktivních — tím uvolní místo novému.
+   Vrací se dál k opakování přes nextDue (box 4 = zítra, box 5 = za tři dny). */
+L.aktualizujAktivni = function (stav, f) {
+  var i = stav.aktivni.indexOf(f.id);
+  if (L.jeZvladnuty(f)) { if (i >= 0) stav.aktivni.splice(i, 1); return true; }
+  if (f.status === "aktivni" && i < 0 && stav.aktivni.length < K.maxAktivnichFaktu) stav.aktivni.push(f.id);
+  return false;
+};
+
+/* --- kdy je políčko v mapě zelené --- */
+L.jeZvladnuty = function (f) {
+  return f.stage >= K.stageProUvolneni && f.box >= K.boxProUvolneni;
+};
+
+/* --- rozklady čísla pro Objevovnu --- */
+L.rozklady = function (n) {
+  var out = [];
+  if (n < 1) return out;
+  for (var d = 1; d * d <= n; d++) if (n % d === 0) out.push([d, n / d]);
+  return out;
+};
+
+/* --- průměrná latence správných odpovědí (pro „kde to drhne") --- */
+L.prumernaLatence = function (f) {
+  var soucet = 0, pocet = 0;
+  for (var i = 0; i < f.history.length; i++) {
+    var h = f.history[i];
+    if (h.correct && !h.timedOut && h.latencyMs != null) { soucet += h.latencyMs; pocet++; }
+  }
+  return pocet ? soucet / pocet : null;
+};
+
+/* --- text pro hlasový výstup --- */
+L.recVeta = function (a, b, soucin) { return a + " krát " + b + " je " + soucin + "."; };
+
+/* ============================================================================
+   3) STAV A PERSISTENCE — každý zápis i čtení v try/catch (§3).
+      Když localStorage selže, aplikace jede dál, jen se postup neuloží.
+   ============================================================================ */
+var KLIC = "nasobilka.v1";
+var S = null;
+var ulozeniJde = true;
+
+function cislo(v, vych, min, max) {
+  if (typeof v !== "number" || !isFinite(v)) return vych;
+  return Math.max(min, Math.min(max, v));
+}
+
+function novyStav() {
+  var s = {
+    verze: 1, fakty: {}, aktivni: [], poradi: L.poradiZavedeni(),
+    zahrivaciHotovo: false, dayStreak: 0, lastSessionDate: null, denniLog: {},
+    nastaveni: { zvuk: true, rec: true, velkePismo: false, motiv: "auto" },
+    plochaSkryto: false
+  };
+  var vs = L.vsechnyFakty();
+  for (var i = 0; i < vs.length; i++) s.fakty[vs[i].id] = vs[i];
+  return s;
+}
+
+function vezmiZObjektu(d) {
+  var s = novyStav();
+  if (!d || typeof d !== "object" || !d.fakty || typeof d.fakty !== "object") return null;
+  for (var id in s.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(s.fakty, id)) continue;
+    var u = d.fakty[id];
+    if (!u || typeof u !== "object") continue;
+    var f = s.fakty[id];
+    f.status = ["nova", "aktivni", "zvladnuta"].indexOf(u.status) >= 0 ? u.status : "nova";
+    f.stage = cislo(u.stage, 1, 1, 3);
+    f.maxStage = Math.max(f.stage, cislo(u.maxStage, f.stage, 1, 3));
+    f.box = cislo(u.box, 0, 0, 5);
+    f.streak = cislo(u.streak, 0, 0, 999);
+    f.errStreak = cislo(u.errStreak, 0, 0, 999);
+    f.nextDue = typeof u.nextDue === "number" && isFinite(u.nextDue) ? u.nextDue : null;
+    f.posledniTs = cislo(u.posledniTs, 0, 0, 1e15);
+    f.history = Array.isArray(u.history) ? u.history.slice(-10) : [];
+  }
+  s.aktivni = Array.isArray(d.aktivni)
+    ? d.aktivni.filter(function (id) { return !!s.fakty[id]; }).slice(0, K.maxAktivnichFaktu)
+    : [];
+  if (Array.isArray(d.poradi)) {
+    s.poradi = d.poradi.filter(function (id) { return !!s.fakty[id]; });
+  } else {
+    s.poradi = L.poradiZavedeni().filter(function (id) {
+      return s.fakty[id].status === "nova" && s.aktivni.indexOf(id) < 0;
+    });
+  }
+  // Úklid po starší verzi: netrefená ×1 nebo ×10 se dřív ukládala do fronty
+  // zavádění, kde předbíhala celou řadu ×2 a mlela se přes všechny tři úrovně.
+  // Přesuneme ji do opakování na úroveň 3, ať se postup nemusí mazat.
+  function doOpakovani(id) {
+    var f = s.fakty[id];
+    if (!f || !L.jeTrivialni(f)) return true;
+    f.stage = 3; f.maxStage = 3; f.status = "zvladnuta";
+    if (f.box < 1) f.box = 1;
+    f.nextDue = Date.now();
+    return false;
+  }
+  s.poradi = s.poradi.filter(doOpakovani);
+  s.aktivni = s.aktivni.filter(doOpakovani);
+
+  s.zahrivaciHotovo = !!d.zahrivaciHotovo;
+  s.dayStreak = cislo(d.dayStreak, 0, 0, 100000);
+  s.lastSessionDate = typeof d.lastSessionDate === "string" ? d.lastSessionDate : null;
+  s.denniLog = (d.denniLog && typeof d.denniLog === "object") ? d.denniLog : {};
+  s.plochaSkryto = !!d.plochaSkryto;
+  if (d.nastaveni && typeof d.nastaveni === "object") {
+    s.nastaveni.zvuk = d.nastaveni.zvuk !== false;
+    s.nastaveni.rec = d.nastaveni.rec !== false;
+    s.nastaveni.velkePismo = !!d.nastaveni.velkePismo;
+    s.nastaveni.motiv = ["auto", "light", "dark"].indexOf(d.nastaveni.motiv) >= 0 ? d.nastaveni.motiv : "auto";
+  }
+  return s;
+}
+
+function nactiZRetezce(raw) {
+  if (!raw) return novyStav();
+  var d = null;
+  try { d = JSON.parse(raw); } catch (e) { return novyStav(); }   // poškozený stav → radši od začátku
+  var s = null;
+  try { s = vezmiZObjektu(d); } catch (e) { s = null; }
+  return s || novyStav();
+}
+
+/* Opravdu zkusíme zapsat a přečíst. Samotné getItem projde i tam, kde je
+   úložiště jen ke čtení nebo plné — a to bychom zjistili až po první relaci. */
+function zkouskaUlozeni() {
+  try {
+    localStorage.setItem(KLIC + ".zkouska", "1");
+    var zpet = localStorage.getItem(KLIC + ".zkouska");
+    localStorage.removeItem(KLIC + ".zkouska");
+    return zpet === "1";
+  } catch (e) { return false; }
+}
+
+function nacti() {
+  ulozeniJde = zkouskaUlozeni();
+  var raw = null;
+  try { raw = localStorage.getItem(KLIC); }
+  catch (e) { return novyStav(); }
+  return nactiZRetezce(raw);
+}
+
+var ulozTimer = null;
+function uloz() {
+  if (ulozTimer) return;
+  ulozTimer = setTimeout(function () {
+    ulozTimer = null;
+    try { localStorage.setItem(KLIC, JSON.stringify(S)); ulozeniJde = true; }
+    catch (e) { ulozeniJde = false; }
+  }, 120);
+}
+function ulozHned() {
+  if (ulozTimer) { clearTimeout(ulozTimer); ulozTimer = null; }
+  try { localStorage.setItem(KLIC, JSON.stringify(S)); ulozeniJde = true; }
+  catch (e) { ulozeniJde = false; }
+}
+
+function dnesniKlic(ts) {
+  var d = new Date(ts == null ? Date.now() : ts);
+  var m = d.getMonth() + 1, den = d.getDate();
+  return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (den < 10 ? "0" : "") + den;
+}
+
+/* ============================================================================
+   4) ZVUK A ŘEČ (§10)
+   ============================================================================ */
+var audioCtx = null, ceskyHlas = null, recPripravena = false;
+
+function odemkniZvuk() {
+  if (!audioCtx) {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    } catch (e) { audioCtx = null; }
+  }
+  if (audioCtx && audioCtx.state === "suspended") { try { audioCtx.resume(); } catch (e) {} }
+  // iOS odemyká syntézu až po dotyku uživatele — proto tady, ne při načtení.
+  if (!recPripravena) { recPripravena = true; najdiHlas(); }
+}
+
+function najdiHlas() {
+  if (!("speechSynthesis" in window)) return;
+  var hlasy = [];
+  try { hlasy = window.speechSynthesis.getVoices() || []; } catch (e) { return; }
+  ceskyHlas = null;
+  for (var i = 0; i < hlasy.length; i++) {
+    var l = (hlasy[i].lang || "").toLowerCase().replace("_", "-");
+    if (l === "cs-cz" || l.indexOf("cs") === 0) { ceskyHlas = hlasy[i]; break; }
+  }
+}
+if ("speechSynthesis" in window) {
+  try { window.speechSynthesis.onvoiceschanged = najdiHlas; najdiHlas(); } catch (e) {}
+}
+
+/* Mluví se jen tam, kde to zadání chce. Když český hlas není, mlčíme a jedeme dál. */
+function rekni(text) {
+  if (!S || !S.nastaveni.rec || !S.nastaveni.zvuk) return;
+  if (!("speechSynthesis" in window) || !ceskyHlas) return;
+  try {
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.voice = ceskyHlas; u.lang = "cs-CZ"; u.rate = 0.95; u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  } catch (e) { /* syntéza není k dispozici — nevadí */ }
+}
+function tichoRec() { try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch (e) {} }
+
+function ton(frekvence, delka, hlasitost, tvar, zpozdeni) {
+  if (!S || !S.nastaveni.zvuk || !audioCtx) return;
+  try {
+    var t0 = audioCtx.currentTime + (zpozdeni || 0);
+    var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+    osc.type = tvar || "sine";
+    osc.frequency.setValueAtTime(frekvence, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(hlasitost, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + delka);
+    osc.connect(g); g.connect(audioCtx.destination);
+    osc.start(t0); osc.stop(t0 + delka + 0.03);
+  } catch (e) {}
+}
+function zvukSpravne() { ton(784, 0.12, 0.16, "sine", 0); ton(1175, 0.16, 0.12, "sine", 0.07); }
+function zvukJemny()   { ton(392, 0.20, 0.10, "sine", 0); }
+function zvukKlik()    { ton(660, 0.05, 0.07, "triangle", 0); }
+function zvukOslava()  { [523, 659, 784, 1046].forEach(function (f, i) { ton(f, 0.22, 0.13, "sine", i * 0.11); }); }
+function zvukOdemknuti() { [659, 880, 1318].forEach(function (f, i) { ton(f, 0.26, 0.12, "sine", i * 0.09); }); }
+
+/* ============================================================================
+   5) MASKOTI A IKONY — vše inline, žádné externí soubory.
+   ============================================================================ */
+var svgPoradi = 0;
+function lama() {
+  var cid = "lbody" + (++svgPoradi);
+  return '<svg class="maskot" viewBox="0 0 100 152" role="img" aria-label="Lama Lulu">' +
+    '<defs><clipPath id="' + cid + '"><ellipse cx="57" cy="97" rx="28" ry="19"/></clipPath></defs>' +
+    '<rect x="72" y="103" width="8" height="45" rx="4" fill="var(--wool-2)"/>' +
+    '<rect x="60" y="105" width="8" height="43" rx="4" fill="var(--wool-2)"/>' +
+    '<path d="M83 84 q10 4 8 13" stroke="var(--wool)" stroke-width="8" fill="none" stroke-linecap="round"/>' +
+    '<path d="M41 40 C37 62 44 82 55 98" stroke="var(--wool)" stroke-width="19" fill="none" stroke-linecap="round"/>' +
+    '<ellipse cx="57" cy="97" rx="28" ry="19" fill="var(--wool)"/>' +
+    '<circle cx="35" cy="109" r="6.5" fill="var(--wool)"/>' +
+    '<circle cx="46" cy="113" r="7" fill="var(--wool)"/>' +
+    '<circle cx="58" cy="114" r="7.2" fill="var(--wool)"/>' +
+    '<circle cx="70" cy="113" r="7" fill="var(--wool)"/>' +
+    '<circle cx="80" cy="108" r="6" fill="var(--wool)"/>' +
+    '<g clip-path="url(#' + cid + ')">' +
+      '<rect x="27" y="78" width="62" height="15" fill="var(--accent)"/>' +
+      '<rect x="27" y="78" width="62" height="4" fill="var(--saffron)"/>' +
+      '<rect x="27" y="88" width="62" height="2.8" fill="var(--berry)"/>' +
+    '</g>' +
+    '<rect x="45" y="105" width="8" height="43" rx="4" fill="var(--wool)"/>' +
+    '<rect x="33" y="103" width="8" height="45" rx="4" fill="var(--wool)"/>' +
+    '<rect x="33" y="141" width="8" height="7" rx="3" fill="var(--mane)" opacity=".45"/>' +
+    '<rect x="45" y="141" width="8" height="7" rx="3" fill="var(--mane)" opacity=".45"/>' +
+    '<rect x="60" y="141" width="8" height="7" rx="3" fill="var(--mane)" opacity=".3"/>' +
+    '<rect x="72" y="141" width="8" height="7" rx="3" fill="var(--mane)" opacity=".3"/>' +
+    '<path d="M32.5 25 C26 14 27.5 3.5 33 5 C37.5 6.5 36.5 16 36 25 Z" fill="var(--wool-2)"/>' +
+    '<path d="M44 24 C50.5 13 49 2.5 43.5 4 C39 5.5 40 15 40.5 24 Z" fill="var(--wool-2)"/>' +
+    '<ellipse cx="38" cy="34" rx="11" ry="9.6" fill="var(--wool)"/>' +
+    '<circle cx="38.5" cy="25.5" r="5.6" fill="var(--wool)"/>' +
+    '<ellipse cx="28.5" cy="40.5" rx="8.6" ry="6.6" fill="var(--wool-2)"/>' +
+    '<circle cx="24.6" cy="39" r="1.2" fill="var(--ink)" opacity=".5"/>' +
+    '<path d="M24.5 43.4 q3.6 2.8 7.2 0" stroke="var(--ink)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".45"/>' +
+    '<circle class="eye-open" cx="37" cy="32" r="2.4" fill="var(--ink)"/>' +
+    '<path class="eye-happy" d="M34 33.2 q3 -3.6 6 0" stroke="var(--ink)" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+    '<path d="M33.2 28.4 l-3 -2.1 M36.4 26.9 l-1 -3" stroke="var(--ink)" stroke-width="1.1" stroke-linecap="round" opacity=".22"/>' +
+    '</svg>';
+}
+
+function osel() {
+  // Baudet du Poitou: tmavě hnědá srst v pramenech (cadenettes), světlá tlama,
+  // světlé kroužky kolem očí, obří uši. Bez hřbetního pruhu i ramenního kříže.
+  function pramen(x, y, h, w, c) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+           '" rx="' + (w / 2) + '" fill="var(--' + c + ')"/>';
+  }
+  var s = '<svg class="maskot" viewBox="0 0 100 152" role="img" aria-label="Osel Oskar, baudet du Poitou">';
+  s += '<rect x="72" y="112" width="9" height="36" rx="4.5" fill="var(--hide-2)"/>';
+  s += '<rect x="61" y="114" width="9" height="34" rx="4.5" fill="var(--hide-2)"/>';
+  s += '<path d="M83 96 q7 4 6 10" stroke="var(--hide-2)" stroke-width="5" fill="none" stroke-linecap="round"/>';
+  s += pramen(84, 104, 19, 9, "mane");
+  s += '<path d="M44 58 C42 74 49 88 58 102" stroke="var(--hide)" stroke-width="21" fill="none" stroke-linecap="round"/>';
+  s += '<g opacity=".6">' + pramen(44, 50, 15, 7, "mane") + pramen(47.5, 61, 16, 7, "mane") +
+       pramen(51, 73, 17, 7, "mane") + '</g>';
+  s += '<ellipse cx="57" cy="100" rx="28" ry="19" fill="var(--hide)"/>';
+  s += '<rect x="46" y="114" width="9" height="34" rx="4.5" fill="var(--hide)"/>';
+  s += '<rect x="35" y="112" width="9" height="36" rx="4.5" fill="var(--hide)"/>';
+  s += '<rect x="35" y="141" width="9" height="7" rx="3" fill="var(--mane)"/>';
+  s += '<rect x="46" y="141" width="9" height="7" rx="3" fill="var(--mane)"/>';
+  s += '<rect x="61" y="141" width="9" height="7" rx="3" fill="var(--mane)" opacity=".8"/>';
+  s += '<rect x="72" y="141" width="9" height="7" rx="3" fill="var(--mane)" opacity=".8"/>';
+  var prameny = [[27,95,15],[32.5,100,20],[38,103,17],[43.5,105,22],[49,106,18],
+                 [54.5,106,23],[60,106,19],[65.5,105,21],[71,103,17],[76.5,100,19],[81,95,14]];
+  for (var i = 0; i < prameny.length; i++) s += pramen(prameny[i][0], prameny[i][1], prameny[i][2], 10, "hide");
+  s += pramen(32, 86, 20, 9, "hide");
+  s += pramen(38, 90, 18, 9, "hide");
+  s += '<path d="M35 70 C42 78 53 77 58 70 L61 78 C54 86 41 87 32 78 Z" fill="var(--saffron)"/>';
+  s += '<ellipse cx="29" cy="22" rx="5.2" ry="17" fill="var(--hide)" transform="rotate(-15 29 22)"/>';
+  s += '<ellipse cx="29" cy="23" rx="2.3" ry="11.5" fill="var(--hide-3)" opacity=".8" transform="rotate(-15 29 23)"/>';
+  s += '<ellipse cx="47" cy="21" rx="5.2" ry="17" fill="var(--hide)" transform="rotate(14 47 21)"/>';
+  s += '<ellipse cx="47" cy="22" rx="2.3" ry="11.5" fill="var(--hide-3)" opacity=".8" transform="rotate(14 47 22)"/>';
+  s += '<ellipse cx="37" cy="47" rx="13.5" ry="12" fill="var(--hide)"/>';
+  s += '<ellipse cx="26" cy="55" rx="9.6" ry="7.2" fill="var(--hide-3)"/>';
+  s += '<ellipse cx="22.4" cy="53.4" rx="1.4" ry="1.8" fill="var(--mane)" opacity=".8"/>';
+  s += '<ellipse cx="27.8" cy="52.6" rx="1.4" ry="1.8" fill="var(--mane)" opacity=".8"/>';
+  s += '<path d="M23 58 q3.8 2.8 7.6 0" stroke="var(--mane)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".8"/>';
+  s += '<ellipse cx="43" cy="45" rx="5.6" ry="5" fill="var(--hide-3)"/>';
+  s += '<g opacity=".9">' + pramen(31, 34, 13, 8.4, "mane") +
+       pramen(36, 32, 15, 8.4, "mane") + pramen(41, 34, 12, 8.4, "mane") + '</g>';
+  s += '<circle class="eye-open" cx="43" cy="45" r="2.7" fill="var(--mane)"/>';
+  s += '<path class="eye-happy" d="M39.8 46.2 q3.2 -3.6 6.4 0" stroke="var(--mane)" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+  return s + '</svg>';
+}
+
+var IK = {
+  zpet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>',
+  zavri: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  zvukZap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  zvukVyp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
+  ozubene: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>',
+  smaz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H8.5L3 12l5.5 7H21a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M15 10l-4 4M11 10l4 4"/></svg>'
+};
+
+/* 55 zvířátek — jedno za každý zvládnutý fakt. */
+var ZVIRATKA = ("🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🐔 🐧 🐦 🐤 🦆 🦅 🦉 🦇 🐺 🐗 " +
+  "🐴 🦄 🐝 🦋 🐌 🐞 🐢 🐍 🦎 🦖 🐙 🦑 🦀 🐡 🐠 🐬 🐳 🦈 🐊 🐅 🦓 🦍 🐘 🦏 🐪 🦒 🦘 🦔 🦦 🦥").split(" ");
+
+var PORADI_ZVIRAT = (function () {
+  var m = {}, vs = L.vsechnyFakty();
+  for (var i = 0; i < vs.length; i++) m[vs[i].id] = ZVIRATKA[i % ZVIRATKA.length];
+  return m;
+})();
+
+/* ============================================================================
+   6) DOM POMOCNÍCI
+   ============================================================================ */
+function $(id) { return document.getElementById(id); }
+function el(tag, tridy, text) {
+  var e = document.createElement(tag);
+  if (tridy) e.className = tridy;
+  if (text != null) e.textContent = text;
+  return e;
+}
+var OBRAZOVKY = ["uvod","tricetsest","domu","radaUvod","zavedeni","trenink","konec","mapa","pokrok","objevovna","testy"];
+var aktualniObrazovka = null;
+function ukazObrazovku(jmeno) {
+  zrusCasovace();
+  for (var i = 0; i < OBRAZOVKY.length; i++) {
+    var s = $("obr-" + OBRAZOVKY[i]);
+    if (s) s.classList.toggle("je-videt", OBRAZOVKY[i] === jmeno);
+  }
+  aktualniObrazovka = jmeno;
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================================
+   7) ČASOVAČE — jediné místo, kde se spouští a ruší odpočet.
+      Každá nová otázka i každé vyhodnocení ruší VŠECHNY běžící časovače,
+      ne jen ten svůj. Sekvenční číslo je druhá pojistka proti doběhnutí
+      časovače předchozí otázky doprostřed té následující.
+   ============================================================================ */
+var CAS = { id: null, seq: 0, zpozdeni: [] };
+
+function zrusCasovace() {
+  if (CAS.id) { clearTimeout(CAS.id); CAS.id = null; }
+  for (var i = 0; i < CAS.zpozdeni.length; i++) clearTimeout(CAS.zpozdeni[i]);
+  CAS.zpozdeni = [];
+  CAS.seq++;
+  zastavOdpocet();
+  tichoRec();
+}
+
+function limitZa(ms, fn) {                 // hlavní časový limit otázky
+  zrusCasovace();
+  var muj = CAS.seq;
+  CAS.id = setTimeout(function () {
+    CAS.id = null;
+    if (muj !== CAS.seq) return;           // patří k jiné otázce → zahodit
+    fn();
+  }, ms);
+}
+
+function pak(ms, fn) {                     // krátká pauza uvnitř téže otázky
+  var muj = CAS.seq;
+  var t = setTimeout(function () {
+    if (muj !== CAS.seq) return;
+    fn();
+  }, ms);
+  CAS.zpozdeni.push(t);
+  return t;
+}
+
+function spustOdpocet(ms) {
+  var obal = $("tr-odpocet"), v = $("tr-odpocet-vypln");
+  if (!obal || !v) return;
+  obal.classList.remove("je-schovany");
+  v.style.transition = "none";
+  v.style.transform = "scaleX(1)";
+  void v.offsetWidth;                       // vynutí reflow, jinak se animace nerozjede
+  v.style.transition = "transform " + ms + "ms linear";
+  v.style.transform = "scaleX(0)";
+}
+function zastavOdpocet() {
+  var v = document.getElementById("tr-odpocet-vypln");
+  if (!v) return;
+  var t = "";
+  try { t = window.getComputedStyle(v).transform; } catch (e) { t = ""; }
+  v.style.transition = "none";
+  if (t && t !== "none") v.style.transform = t;
+}
+function schovejOdpocet() {
+  zastavOdpocet();
+  var obal = $("tr-odpocet");
+  if (obal) obal.classList.add("je-schovany");
+}
+
+/* ============================================================================
+   8) RELACE
+   ============================================================================ */
+var REL = null;
+
+/* Kolikátá relace dnes už proběhla (dokončená). */
+function relaciDnes() {
+  var z = S.denniLog[dnesniKlic()];
+  return z ? z.relaci : 0;
+}
+
+function novaRelace(rezim) {
+  var delka = rezim === "zahrivaci" ? 0 : L.delkaRelace(relaciDnes());
+  return {
+    rezim: rezim,                       // "zahrivaci" | "trenink"
+    faze: "otazka",
+    index: 0,
+    delka: delka,
+    maxNovych: L.maxNovych(delka),
+    konecOd: L.konecOd(delka),
+    start: Date.now(),
+    posledniId: null,
+    poz: L.novyPozicniStav(),
+    aktualni: null,
+    novychVRelaci: 0,
+    zahrivaciBloky: [], zahrivaciBlok: 0, zahrivaciPoz: 0,
+    staty: { zodpovezeno: 0, spravne: 0, zpameti: 0, odemcena: [], soucetLatence: 0 }
+  };
+}
+
+function ctx() { return { index: REL ? REL.index : 0, ted: Date.now() }; }
+
+/* --- které fakty smí relace nabízet --- */
+function sestavFrontu() {
+  var ted = Date.now(), out = S.aktivni.slice(), zvladnute = [];
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    var f = S.fakty[id];
+    if (f.status === "zvladnuta") zvladnute.push(f);      // úplný seznam, nefiltrovaný
+  }
+  zvladnute.sort(function (m, n) { return (m.nextDue || 0) - (n.nextDue || 0); });
+
+  var uzMam = {}, i;
+  for (i = 0; i < out.length; i++) uzMam[out[i]] = true;
+
+  // 1) co je opravdu splatné k opakování
+  var pridano = 0;
+  for (i = 0; i < zvladnute.length && pridano < 8; i++) {
+    var g = zvladnute[i];
+    if (g.nextDue == null || g.nextDue > ted) continue;
+    if (uzMam[g.id]) continue;
+    out.push(g.id); uzMam[g.id] = true; pridano++;
+  }
+
+  // 2) Málo příkladů ve frontě znamená rotaci, které dítě odjede poslepu —
+  //    a když zbude jediný, dokonce tentýž příklad dvakrát po sobě. Doplníme
+  //    proto zvládnutými, u kterých je opakování nejblíž. Zopakovat si něco,
+  //    co už umí, není trest, ale oddech mezi novými příklady.
+  var chceme = L.minFronty(REL ? REL.delka : K.delkyRelaci[0]);
+  for (i = 0; i < zvladnute.length && out.length < chceme; i++) {
+    if (uzMam[zvladnute[i].id]) continue;
+    out.push(zvladnute[i].id); uzMam[zvladnute[i].id] = true;
+  }
+  return out;
+}
+
+/* --- zavádění nových faktů (§6) --- */
+function potrebaZavest() {
+  return L.maZavestNovy(S, REL.index, REL.novychVRelaci, sestavFrontu().length, REL.maxNovych);
+}
+
+/* ============================================================================
+   9) OBRAZOVKA ZAVEDENÍ NOVÉHO FAKTU (§6)
+      Ukáže příklad i s výsledkem, přečte ho nahlas, dítě ho jednou opíše.
+   ============================================================================ */
+var ZAV = null;
+
+function tipKFaktu(f) {
+  if (f.a === f.b) return "Čtverec! " + f.a + " × " + f.a + " — takové příklady jsou kotvy v tabulce.";
+  if (f.a === 9 || f.b === 9) {
+    var s = f.product;
+    return "Devítky mají fintu: číslice výsledku dají po sečtení devět. " +
+           s + " → " + String(s).split("").join(" + ") + " = 9.";
+  }
+  if (f.a === 5 || f.b === 5) return "Pětky končí vždycky na 0 nebo na 5.";
+  if (f.a === 2 || f.b === 2) return "Dvojnásobek — prostě to samé číslo dvakrát.";
+  if (f.a === 4 || f.b === 4) return "Čtyřikrát = dvakrát dvojnásobek.";
+  return null;
+}
+
+function obrazovkaZavedeni(id) {
+  var f = S.fakty[id];
+  ZAV = { f: f, napsano: "", hotovo: false };
+  ukazObrazovku("zavedeni");
+  $("zav-lulu").innerHTML = lama();
+  $("zav-priklad").innerHTML = "<span>" + f.a + "</span><span>×</span><span>" + f.b +
+                               "</span><span>=</span><span>" + f.product + "</span>";
+  var tip = tipKFaktu(f);
+  var tipEl = $("zav-tip");
+  if (tip) { tipEl.textContent = tip; tipEl.style.display = ""; } else { tipEl.style.display = "none"; }
+  $("zav-displej").textContent = "";
+  $("zav-displej").classList.add("je-prazdny");
+  postavKlavesnici($("zav-klavesnice"), zavKlavesa);
+  rekni(L.recVeta(f.a, f.b, f.product));
+}
+
+function zavKlavesa(znak) {
+  if (!ZAV || ZAV.hotovo) return;      // dotyk navíc těsně před přechodem nesmí nic spustit
+  zvukKlik();
+  var cil = String(ZAV.f.product);
+  if (znak === "smaz") ZAV.napsano = ZAV.napsano.slice(0, -1);
+  else if (ZAV.napsano.length < cil.length) ZAV.napsano += znak;
+  var d = $("zav-displej");
+  d.textContent = ZAV.napsano;
+  d.classList.toggle("je-prazdny", ZAV.napsano.length === 0);
+  if (ZAV.napsano.length === cil.length) {
+    if (ZAV.napsano === cil) {
+      ZAV.hotovo = true;
+      zvukSpravne();
+      var f = ZAV.f;
+      var i = S.poradi.indexOf(f.id);
+      if (i > 0) { S.poradi.splice(i, 1); S.poradi.unshift(f.id); }
+      L.zavedNovy(S, ctx());
+      REL.novychVRelaci++;
+      uloz();
+      pak(420, function () { dalsiOtazka(); });
+    } else {
+      ZAV.napsano = "";
+      d.textContent = ""; d.classList.add("je-prazdny");
+      zvukJemny();
+    }
+  }
+}
+
+/* ============================================================================
+   10) HLAVNÍ SMYČKA TRÉNINKU
+   ============================================================================ */
+function spustTrenink() {
+  odemkniZvuk();
+  REL = novaRelace("trenink");
+  // fakty z boxů 1–3 čekaly na další relaci — jsou splatné hned
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    var f = S.fakty[id];
+    f.dueAt = null; f.konecRelace = false; f.videnoRelaci = 0;
+  }
+  ukazObrazovku("trenink");
+  aktualizujPostup();
+  dalsiOtazka();
+}
+
+function dalsiOtazka() {
+  zrusCasovace();
+  if (!REL) return;
+  if (REL.rezim === "zahrivaci") return dalsiOtazkaZahrivaci();
+  REL.faze = "otazka";
+  var prescas = (Date.now() - REL.start) > K.maxMinutRelace * 60000;
+  if (REL.index >= REL.delka || prescas) return konecRelace();
+
+  if (potrebaZavest()) return obrazovkaZavedeni(S.poradi[0]);
+
+  var fronta = sestavFrontu();
+  var f = L.vyberDalsiFakt(S.fakty, fronta, {
+    index: REL.index, posledniId: REL.posledniId, ted: Date.now(), konecOd: REL.konecOd
+  });
+  if (!f) return konecRelace();
+  polozOtazku(f);
+}
+
+function polozOtazku(f) {
+  if (aktualniObrazovka !== "trenink") ukazObrazovku("trenink");
+  var stage = (REL.rezim === "zahrivaci") ? 1 : f.stage;
+  var tvar = (stage === 2 || REL.rezim === "zahrivaci") ? "soucin" : L.vyberTvar(f, stage, Math.random);
+  var pocet = (f.videnoRelaci === 0 && f.history.length <= 2) ? K.moznostiNovyFakt : K.moznostiJindy;
+
+  var A = { f: f, stage: stage, tvar: tvar, start: 0, napsano: "", mode: "stage" + stage };
+  if (stage === 1) {
+    var g = L.generujMoznosti(f.a, f.b, tvar, pocet, REL.poz, Math.random);
+    A.moznosti = g.moznosti; A.spravna = g.spravna;
+  } else if (stage === 3) {
+    A.spravna = (tvar === "soucin") ? f.product : (tvar === "cinitelA" ? f.a : f.b);
+  } else {
+    A.spravna = f.product;
+  }
+  REL.aktualni = A;
+  REL.faze = "otazka";
+  vykresliOtazku();
+  A.start = Date.now();
+  var limit = (REL.rezim === "zahrivaci" ? K.limitZahrivaci
+              : stage === 1 ? K.limitStage1 : stage === 2 ? K.limitStage2 : K.limitStage3) * 1000;
+  limitZa(limit, function () { odpovez(null, true); });
+  spustOdpocet(limit);
+}
+
+/* --- text zadání; misto = co se vykreslí na místo neznámé --- */
+function zadaniHTML(A, mistoHTML) {
+  var f = A.f;
+  if (A.tvar === "cinitelA") return mistoHTML + "<span>×</span><span>" + f.b + "</span><span>=</span><span>" + f.product + "</span>";
+  if (A.tvar === "cinitelB") return "<span>" + f.a + "</span><span>×</span>" + mistoHTML + "<span>=</span><span>" + f.product + "</span>";
+  return "<span>" + f.a + "</span><span>×</span><span>" + f.b + "</span><span>=</span>" + mistoHTML;
+}
+
+function vykresliOtazku() {
+  var A = REL.aktualni;
+  var lulu = $("tr-lulu");
+  lulu.innerHTML = lama();
+  lulu.firstChild.classList.add("mysli");
+  var z = $("tr-zadani"), o = $("tr-odpoved");
+  z.className = ""; o.className = "";
+
+  var telo = $("obr-trenink").querySelector(".telo");
+  telo.classList.toggle("s-mapou", A.stage === 2);
+
+  if (A.stage === 2) {
+    z.innerHTML = '<div class="otazka-popis">Najdi to v mapě</div>' +
+                  '<div class="velke-cislo">' + A.f.product + '</div>';
+    o.innerHTML = "";
+    o.appendChild(mrizkaProTrenink());
+  } else if (A.stage === 3) {
+    z.innerHTML = '<div class="otazka" id="tr-veta">' +
+      zadaniHTML(A, '<span class="displej je-prazdny" id="tr-displej"></span>') + '</div>';
+    o.innerHTML = "";
+    var kl = el("div", "klavesnice");
+    o.appendChild(kl);
+    postavKlavesnici(kl, trKlavesa);
+  } else {
+    z.innerHTML = '<div class="otazka">' + zadaniHTML(A, '<span class="diri">?</span>') + '</div>';
+    o.innerHTML = "";
+    var vol = el("div", "volby " + (A.moznosti.length === 3 ? "tri" : "ctyri"));
+    for (var i = 0; i < A.moznosti.length; i++) {
+      (function (hodnota) {
+        var b = el("button", "volba", String(hodnota));
+        b.addEventListener("click", function () {
+          if (REL.faze !== "otazka") return;
+          b.classList.add("je-vybrana");
+          odpovez(hodnota, false);
+        });
+        vol.appendChild(b);
+      })(A.moznosti[i]);
+    }
+    o.appendChild(vol);
+  }
+  aktualizujPostup();
+}
+
+function postavKlavesnici(kontejner, handler) {
+  kontejner.innerHTML = "";
+  var klavesy = ["1","2","3","4","5","6","7","8","9","prazdna","0","smaz"];
+  for (var i = 0; i < klavesy.length; i++) {
+    (function (kl) {
+      if (kl === "prazdna") { kontejner.appendChild(el("div", "klavesa prazdna")); return; }
+      var b = el("button", "klavesa" + (kl === "smaz" ? " smaz" : ""));
+      if (kl === "smaz") { b.innerHTML = IK.smaz; b.setAttribute("aria-label", "Smazat"); }
+      else b.textContent = kl;
+      b.addEventListener("click", function () { handler(kl); });
+      kontejner.appendChild(b);
+    })(klavesy[i]);
+  }
+}
+
+/* Odpověď se vyhodnotí sama, jakmile má napsané číslo tolik číslic jako
+   správný výsledek. Mazání opravuje poslední číslici a odpočet nerestartuje. */
+function trKlavesa(znak) {
+  if (REL.faze !== "otazka") return;
+  var A = REL.aktualni;
+  var cil = String(A.spravna);
+  zvukKlik();
+  if (znak === "smaz") A.napsano = A.napsano.slice(0, -1);
+  else if (A.napsano.length < cil.length) A.napsano += znak;
+  var d = $("tr-displej");
+  if (d) { d.textContent = A.napsano; d.classList.toggle("je-prazdny", A.napsano.length === 0); }
+  if (A.napsano.length === cil.length) odpovez(parseInt(A.napsano, 10), false);
+}
+
+/* ============================================================================
+   11) VYHODNOCENÍ ODPOVĚDI
+   ============================================================================ */
+function odpovez(hodnota, vyprselo) {
+  if (!REL || REL.faze !== "otazka") return;
+  zrusCasovace();                                  // ruší i případný doběhlý časovač
+  REL.faze = "vyhodnoceni";
+  schovejOdpocet();
+
+  var A = REL.aktualni, f = A.f;
+  var latence = Date.now() - A.start;
+  var spravne = !vyprselo && hodnota === A.spravna;
+
+  REL.index++;
+  REL.staty.zodpovezeno++;
+  REL.posledniId = f.id;
+  var byloZvladnuto = L.jeZvladnuty(f);
+  var noveZvladnuto;
+
+  if (REL.rezim === "zahrivaci") {
+    noveZvladnuto = zahrivaciVyhodnoceni(f, spravne, vyprselo, latence, A.mode);
+  } else {
+    L.poOdpovedi(f, { correct: spravne, timedOut: !!vyprselo, latencyMs: latence, mode: A.mode }, ctx());
+    noveZvladnuto = !byloZvladnuto && L.jeZvladnuty(f);
+    L.aktualizujAktivni(S, f);
+  }
+
+  if (spravne) {
+    REL.staty.spravne++;
+    REL.staty.soucetLatence += latence;
+    if (latence <= K.rychlaOdpovedMs) REL.staty.zpameti++;
+  }
+  if (noveZvladnuto) REL.staty.odemcena.push(f.id);
+  uloz();
+  aktualizujPostup();
+
+  if (spravne) ukazSpravne(noveZvladnuto);
+  else ukazOpravu(vyprselo);
+}
+
+function ukazSpravne(noveZvladnuto) {
+  var lulu = $("tr-lulu").firstChild;
+  if (lulu) { lulu.classList.remove("mysli"); lulu.classList.add("raduje"); }
+  if (noveZvladnuto) zvukOdemknuti(); else zvukSpravne();
+
+  var A = REL.aktualni;
+  if (A.stage === 1) {
+    var vol = $("tr-odpoved").querySelector(".volby");
+    if (vol) {
+      vol.classList.add("je-zamknuta");
+      var btns = vol.querySelectorAll(".volba");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].disabled = true;
+        if (parseInt(btns[i].textContent, 10) === A.spravna) {
+          btns[i].classList.remove("je-vybrana");
+          btns[i].classList.add("je-spravna");
+        }
+      }
+    }
+  } else if (A.stage === 2) {
+    if (A.klikleEl) A.klikleEl.classList.add("trefa");
+  } else if (A.stage === 3) {
+    var d = $("tr-displej");
+    if (d) { d.style.background = "var(--jade-bg)"; d.style.color = "var(--jade)"; }
+  }
+  pak(K.animaceSpravneMs + K.pauzaPoSpravneMs, function () { dalsiOtazka(); });
+}
+
+/* Nikdy červený kříž, nikdy „ŠPATNĚ". Ukáže se správná odpověď, přečte se
+   nahlas, dítě ji jednou potvrdí (na úrovni 3 opíše) a jede se dál. */
+function ukazOpravu(vyprselo) {
+  REL.faze = "oprava";
+  var A = REL.aktualni, f = A.f;
+  var telo = $("obr-trenink").querySelector(".telo");
+  var z = $("tr-zadani"), o = $("tr-odpoved");
+
+  zvukJemny();
+  rekni(L.recVeta(f.a, f.b, f.product));
+
+  var hlaska = vyprselo ? "Ještě to spolu zopakujeme." : "Podívej se na to se mnou.";
+  var box = el("div", "oprava");
+  box.appendChild(el("div", "veta", f.a + " × " + f.b + " = " + f.product));
+  box.appendChild(el("div", "hlaska", hlaska));
+
+  var lulu = $("tr-lulu").firstChild;
+  if (lulu) lulu.classList.remove("mysli", "raduje");
+
+  if (A.stage === 2) {
+    // Mapa zůstane na místě — smysl opravy je ukázat, KDE to políčko bylo.
+    var mr = o.querySelector(".mrizka");
+    if (mr) {
+      var bunky = mr.querySelectorAll(".bunka[data-soucin]");
+      for (var i = 0; i < bunky.length; i++) {
+        bunky[i].classList.remove("klikaci");
+        if (parseInt(bunky[i].getAttribute("data-soucin"), 10) === f.product) bunky[i].classList.add("ukaz");
+      }
+      if (A.klikleEl && !A.klikleEl.classList.contains("ukaz")) A.klikleEl.classList.add("vedle");
+    }
+    var tl2 = el("button", "tl mala", "Jasně!");
+    tl2.addEventListener("click", function () { if (REL && REL.faze === "oprava") dalsiOtazka(); });
+    box.appendChild(tl2);
+    z.innerHTML = "";
+    z.appendChild(box);
+    return;
+  }
+
+  telo.classList.remove("s-mapou");
+  z.innerHTML = "";
+  z.appendChild(box);
+  o.innerHTML = "";
+
+  if (A.stage === 3) {
+    // Na úrovni 3 si ji jednou opíše — psaní je to, co buduje stopu.
+    var pop = el("div", "otazka-popis", "Napiš to po mně");
+    pop.style.textAlign = "center";
+    o.appendChild(pop);
+    var obal = el("div", "centr");
+    var disp = el("div", "displej je-prazdny");
+    disp.id = "op-displej";
+    obal.appendChild(disp);
+    o.appendChild(obal);
+    var kl = el("div", "klavesnice");
+    o.appendChild(kl);
+    var napsano = "", hotovo = false;
+    postavKlavesnici(kl, function (znak) {
+      if (hotovo) return;
+      zvukKlik();
+      var cil = String(f.product);
+      if (znak === "smaz") napsano = napsano.slice(0, -1);
+      else if (napsano.length < cil.length) napsano += znak;
+      disp.textContent = napsano;
+      disp.classList.toggle("je-prazdny", napsano.length === 0);
+      if (napsano.length === cil.length) {
+        if (napsano === cil) { hotovo = true; zvukSpravne(); dalsiOtazka(); }
+        else { napsano = ""; disp.textContent = ""; disp.classList.add("je-prazdny"); zvukJemny(); }
+      }
+    });
+  } else {
+    var wrap = el("div", "centr");
+    var b = el("button", "tl", "Jasně!");
+    b.addEventListener("click", function () { if (REL && REL.faze === "oprava") dalsiOtazka(); });
+    wrap.appendChild(b);
+    o.appendChild(wrap);
+  }
+}
+
+function aktualizujPostup() {
+  if (!REL) return;
+  var celkem = REL.delka;
+  var pct = celkem ? Math.min(100, Math.round(REL.index / celkem * 100)) : 0;
+  var p = $("tr-postup"), t = $("tr-postup-text");
+  if (p) p.style.width = pct + "%";
+  if (t) t.textContent = REL.index + "/" + celkem;
+}
+
+/* ============================================================================
+   12) MŘÍŽKA
+       Přehled  — celých 10×10, jen se kouká, posouvá se uvnitř sebe.
+       Trénink  — jen odemčené řady a sloupce; políčka se natáhnou do výšky,
+                  aby se do nich dalo trefit prstem i na telefonu.
+                  Čísla se v tréninku NEVYKRESLUJÍ — to by byla nápověda.
+   ============================================================================ */
+function odemceneCinitele() {
+  var set = {}; set[1] = true; set[10] = true;
+  function pridej(f) { set[f.a] = true; set[f.b] = true; }
+  for (var i = 0; i < S.aktivni.length; i++) { var a = S.fakty[S.aktivni[i]]; if (a) pridej(a); }
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    var f = S.fakty[id];
+    if (f.status === "zvladnuta" && f.a >= 2 && f.a <= 9 && f.b >= 2 && f.b <= 9) pridej(f);
+  }
+  var out = [];
+  for (var k in set) out.push(parseInt(k, 10));
+  out.sort(function (m, n) { return m - n; });
+  return out;
+}
+
+function postavMrizku(opt) {
+  var rady = opt.rady, sloupce = opt.sloupce;
+  var m = el("div", "mrizka" + (opt.vTreninku ? " v-treninku" : ""));
+  m.style.gridTemplateColumns = "repeat(" + (sloupce.length + 1) + ", 1fr)";
+  if (opt.vTreninku) {
+    // hlavička nahoře co nejmenší, zbytek výšky rovnoměrně mezi řady
+    m.style.gridTemplateRows = "auto repeat(" + rady.length + ", minmax(" + minVyskaPolicka() + "px, 1fr))";
+  }
+  m.appendChild(el("div", "bunka rohova hlavicka", "×"));
+  for (var c = 0; c < sloupce.length; c++) m.appendChild(el("div", "bunka hlavicka", String(sloupce[c])));
+  for (var r = 0; r < rady.length; r++) {
+    m.appendChild(el("div", "bunka hlavicka", String(rady[r])));
+    for (var j = 0; j < sloupce.length; j++) {
+      (function (rr, cc) {
+        var f = S.fakty[L.idFaktu(rr, cc)];
+        var b = el("div", "bunka");
+        b.setAttribute("data-soucin", rr * cc);
+        b.setAttribute("data-r", rr); b.setAttribute("data-c", cc);
+        if (opt.vzhled) opt.vzhled(b, f, rr, cc);
+        if (opt.klik) {
+          b.classList.add("klikaci");
+          b.setAttribute("role", "button");
+          b.setAttribute("aria-label", rr + " krát " + cc);
+          b.addEventListener("click", function () { opt.klik(rr, cc, b); });
+        }
+        m.appendChild(b);
+      })(rady[r], sloupce[j]);
+    }
+  }
+  return m;
+}
+
+/* Kolik činitelů se do mřížky ještě vejde, aby políčko zůstalo trefitelné.
+   Mřížka je čtvercová, takže rozhoduje ten těsnější z obou rozměrů — na výšku
+   je limitem portrét, na šířku (otočený telefon) zase nízká obrazovka. */
+function jeNaSirku() {
+  return (window.innerWidth || 0) > (window.innerHeight || 0) && (window.innerHeight || 0) <= 560;
+}
+function minVyskaPolicka() { return jeNaSirku() ? 38 : K.minSirkaPolicka; }
+
+function kolikCinitelu() {
+  var mezera = 5;
+  var naSirku = jeNaSirku();
+
+  var sirka = Math.min((window.innerWidth || 390) - 8, 560);
+  var dleSirky = Math.floor((sirka + mezera) / (K.minSirkaPolicka + mezera)) - 1;
+
+  var vyska = (window.innerHeight || 844) - 56 - 30;       // horní lišta a okraje
+  if (!naSirku) vyska -= 138;                              // v portrétu je nad mřížkou i zadání a odpočet
+  var dleVysky = Math.floor((vyska + mezera) / (minVyskaPolicka() + mezera)) - 1;
+
+  return Math.max(3, Math.min(dleSirky, dleVysky, 10));
+}
+
+/* Na telefonu se odemčené řady nakonec přestanou vejít. Místo scvrknutých
+   políček ukážeme výřez tabulky — vždycky takový, aby v něm hledané políčko
+   bylo. Hlavičky řádků a sloupců zůstávají, takže mapa dává dál smysl. */
+function vyrezMapy(cinitele, a, b) {
+  var max = kolikCinitelu();
+  if (cinitele.length <= max) return cinitele;
+  var iA = cinitele.indexOf(a), iB = cinitele.indexOf(b);
+  if (iA < 0 || iB < 0) return cinitele.slice(0, max);
+  var od = Math.min(iA, iB), doo = Math.max(iA, iB);
+
+  if (doo - od + 1 <= max) {                  // souvislý výřez, ten se čte nejlíp
+    var minStart = Math.max(0, doo - max + 1);
+    var maxStart = Math.min(od, cinitele.length - max);
+    var start = minStart + Math.floor(Math.random() * (maxStart - minStart + 1));
+    return cinitele.slice(start, start + max);
+  }
+
+  // Činitelé jsou od sebe moc daleko (třeba 2 a 9). Vezmeme oba a dorovnáme
+  // náhodnými dalšími — hlavičky řádků a sloupců drží mapu čitelnou i tak.
+  var mam = {}, vybrane = [];
+  function pridej(x) { if (!mam[x]) { mam[x] = true; vybrane.push(x); } }
+  pridej(a); pridej(b);
+  var zbytek = L.zamichej(cinitele.filter(function (x) { return !mam[x]; }), Math.random);
+  while (vybrane.length < max && zbytek.length) pridej(zbytek.shift());
+  vybrane.sort(function (m, n) { return m - n; });
+  return vybrane;
+}
+
+function mrizkaProTrenink() {
+  var cinitele = odemceneCinitele();
+  if (REL && REL.aktualni) cinitele = vyrezMapy(cinitele, REL.aktualni.f.a, REL.aktualni.f.b);
+  var obal = el("div", "mrizka-obal");
+  var m = postavMrizku({
+    rady: cinitele, sloupce: cinitele, vTreninku: true,
+    // Políčka jsou schválně všechna stejná. Kdyby zvládnuté svítily zeleně,
+    // hledané políčko by bylo vždycky jedno z těch nezelených — a to je nápověda,
+    // stejně vydatná jako napsat rovnou „7 × 8".
+    vzhled: null,
+    klik: function (r, c, b) {
+      if (!REL || REL.faze !== "otazka") return;
+      REL.aktualni.klikleEl = b;      // obarví se až podle výsledku
+      odpovez(r * c, false);
+    }
+  });
+  obal.appendChild(m);
+  return obal;
+}
+
+function mrizkaPrehled() {
+  var vsechny = [1,2,3,4,5,6,7,8,9,10];
+  return postavMrizku({
+    rady: vsechny, sloupce: vsechny,
+    vzhled: function (b, f) {
+      if (!f) return;
+      if (L.jeZvladnuty(f)) { b.classList.add("zvladnuta"); b.textContent = PORADI_ZVIRAT[f.id]; }
+      else if (f.status !== "nova" || f.history.length) { b.classList.add("uci-se"); b.textContent = String(f.product); }
+    }
+  });
+}
+
+/* ============================================================================
+   13) ZAHŘÍVACÍ KOLO — „už to umíš" (§6)
+   ============================================================================ */
+function zahrivaciBloky() {
+  function rada(n, od) { var out = []; for (var x = od; x <= 10; x++) out.push(L.idFaktu(n, x)); return out; }
+  var r2 = []; for (var x = 2; x <= 9; x++) r2.push(L.idFaktu(2, x));
+  return [
+    { nadpis: "Řada jedniček", tip: "Jedna krát cokoliv je pořád to samé číslo. 1 × 7 = 7.", ids: rada(1, 1) },
+    { nadpis: "Řada desítek", tip: "Deset krát cokoliv — stačí připsat nulu. 10 × 7 = 70.", ids: rada(10, 2) },
+    { nadpis: "Řada dvojek", tip: "Dvakrát tolik je to samé číslo dvakrát. 2 × 7 je 7 + 7.", ids: r2 }
+  ];
+}
+
+function spustZahrivaci() {
+  odemkniZvuk();
+  REL = novaRelace("zahrivaci");
+  REL.zahrivaciBloky = zahrivaciBloky();
+  REL.delka = REL.zahrivaciBloky.reduce(function (a, b) { return a + b.ids.length; }, 0);
+  REL.zahrivaciBlok = 0; REL.zahrivaciPoz = 0;
+  ukazUvodRady();
+}
+
+function ukazUvodRady() {
+  zrusCasovace();
+  var blok = REL.zahrivaciBloky[REL.zahrivaciBlok];
+  ukazObrazovku("radaUvod");
+  $("rada-lulu").innerHTML = lama();
+  $("rada-nadpis").textContent = blok.nadpis;
+  $("rada-tip").textContent = blok.tip;
+}
+
+function dalsiOtazkaZahrivaci() {
+  zrusCasovace();
+  var blok = REL.zahrivaciBloky[REL.zahrivaciBlok];
+  if (!blok) return konecRelace();
+  if (REL.zahrivaciPoz >= blok.ids.length) {
+    REL.zahrivaciBlok++; REL.zahrivaciPoz = 0;
+    if (REL.zahrivaciBlok >= REL.zahrivaciBloky.length) return konecRelace();
+    return ukazUvodRady();
+  }
+  var f = S.fakty[blok.ids[REL.zahrivaciPoz]];
+  REL.zahrivaciPoz++;
+  polozOtazku(f);
+}
+
+function zahrivaciVyhodnoceni(f, spravne, vyprselo, latence, mode) {
+  var ted = Date.now();
+  f.posledniTs = ted;
+  f.history.push({ ts: ted, mode: mode, correct: !!spravne, latencyMs: latence, timedOut: !!vyprselo });
+  while (f.history.length > 10) f.history.shift();
+  var uspech = spravne && !vyprselo;
+  if (uspech && L.jeTrivialni(f)) {
+    f.stage = 3; f.maxStage = 3; f.box = 4; f.status = "zvladnuta";
+    f.nextDue = ted + (K.boxDny[4] || 1) * 86400000;
+    return true;
+  }
+  if (uspech) {                       // řada ×2: náskok, ale zavádí se normálně přes frontu
+    f.stage = 2; f.maxStage = 2; f.box = 2; f.streak = 0;
+    return false;
+  }
+  f.box = 1; f.streak = 0;
+  if (L.jeTrivialni(f)) {
+    // Netrefená jednička nebo desítka není nové učivo — nejspíš to jen nestihla.
+    // Nepatří proto na začátek fronty zavádění, kde by se mlela přes všechny tři
+    // úrovně a předběhla by celou řadu ×2. Vrátí se rovnou na úrovni 3 jako
+    // opakování a zezelená, až ji třikrát napíše.
+    f.stage = 3; f.maxStage = 3; f.status = "zvladnuta"; f.nextDue = ted;
+  }
+  return false;
+}
+
+/* ============================================================================
+   14) KONEC RELACE (§8.1)
+   ============================================================================ */
+function konecRelace() {
+  zrusCasovace();
+  var byloZahrivaci = REL && REL.rezim === "zahrivaci";
+  var st = REL ? REL.staty : { zodpovezeno: 0, spravne: 0, zpameti: 0, odemcena: [] };
+
+  if (byloZahrivaci) S.zahrivaciHotovo = true;
+
+  var dnes = dnesniKlic();
+  if (S.lastSessionDate !== dnes) {
+    var vcera = dnesniKlic(Date.now() - 86400000);
+    S.dayStreak = (S.lastSessionDate === vcera) ? S.dayStreak + 1 : 1;
+    S.lastSessionDate = dnes;
+  }
+  var zaznam = S.denniLog[dnes] || { relaci: 0, prikladu: 0, spravne: 0, zpameti: 0 };
+  zaznam.relaci++; zaznam.prikladu += st.zodpovezeno;
+  zaznam.spravne += st.spravne; zaznam.zpameti += st.zpameti;
+  S.denniLog[dnes] = zaznam;
+  var klice = Object.keys(S.denniLog).sort();
+  while (klice.length > 60) { delete S.denniLog[klice.shift()]; }
+  ulozHned();
+
+  ukazObrazovku("konec");
+  $("konec-lulu").innerHTML = lama();
+  var lulu = $("konec-lulu").firstChild;
+  if (lulu) lulu.classList.add("raduje");
+  zvukOslava();
+
+  var zvladnutychCelkem = spocitejZvladnute();
+  if (byloZahrivaci) {
+    $("konec-nadpis").textContent = "A je to!";
+    $("konec-text").innerHTML = "Vidíš? Tolik toho už umíš. Zbytek zvládneme spolu, " +
+      "po kouskách. <b>Každý den pět minut</b> stačí.";
+  } else {
+    $("konec-nadpis").textContent = ["Skvělá práce!", "Hotovo!", "To bylo super!", "Máš to!"][Math.floor(Math.random() * 4)];
+    var dalsi = L.delkaRelace(relaciDnes());
+    $("konec-text").textContent = (relaciDnes() >= K.delkyRelaci.length)
+      ? "Na dnešek toho bylo dost. Mozek si to teď potřebuje uložit — zítra ti to " +
+        "půjde líp než dneska."
+      : "Na dnešek to stačí. Kdyby se ti chtělo ještě, další kolo už je jen " +
+        dalsi + " příkladů.";
+  }
+
+  var staty = $("konec-staty");
+  staty.innerHTML = "";
+  staty.appendChild(statKarta(st.zodpovezeno, "příkladů"));
+  staty.appendChild(statKarta(st.zpameti, "z paměti (do 2,5 s)"));
+  staty.appendChild(statKarta(zvladnutychCelkem + " / 55", "zvířátek ve sbírce"));
+  if (S.dayStreak > 1) staty.appendChild(statKarta(S.dayStreak, "dní v řadě"));
+
+  var od = $("konec-odemceno");
+  od.innerHTML = "";
+  if (st.odemcena.length) {
+    var nadp = el("div", "otazka-popis", st.odemcena.length === 1 ? "Nové zvířátko!" : "Nová zvířátka!");
+    od.appendChild(nadp);
+    var rada = el("div", "odemceno");
+    for (var i = 0; i < st.odemcena.length; i++) {
+      var kus = el("div", "kus", PORADI_ZVIRAT[st.odemcena[i]]);
+      kus.style.animationDelay = (i * 0.12) + "s";
+      rada.appendChild(kus);
+    }
+    od.appendChild(rada);
+  }
+  REL = null;
+  if (byloZahrivaci) pak(600, function () { nabidniPlochu(); });
+}
+
+function statKarta(cislo, popis) {
+  var s = el("div", "stat");
+  s.appendChild(el("div", "cis", String(cislo)));
+  s.appendChild(el("div", "pop", popis));
+  return s;
+}
+
+function spocitejZvladnute() {
+  var n = 0;
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    if (L.jeZvladnuty(S.fakty[id])) n++;
+  }
+  return n;
+}
+function spocitejStage3() {
+  var n = 0;
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    if (S.fakty[id].stage >= 3) n++;
+  }
+  return n;
+}
+
+/* ============================================================================
+   15) MAPA (§8.2a)
+   ============================================================================ */
+function vykresliMapu() {
+  ukazObrazovku("mapa");
+  $("mapa-oskar").innerHTML = osel();
+  var zvl = spocitejZvladnute();
+  var zbyva = 55 - zvl;
+  $("mapa-bublina").innerHTML = zbyva === 0
+    ? "<b>Máš je všechny!</b> Celá tabulka je zelená."
+    : "Zelených políček máš <b>" + zvl + "</b>. Zbývá jich " + zbyva + " — a to už je kousek.";
+  var obal = $("mapa-mrizka");
+  obal.innerHTML = "";
+  obal.className = "";
+  var svitek = el("div", "mrizka-svitek");
+  svitek.appendChild(mrizkaPrehled());
+  obal.appendChild(svitek);
+}
+
+/* ============================================================================
+   16) POKROK (§8.4) — jedna obrazovka pro dítě i pro rodiče
+   ============================================================================ */
+function vykresliPokrok() {
+  ukazObrazovku("pokrok");
+  var c = $("pokrok-obsah");
+  c.innerHTML = "";
+
+  var zvl = spocitejZvladnute();
+  var staty = el("div", "statrada");
+  staty.appendChild(statKarta(zvl + " / 55", "zvířátek ve sbírce"));
+  staty.appendChild(statKarta(spocitejStage3(), "umím zpaměti"));
+  staty.appendChild(statKarta(S.dayStreak, S.dayStreak === 1 ? "den v řadě" : "dní v řadě"));
+  c.appendChild(staty);
+
+  /* --- sbírka --- */
+  var k1 = el("div", "karta");
+  k1.appendChild(el("div", "sekce-nadpis", "Sbírka zvířátek"));
+  var sb = el("div", "sbirka");
+  var vs = L.vsechnyFakty();
+  for (var i = 0; i < vs.length; i++) {
+    var f = S.fakty[vs[i].id];
+    var kus = el("div", "kus" + (L.jeZvladnuty(f) ? "" : " prazdny"));
+    kus.textContent = L.jeZvladnuty(f) ? PORADI_ZVIRAT[f.id] : "·";
+    kus.title = f.a + " × " + f.b;
+    sb.appendChild(kus);
+  }
+  k1.appendChild(sb);
+  c.appendChild(k1);
+
+  /* --- posledních 7 dní --- */
+  var k2 = el("div", "karta");
+  k2.appendChild(el("div", "sekce-nadpis", "Posledních 7 dní"));
+  var tyden = el("div", "tyden");
+  var dny = ["ne","po","út","st","čt","pá","so"];
+  var max = 1;
+  var data = [];
+  for (var d = 6; d >= 0; d--) {
+    var ts = Date.now() - d * 86400000;
+    var z = S.denniLog[dnesniKlic(ts)];
+    var pocet = z ? z.relaci : 0;
+    max = Math.max(max, pocet);
+    data.push({ pocet: pocet, lab: dny[new Date(ts).getDay()] });
+  }
+  for (var j = 0; j < data.length; j++) {
+    var den = el("div", "den");
+    var sl = el("div", "sloup" + (data[j].pocet === 0 ? " nula" : ""));
+    sl.style.height = Math.max(5, Math.round(data[j].pocet / max * 74)) + "px";
+    den.appendChild(sl);
+    den.appendChild(el("div", "lab", data[j].lab));
+    tyden.appendChild(den);
+  }
+  k2.appendChild(tyden);
+  c.appendChild(k2);
+
+  /* --- kde to ještě drhne — formulováno dopředu, nikdy jako seznam chyb --- */
+  var kand = [];
+  for (var id in S.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
+    var g = S.fakty[id];
+    // Jen fakty, u kterých máme naměřený čas. Nezkoušený příklad není „drhne",
+    // jen na něj ještě nedošlo — a seznam by pak byl k ničemu.
+    var lat = L.prumernaLatence(g);
+    if (lat == null) continue;
+    kand.push({ f: g, lat: lat });
+  }
+  kand.sort(function (m, n) { return n.lat - m.lat; });
+  var k3 = el("div", "karta");
+  k3.appendChild(el("div", "sekce-nadpis", "Tyhle si zítra procvičíme"));
+  var sez = el("div", "seznam-drhne");
+  if (!kand.length) {
+    sez.appendChild(el("div", "drhne-radek", "Zatím nemám co ukázat — po prvním tréninku se to tu objeví."));
+  } else {
+    for (var q = 0; q < Math.min(5, kand.length); q++) {
+      var r = el("div", "drhne-radek");
+      r.appendChild(el("span", "pr", kand[q].f.a + " × " + kand[q].f.b));
+      r.appendChild(el("span", null, PORADI_ZVIRAT[kand[q].f.id]));
+      r.appendChild(el("span", "cas", (kand[q].lat / 1000).toFixed(1) + " s"));
+      sez.appendChild(r);
+    }
+  }
+  k3.appendChild(sez);
+  c.appendChild(k3);
+
+  if (!ulozeniJde) {
+    var varovani = el("div", "tip", "Pozor: v tomhle okně se postup neukládá (soukromé okno nebo plná paměť). " +
+      "Aplikace funguje, ale po zavření se pokrok ztratí.");
+    c.appendChild(varovani);
+  }
+}
+
+/* ============================================================================
+   17) OBJEVOVNA (§8.3) — bez času, bez hodnocení, bez vlivu na postup
+   ============================================================================ */
+var OBJ = { rezim: "mrizka", cislo: null, vybrany: 0, napsano: "" };
+
+function vykresliObjevovnu() {
+  ukazObrazovku("objevovna");
+  var vstup = $("obj-vstup");
+  vstup.innerHTML = "";
+  if (OBJ.rezim === "mrizka") {
+    var vsechny = [1,2,3,4,5,6,7,8,9,10];
+    var svitek = el("div", "mrizka-svitek");
+    svitek.appendChild(postavMrizku({
+      rady: vsechny, sloupce: vsechny,
+      vzhled: function (b, f, r, c) { b.textContent = String(r * c); b.classList.add("uci-se"); },
+      klik: function (r, c, b) {
+        odemkniZvuk(); zvukKlik();
+        var vsechnyB = vstup.querySelectorAll(".bunka");
+        for (var i = 0; i < vsechnyB.length; i++) vsechnyB[i].classList.remove("zvyraz");
+        b.classList.add("zvyraz");
+        ukazRozklady(r * c, r, c);
+      }
+    }));
+    vstup.appendChild(svitek);
+  } else {
+    var box = el("div"); box.style.width = "100%"; box.style.maxWidth = "420px";
+    var d = el("div"); d.style.textAlign = "center"; d.style.marginBottom = "12px";
+    var disp = el("div", "displej" + (OBJ.napsano ? "" : " je-prazdny"), OBJ.napsano);
+    disp.id = "obj-displej";
+    d.appendChild(disp); box.appendChild(d);
+    var kl = el("div", "klavesnice"); box.appendChild(kl);
+    postavKlavesnici(kl, function (znak) {
+      odemkniZvuk(); zvukKlik();
+      if (znak === "smaz") OBJ.napsano = OBJ.napsano.slice(0, -1);
+      else if (OBJ.napsano.length < 3) OBJ.napsano += znak;
+      disp.textContent = OBJ.napsano;
+      disp.classList.toggle("je-prazdny", !OBJ.napsano);
+      var n = parseInt(OBJ.napsano, 10);
+      if (n > 0) ukazRozklady(n, null, null); else $("obj-vysledek").innerHTML = "";
+    });
+    vstup.appendChild(box);
+  }
+  $("obj-vysledek").innerHTML = "";
+  if (OBJ.cislo) ukazRozklady(OBJ.cislo, null, null);
+}
+
+function ukazRozklady(n, r, c) {
+  OBJ.cislo = n;
+  var rz = L.rozklady(n);
+  var out = $("obj-vysledek");
+  out.innerHTML = "";
+  var karta = el("div", "karta");
+  karta.style.display = "flex"; karta.style.flexDirection = "column";
+  karta.style.gap = "14px"; karta.style.alignItems = "center";
+
+  karta.appendChild(el("div", "velke-cislo", String(n)));
+  var veta = rz.map(function (p) { return p[0] + " × " + p[1]; }).join("  =  ");
+  karta.appendChild(el("div", "otazka-popis", rz.length === 1 ? "Tohle číslo se dá poskládat jen jedním způsobem." :
+    "Dá se poskládat " + rz.length + "× různě:"));
+
+  var rada = el("div", "rozklady");
+  var vychozi = 0;
+  for (var i = 0; i < rz.length; i++) {
+    if (r != null && ((rz[i][0] === Math.min(r, c) && rz[i][1] === Math.max(r, c)))) vychozi = i;
+  }
+  for (var j = 0; j < rz.length; j++) {
+    (function (idx) {
+      var b = el("button", "rozklad" + (idx === vychozi ? " je-vybrany" : ""), rz[idx][0] + " × " + rz[idx][1]);
+      b.addEventListener("click", function () {
+        odemkniZvuk(); zvukKlik();
+        var vs = rada.querySelectorAll(".rozklad");
+        for (var q = 0; q < vs.length; q++) vs[q].classList.remove("je-vybrany");
+        b.classList.add("je-vybrany");
+        vykresliTecky(tecky, rz[idx][0], rz[idx][1]);
+        rekni(L.recVeta(rz[idx][0], rz[idx][1], n));
+      });
+      rada.appendChild(b);
+    })(j);
+  }
+  karta.appendChild(rada);
+  var tecky = el("div", "tecky");
+  karta.appendChild(tecky);
+  vykresliTecky(tecky, rz[vychozi][0], rz[vychozi][1]);
+  out.appendChild(karta);
+}
+
+function vykresliTecky(kontejner, radku, sloupcu) {
+  kontejner.innerHTML = "";
+  if (radku * sloupcu > 144) {                     // 12×12 je strop, dál už to není čitelné
+    kontejner.appendChild(el("div", "otazka-popis", "Na tečky je to už moc velké číslo."));
+    return;
+  }
+  kontejner.classList.toggle("je-ctverec", radku === sloupcu);
+  kontejner.style.gridTemplateColumns = "repeat(" + sloupcu + ", auto)";
+  for (var i = 0; i < radku * sloupcu; i++) kontejner.appendChild(el("i"));
+}
+
+/* ============================================================================
+   18) NASTAVENÍ, ZÁLOHA A OBNOVA
+       Safari maže localStorage webům, se kterými se týden neinteragovalo.
+       Při každodenním používání se nic nestane, ale po delší pauze může být
+       postup pryč — proto ruční záloha a nabídka „přidej na plochu".
+   ============================================================================ */
+function otevriNastaveni() {
+  odemkniZvuk();
+  $("zaves-nastaveni").classList.add("je-videt");
+  $("nast-hlaska").textContent = "";
+  synchronizujNastaveni();
+}
+function zavriNastaveni() { $("zaves-nastaveni").classList.remove("je-videt"); }
+
+function synchronizujNastaveni() {
+  var n = S.nastaveni;
+  function nast(id, zap, popis) {
+    var b = $(id);
+    if (!b) return;
+    b.classList.toggle("je-zap", !!zap);
+    b.textContent = popis;
+  }
+  nast("nast-zvuk", n.zvuk, n.zvuk ? "Zapnutý" : "Vypnutý");
+  nast("nast-rec", n.rec, n.rec ? "Zapnuté" : "Vypnuté");
+  nast("nast-pismo", n.velkePismo, n.velkePismo ? "Zapnuté" : "Vypnuté");
+  var b = $("nast-motiv");
+  if (b) {
+    b.classList.remove("je-zap");
+    b.textContent = n.motiv === "auto" ? "Podle systému" : (n.motiv === "dark" ? "Tmavý" : "Světlý");
+  }
+  var z = $("btn-zvuk");
+  if (z) { z.innerHTML = n.zvuk ? IK.zvukZap : IK.zvukVyp; z.classList.toggle("je-vyp", !n.zvuk); }
+  var z2 = $("tr-zvuk");
+  if (z2) { z2.innerHTML = n.zvuk ? IK.zvukZap : IK.zvukVyp; z2.classList.toggle("je-vyp", !n.zvuk); }
+}
+
+function pouzijNastaveni() {
+  var n = S.nastaveni;
+  document.documentElement.setAttribute("data-text", n.velkePismo ? "velke" : "normal");
+  if (n.motiv === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", n.motiv);
+  synchronizujNastaveni();
+}
+
+function textovePole(hodnota, jenCist) {
+  var ta = document.createElement("textarea");
+  ta.value = hodnota || "";
+  ta.readOnly = !!jenCist;
+  ta.style.cssText = "width:100%;min-height:120px;border-radius:12px;border:2px solid var(--line);" +
+    "padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--card-2);" +
+    "color:var(--ink);-webkit-user-select:text;user-select:text;resize:vertical";
+  return ta;
+}
+
+function zalohuj() {
+  var json = "";
+  try { json = JSON.stringify(S); } catch (e) { $("nast-hlaska").textContent = "Zálohu se nepodařilo vytvořit."; return; }
+  var hl = $("nast-hlaska");
+  function nabidniRucne() {
+    hl.textContent = "Zkopírujte si tenhle text a uložte ho někam k sobě:";
+    var stary = $("zaloha-pole");
+    if (stary) stary.parentNode.removeChild(stary);
+    var ta = textovePole(json, true);
+    ta.id = "zaloha-pole";
+    hl.parentNode.insertBefore(ta, hl.nextSibling);
+    try { ta.focus(); ta.select(); } catch (e) {}
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(json).then(function () {
+      hl.textContent = "Hotovo — záloha je ve schránce. Vložte ji třeba do poznámek nebo do mailu.";
+    })["catch"](nabidniRucne);
+  } else nabidniRucne();
+}
+
+function obnovZeZalohy() {
+  var hl = $("nast-hlaska");
+  var stary = $("obnova-box");
+  if (stary) { stary.parentNode.removeChild(stary); hl.textContent = ""; return; }
+  hl.textContent = "Vložte sem text zálohy a potvrďte.";
+  var box = el("div"); box.id = "obnova-box";
+  box.style.cssText = "display:flex;flex-direction:column;gap:10px;margin-top:8px";
+  var ta = textovePole("", false);
+  var b = el("button", "tl mala", "Obnovit tenhle postup");
+  b.style.maxWidth = "none";
+  b.addEventListener("click", function () {
+    var d = null;
+    try { d = JSON.parse(ta.value); } catch (e) { hl.textContent = "Tohle nevypadá jako záloha — text je poškozený."; return; }
+    var novy = null;
+    try { novy = vezmiZObjektu(d); } catch (e) { novy = null; }
+    if (!novy) { hl.textContent = "Tohle nevypadá jako záloha této aplikace."; return; }
+    S = novy;
+    ulozHned();
+    pouzijNastaveni();
+    hl.textContent = "Postup obnoven. Zvířátek ve sbírce: " + spocitejZvladnute() + ".";
+    box.parentNode.removeChild(box);
+    vykresliDomu();
+  });
+  box.appendChild(ta); box.appendChild(b);
+  hl.parentNode.insertBefore(box, hl.nextSibling);
+}
+
+var jeIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || "") ||
+            ((navigator.platform === "MacIntel") && navigator.maxTouchPoints > 1);
+function jeNaPlose() {
+  if (window.navigator.standalone === true) return true;
+  try { return window.matchMedia("(display-mode: standalone)").matches; } catch (e) { return false; }
+}
+function nabidniPlochu() {
+  if (!jeIOS || jeNaPlose() || S.plochaSkryto) return;
+  $("plocha-lulu").innerHTML = lama();
+  $("zaves-plocha").classList.add("je-videt");
+}
+
+/* ============================================================================
+   19) DOMOVSKÁ OBRAZOVKA
+   ============================================================================ */
+var POZDRAVY = [
+  "Tak co, dáme pět minut?",
+  "Jsem připravená. A ty?",
+  "Dneska to půjde samo, uvidíš.",
+  "Krátce a každý den — to je celý trik."
+];
+function vykresliDomu() {
+  ukazObrazovku("domu");
+  $("domu-lulu").innerHTML = lama();
+  var zvl = spocitejZvladnute();
+  var dnes = S.denniLog[dnesniKlic()];
+  $("domu-pozdrav").textContent = dnes && dnes.relaci
+    ? "Dneska už jsi cvičila — a to je to hlavní. Klidně si dej ještě jedno kolo."
+    : (S.dayStreak > 1 ? "Máš " + S.dayStreak + " dní v řadě. Nepřerušíme to?" : POZDRAVY[Math.floor(Math.random() * POZDRAVY.length)]);
+  $("dl-mapa-pod").textContent = zvl + " z 55 políček je zelených";
+  $("dl-pokrok-pod").textContent = spocitejStage3() + " příkladů umíš zpaměti";
+  // Ať je dopředu vidět, jak dlouhé kolo ji čeká — pokračování je kratší.
+  var poradi = relaciDnes();
+  var delka = L.delkaRelace(poradi);
+  var uvod = poradi === 0 ? "Celé kolo" : (poradi === 1 ? "Kratší kolo" : "Poslední kolečko");
+  $("dl-trenink-pod").textContent = uvod + " · " + delka + " příkladů" +
+    (S.poradi.length ? "" : " · samé opakování");
+  ukazVarovaniUlozeni($("domu-varovani"));
+  pouzijNastaveni();
+}
+
+/* Kdyby prohlížeč neuměl uložit postup, musí to být vidět hned — ne až
+   za měsíc, kdy zmizí sbírka zvířátek. */
+function ukazVarovaniUlozeni(kam) {
+  if (!kam) return;
+  if (ulozeniJde) { kam.style.display = "none"; kam.textContent = ""; return; }
+  kam.style.display = "";
+  kam.className = "tip";
+  kam.textContent = "Pozor: tenhle prohlížeč postup neukládá (nejspíš anonymní okno). " +
+    "Cvičit jde, ale po zavření se pokrok ztratí.";
+}
+
+/* ============================================================================
+   20) PAUZA — když se přepne aplikace, odpočet se nesmí odtikat naprázdno
+   ============================================================================ */
+function pauzni() {
+  if (!REL || REL.faze !== "otazka") return;
+  zrusCasovace();
+  schovejOdpocet();
+  REL.faze = "pauza";
+  $("zaves-pauza").classList.add("je-videt");
+}
+function odpauzuj() {
+  $("zaves-pauza").classList.remove("je-videt");
+  if (!REL || REL.faze !== "pauza") return;
+  REL.faze = "otazka";
+  var A = REL.aktualni;
+  if (!A) return dalsiOtazka();
+  A.start = Date.now();                     // po pauze dostane plný čas znovu, to je fér
+  var limit = (REL.rezim === "zahrivaci" ? K.limitZahrivaci
+              : A.stage === 1 ? K.limitStage1 : A.stage === 2 ? K.limitStage2 : K.limitStage3) * 1000;
+  limitZa(limit, function () { odpovez(null, true); });
+  spustOdpocet(limit);
+}
+
+/* ============================================================================
+   21) TESTY ČISTÉ LOGIKY (§12)  — spustí se na adrese s #testy
+   ============================================================================ */
+function nahodnyGenerator(seed) {          // mulberry32 — determinismus kvůli opakovatelnosti
+  var a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function spustTesty() {
+  var radky = [], padlo = 0, proslo = 0;
+  function ok(podminka, zprava) { if (!podminka) throw new Error(zprava || "podmínka neplatí"); }
+  function t(jmeno, fn) {
+    try { fn(); proslo++; radky.push("  OK    " + jmeno); }
+    catch (e) { padlo++; radky.push("  CHYBA " + jmeno + "\n          → " + (e && e.message ? e.message : String(e))); }
+  }
+  function prazdnyStav() {
+    var s = { fakty: {}, aktivni: [], poradi: L.poradiZavedeni() };
+    var vs = L.vsechnyFakty();
+    for (var i = 0; i < vs.length; i++) s.fakty[vs[i].id] = vs[i];
+    return s;
+  }
+
+  radky.push("§12.1  generujMoznosti()");
+  t("500 náhodných běhů: bez duplicit, správná odpověď vždy mezi možnostmi", function () {
+    var rnd = nahodnyGenerator(20260829);
+    var poz = L.novyPozicniStav();
+    for (var i = 0; i < 500; i++) {
+      var a = 1 + Math.floor(rnd() * 10), b = 1 + Math.floor(rnd() * 10);
+      var tvary = ["soucin", "soucin", "cinitelA", "cinitelB"];
+      var tvar = tvary[Math.floor(rnd() * 4)];
+      if (tvar !== "soucin" && (a > 9 || b > 9 || a < 2 || b < 2)) tvar = "soucin";
+      var pocet = rnd() < 0.5 ? 3 : 4;
+      var g = L.generujMoznosti(a, b, tvar, pocet, poz, rnd);
+      ok(g.moznosti.length === pocet, a + "×" + b + " " + tvar + ": čekal " + pocet + " možností, dostal " + g.moznosti.length);
+      ok(g.moznosti.indexOf(g.spravna) >= 0, a + "×" + b + ": správná odpověď " + g.spravna + " chybí mezi " + g.moznosti);
+      ok(g.moznosti[g.pozice] === g.spravna, a + "×" + b + ": hlášená pozice nesedí");
+      var videl = {};
+      for (var j = 0; j < g.moznosti.length; j++) {
+        var v = g.moznosti[j];
+        ok(!videl[v], a + "×" + b + ": duplicita " + v + " v " + g.moznosti);
+        videl[v] = true;
+      }
+    }
+  });
+  t("všechny možnosti mají stejný počet číslic jako správná odpověď", function () {
+    var rnd = nahodnyGenerator(777), poz = L.novyPozicniStav();
+    for (var i = 0; i < 500; i++) {
+      var a = 1 + Math.floor(rnd() * 10), b = 1 + Math.floor(rnd() * 10);
+      var g = L.generujMoznosti(a, b, "soucin", rnd() < 0.5 ? 3 : 4, poz, rnd);
+      var cifer = L.pocetCifer(g.spravna);
+      for (var j = 0; j < g.moznosti.length; j++) {
+        ok(L.pocetCifer(g.moznosti[j]) === cifer,
+           a + "×" + b + "=" + g.spravna + ": možnost " + g.moznosti[j] + " má jiný počet číslic");
+      }
+    }
+  });
+  t("žádný distraktor není správnou odpovědí na jiný tvar téže otázky", function () {
+    var rnd = nahodnyGenerator(31337), poz = L.novyPozicniStav();
+    for (var a = 2; a <= 9; a++) for (var b = a; b <= 9; b++) {
+      var g = L.generujMoznosti(a, b, "soucin", 4, poz, rnd);
+      for (var j = 0; j < g.moznosti.length; j++) {
+        var v = g.moznosti[j];
+        if (v === g.spravna) continue;
+        ok(v !== a && v !== b, a + "×" + b + ": distraktor " + v + " je odpovědí na reverzní tvar");
+      }
+      var r = L.generujMoznosti(a, b, "cinitelA", 4, poz, rnd);
+      for (var q = 0; q < r.moznosti.length; q++) {
+        var w = r.moznosti[q];
+        if (w === r.spravna) continue;
+        ok(w !== a * b && w !== b, "□×" + b + "=" + (a * b) + ": distraktor " + w + " je odpovědí na jiný tvar");
+      }
+    }
+  });
+  t("rozdělení pozic správné odpovědi je rovnoměrné (odchylka do 10 %)", function () {
+    var rnd = nahodnyGenerator(4242);
+    var poz = L.novyPozicniStav(), pocty = [0, 0, 0, 0], N = 400;
+    for (var i = 0; i < N; i++) {
+      var a = 2 + Math.floor(rnd() * 8), b = 2 + Math.floor(rnd() * 8);
+      var g = L.generujMoznosti(a, b, "soucin", 4, poz, rnd);
+      pocty[g.pozice]++;
+    }
+    var ocekavano = N / 4;
+    for (var p = 0; p < 4; p++) {
+      var odchylka = Math.abs(pocty[p] - ocekavano) / ocekavano;
+      ok(odchylka <= 0.10, "pozice " + p + ": " + pocty[p] + " z " + N + " (odchylka " + Math.round(odchylka * 100) + " %)");
+    }
+  });
+  t("3 možnosti u nového faktu, 4 od druhé relace dál", function () {
+    var poz = L.novyPozicniStav(), rnd = nahodnyGenerator(9);
+    ok(L.generujMoznosti(7, 8, "soucin", K.moznostiNovyFakt, poz, rnd).moznosti.length === 3, "nový fakt");
+    ok(L.generujMoznosti(7, 8, "soucin", K.moznostiJindy, poz, rnd).moznosti.length === 4, "další relace");
+  });
+
+  radky.push("");
+  radky.push("§12.2  vyberDalsiFakt()");
+  t("nikdy nevrátí tentýž fakt dvakrát po sobě", function () {
+    var s = prazdnyStav();
+    var ids = ["2x2", "2x3", "2x4", "3x3", "4x5"];
+    for (var i = 0; i < ids.length; i++) { s.fakty[ids[i]].status = "aktivni"; s.fakty[ids[i]].box = 1; s.aktivni.push(ids[i]); }
+    var posledni = null, ted = Date.now();
+    for (var q = 0; q < 300; q++) {
+      var f = L.vyberDalsiFakt(s.fakty, s.aktivni, { index: q, posledniId: posledni, ted: ted });
+      ok(f, "fronta vrátila prázdno");
+      ok(f.id !== posledni, "fakt " + f.id + " se zopakoval hned po sobě (krok " + q + ")");
+      L.poOdpovedi(f, { correct: q % 3 !== 0, timedOut: false, latencyMs: 1500, mode: "test" }, { index: q, ted: ted });
+      posledni = f.id;
+    }
+  });
+  t("respektuje nextDue — splatný fakt má přednost před nesplatným", function () {
+    var s = prazdnyStav(), ted = 1000000;
+    var a = s.fakty["2x2"], b = s.fakty["3x3"];
+    a.status = b.status = "aktivni";
+    a.nextDue = ted - 5000; a.dueAt = null;
+    b.nextDue = ted + 500000; b.dueAt = null;
+    s.aktivni = ["2x2", "3x3"];
+    var f = L.vyberDalsiFakt(s.fakty, s.aktivni, { index: 5, posledniId: null, ted: ted });
+    ok(f.id === "2x2", "vybral " + f.id + ", čekal 2x2 (jediný splatný)");
+  });
+  t("fakt z boxu 1 se vrátí zhruba za 3 příklady, z boxu 2 za 8", function () {
+    var s = prazdnyStav(), ted = 5000;
+    var f = s.fakty["6x7"];
+    f.box = 1; L.naplanuj(f, { index: 10, ted: ted });
+    ok(f.dueAt === 13, "box 1 → dueAt " + f.dueAt + ", čekal 13");
+    f.box = 2; L.naplanuj(f, { index: 10, ted: ted });
+    ok(f.dueAt === 18, "box 2 → dueAt " + f.dueAt + ", čekal 18");
+    f.box = 3; L.naplanuj(f, { index: 10, ted: ted });
+    ok(f.konecRelace === true && f.dueAt === null, "box 3 → konec relace");
+    f.box = 4; L.naplanuj(f, { index: 10, ted: ted });
+    ok(f.nextDue === ted + 86400000, "box 4 → zítra");
+    f.box = 5; L.naplanuj(f, { index: 10, ted: ted });
+    ok(f.nextDue === ted + 3 * 86400000, "box 5 → za tři dny");
+  });
+
+  radky.push("");
+  radky.push("§12.3  postupová logika");
+  t("3 správné a včasné odpovědi v řadě → stage++", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    ok(f.stage === 1, "začíná na stage 1");
+    L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 900, mode: "t" }, c);
+    L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 900, mode: "t" }, c);
+    ok(f.stage === 1, "po dvou správných je pořád stage 1, je " + f.stage);
+    L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 900, mode: "t" }, c);
+    ok(f.stage === 2, "po třech správných má být stage 2, je " + f.stage);
+    ok(f.streak === 0, "streak se má vynulovat, je " + f.streak);
+  });
+  t("2 chyby v řadě → stage--, ne níž než 1", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    f.stage = 3; f.maxStage = 3;
+    L.poOdpovedi(f, { correct: false, timedOut: false, latencyMs: 5000, mode: "t" }, c);
+    ok(f.stage === 3, "jedna chyba stage nesnižuje, je " + f.stage);
+    L.poOdpovedi(f, { correct: false, timedOut: false, latencyMs: 5000, mode: "t" }, c);
+    ok(f.stage === 2, "po druhé chybě má být stage 2, je " + f.stage);
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "t" }, c);
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "t" }, c);
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "t" }, c);
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "t" }, c);
+    ok(f.stage === 1, "níž než stage 1 to nesmí spadnout, je " + f.stage);
+  });
+  t("fakt nezezelená dřív, než ho zvládne i na úrovni 3 (psaní)", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    f.status = "aktivni"; f.box = 1;
+    var videnoNaStage3 = 0;
+    for (var i = 0; i < 40 && !L.jeZvladnuty(f); i++) {
+      if (f.stage === 3) videnoNaStage3++;
+      L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 900, mode: "stage" + f.stage }, c);
+    }
+    ok(L.jeZvladnuty(f), "fakt se nikdy nestal zvládnutým");
+    ok(videnoNaStage3 >= K.spravneProPostup,
+       "zezelenal po " + videnoNaStage3 + " odpovědích na úrovni 3, čekal aspoň " + K.spravneProPostup);
+    var naStage3 = f.history.filter(function (h) { return h.mode === "stage3"; }).length;
+    ok(naStage3 >= K.spravneProPostup, "v historii je jen " + naStage3 + " odpovědí z úrovně 3");
+  });
+  t("postup přes všechny tři úrovně trvá aspoň 9 správných odpovědí", function () {
+    var s = prazdnyStav(), f = s.fakty["6x7"], c = { index: 0, ted: 1 };
+    f.status = "aktivni"; f.box = 1;
+    var n = 0;
+    while (!L.jeZvladnuty(f) && n < 50) { L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 800, mode: "t" }, c); n++; }
+    ok(n >= 9, "stačilo " + n + " odpovědí — to je na zapamatování málo");
+  });
+  t("chyba i vypršení času vrací fakt vždy do boxu 1", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    f.box = 5;
+    L.poOdpovedi(f, { correct: false, timedOut: false, latencyMs: 4000, mode: "t" }, c);
+    ok(f.box === 1, "po chybě má být box 1, je " + f.box);
+    f.box = 4;
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "t" }, c);
+    ok(f.box === 1, "po vypršení času má být box 1, je " + f.box);
+  });
+  t("vypršení času se nikdy nepočítá jako úspěch, i kdyby přišla správná hodnota", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    L.poOdpovedi(f, { correct: true, timedOut: true, latencyMs: 5200, mode: "t" }, c);
+    ok(f.box === 1 && f.streak === 0, "box " + f.box + ", streak " + f.streak);
+  });
+  t("historie faktu si drží nejvýš 10 posledních záznamů", function () {
+    var s = prazdnyStav(), f = s.fakty["7x8"], c = { index: 0, ted: 1 };
+    for (var i = 0; i < 25; i++) L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 800, mode: "t" }, c);
+    ok(f.history.length === 10, "historie má " + f.history.length + " záznamů");
+  });
+
+  radky.push("");
+  radky.push("§12.4  dávkování");
+  t("limit aktivních faktů nikdy nepřekročí " + K.maxAktivnichFaktu, function () {
+    var s = prazdnyStav(), rnd = nahodnyGenerator(123), ted = Date.now(), posledni = null;
+    var max = 0;
+    for (var q = 0; q < 1200; q++) {
+      var c = { index: q, ted: ted + q * 4000 };
+      if (L.lzeZavest(s)) L.zavedNovy(s, c);
+      max = Math.max(max, s.aktivni.length);
+      ok(s.aktivni.length <= K.maxAktivnichFaktu, "krok " + q + ": aktivních " + s.aktivni.length);
+      var f = L.vyberDalsiFakt(s.fakty, s.aktivni, { index: q, posledniId: posledni, ted: c.ted });
+      if (!f) continue;
+      L.poOdpovedi(f, { correct: rnd() < 0.8, timedOut: false, latencyMs: 1200, mode: "t" }, c);
+      L.aktualizujAktivni(s, f);
+      ok(s.aktivni.length <= K.maxAktivnichFaktu, "krok " + q + " po odpovědi: aktivních " + s.aktivni.length);
+      posledni = f.id;
+    }
+    ok(max === K.maxAktivnichFaktu, "fronta se má naplnit až na " + K.maxAktivnichFaktu + ", dosáhla " + max);
+  });
+  t("první relace se nezasekne na jediném faktu dokola", function () {
+    var s = prazdnyStav(), ted = Date.now(), posledni = null, novych = 0;
+    var poSobe = 0, maxPoSobe = 0;
+    for (var q = 0; q < 20; q++) {
+      var c = { index: q, ted: ted + q * 4000 };
+      if (L.maZavestNovy(s, q, novych, s.aktivni.length)) { if (L.zavedNovy(s, c)) novych++; continue; }
+      var f = L.vyberDalsiFakt(s.fakty, s.aktivni, { index: q, posledniId: posledni, ted: c.ted });
+      if (!f) continue;
+      poSobe = (f.id === posledni) ? poSobe + 1 : 1;
+      maxPoSobe = Math.max(maxPoSobe, poSobe);
+      L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 1000, mode: "t" }, c);
+      L.aktualizujAktivni(s, f);
+      posledni = f.id;
+    }
+    ok(s.aktivni.length >= 2, "po dvaceti příkladech je aktivních jen " + s.aktivni.length);
+    ok(maxPoSobe <= 2, "tentýž fakt přišel " + maxPoSobe + "krát za sebou");
+  });
+  t("relace se nesmí zvrhnout v rotaci pár příkladů dokola", function () {
+    // Simulace celé relace: fronta se plní stejně jako v appce, tedy aktivní
+    // fakty plus zvládnuté k opakování. Sledujeme, jak často se příklad vrací.
+    var s = prazdnyStav(), ted = Date.now();
+    var vs = L.vsechnyFakty();
+    for (var i = 0; i < vs.length; i++) {
+      var f = s.fakty[vs[i].id];
+      if (L.jeTrivialni(f)) {           // po zahřívacím kole jsou ×1 a ×10 hotové
+        f.stage = 3; f.maxStage = 3; f.box = 4; f.status = "zvladnuta";
+        f.nextDue = ted + 86400000;
+      }
+    }
+    function fronta() {
+      var out = s.aktivni.slice(), opak = [];
+      for (var id in s.fakty) {
+        if (!Object.prototype.hasOwnProperty.call(s.fakty, id)) continue;
+        var g = s.fakty[id];
+        if (g.status === "zvladnuta") opak.push(g);
+      }
+      opak.sort(function (m, n) { return (m.nextDue || 0) - (n.nextDue || 0); });
+      var mam = {}, k;
+      for (k = 0; k < out.length; k++) mam[out[k]] = true;
+      for (k = 0; k < opak.length && out.length < L.minFronty(delka); k++) {
+        if (!mam[opak[k].id]) out.push(opak[k].id);
+      }
+      return out;
+    }
+    var posledni = null, novych = 0, poSobe = 0, maxPoSobe = 0;
+    var pocty = {}, poradi = [];
+    var delka = L.delkaRelace(0);
+    for (var q = 0; q < delka; q++) {
+      var c = { index: q, ted: ted + q * 4000 };
+      if (L.maZavestNovy(s, q, novych, fronta().length, L.maxNovych(delka))) {
+        if (L.zavedNovy(s, c)) novych++;
+        continue;
+      }
+      var vybrany = L.vyberDalsiFakt(s.fakty, fronta(),
+        { index: q, posledniId: posledni, ted: c.ted, konecOd: L.konecOd(delka) });
+      if (!vybrany) continue;
+      poSobe = (vybrany.id === posledni) ? poSobe + 1 : 1;
+      maxPoSobe = Math.max(maxPoSobe, poSobe);
+      pocty[vybrany.id] = (pocty[vybrany.id] || 0) + 1;
+      poradi.push(vybrany.id);
+      L.poOdpovedi(vybrany, { correct: true, timedOut: false, latencyMs: 1100, mode: "t" }, c);
+      L.aktualizujAktivni(s, vybrany);
+      posledni = vybrany.id;
+    }
+    ok(maxPoSobe === 1, "tentýž příklad přišel " + maxPoSobe + "krát hned po sobě");
+    var stridani = 0;
+    for (var v = 0; v + 2 < poradi.length; v++) if (poradi[v] === poradi[v + 2]) stridani++;
+    ok(stridani < (poradi.length - 2) * 0.6,
+       "pořadí je z velké části střídání dvou příkladů (" + stridani + " z " + (poradi.length - 2) + ")");
+    var nejcastejsi = 0, id2;
+    for (id2 in pocty) nejcastejsi = Math.max(nejcastejsi, pocty[id2]);
+    ok(nejcastejsi <= 12, "jeden příklad se v relaci objevil " + nejcastejsi + "krát — to je mlácení dokola");
+    var ruznych = Object.keys(pocty).length;
+    ok(ruznych >= 5, "za celou relaci se vystřídalo jen " + ruznych + " různých příkladů");
+    // tvrdá rotace „a b c a b c" se pozná tak, že prvek na pozici i+n je vždycky týž
+    var perioda3 = 0;
+    for (var w = 0; w + 3 < poradi.length; w++) if (poradi[w] === poradi[w + 3]) perioda3++;
+    ok(perioda3 < poradi.length * 0.7,
+       "pořadí je skoro přesná rotace po třech (" + perioda3 + " z " + (poradi.length - 3) + " shod)");
+  });
+  t("i kratší pokračovací kolo má dost pestrosti", function () {
+    // Druhé kolo dne: většina učiva z prvního kola je hotová, zbývá pár faktů.
+    // Právě tady dřív vznikalo přesné střídání dvou příkladů dokola.
+    var s = prazdnyStav(), ted = Date.now();
+    var vs = L.vsechnyFakty(), i;
+    for (i = 0; i < vs.length; i++) {
+      var f = s.fakty[vs[i].id];
+      if (L.jeTrivialni(f)) {
+        f.stage = 3; f.maxStage = 3; f.box = 4; f.status = "zvladnuta";
+        f.nextDue = ted + 86400000;
+      }
+    }
+    var delka = L.delkaRelace(1);                    // 2. kolo dne
+    function fronta() {
+      var out = s.aktivni.slice(), opak = [], id, k;
+      for (id in s.fakty) {
+        if (!Object.prototype.hasOwnProperty.call(s.fakty, id)) continue;
+        if (s.fakty[id].status === "zvladnuta") opak.push(s.fakty[id]);
+      }
+      opak.sort(function (m, n) { return (m.nextDue || 0) - (n.nextDue || 0); });
+      var mam = {};
+      for (k = 0; k < out.length; k++) mam[out[k]] = true;
+      for (k = 0; k < opak.length && out.length < L.minFronty(delka); k++) {
+        if (!mam[opak[k].id]) out.push(opak[k].id);
+      }
+      return out;
+    }
+    var posledni = null, novych = 0, poradi = [], pocty = {};
+    for (var q = 0; q < delka; q++) {
+      var c = { index: q, ted: ted + q * 4000 };
+      if (L.maZavestNovy(s, q, novych, fronta().length, L.maxNovych(delka))) {
+        if (L.zavedNovy(s, c)) novych++;
+        continue;
+      }
+      var v = L.vyberDalsiFakt(s.fakty, fronta(),
+        { index: q, posledniId: posledni, ted: c.ted, konecOd: L.konecOd(delka) });
+      if (!v) continue;
+      poradi.push(v.id);
+      pocty[v.id] = (pocty[v.id] || 0) + 1;
+      L.poOdpovedi(v, { correct: true, timedOut: false, latencyMs: 1000, mode: "t" }, c);
+      L.aktualizujAktivni(s, v);
+      posledni = v.id;
+    }
+    ok(Object.keys(pocty).length >= 4,
+       "v pokračovacím kole se vystřídaly jen " + Object.keys(pocty).length + " příklady");
+    var stridani = 0;
+    for (var w = 0; w + 2 < poradi.length; w++) if (poradi[w] === poradi[w + 2]) stridani++;
+    ok(stridani < (poradi.length - 2) * 0.7,
+       "pokračovací kolo je pořád skoro jen střídání dvou příkladů (" + stridani +
+       " z " + (poradi.length - 2) + ")");
+  });
+  t("netrefená jednička nebo desítka nepředběhne učivo řad 2–9", function () {
+    var s = prazdnyStav(), ted = Date.now();
+    var id = L.idFaktu(10, 5);                     // fakty se drží jako {menší, větší}
+    var f = s.fakty[id];
+    f.stage = 3; f.maxStage = 3; f.status = "zvladnuta"; f.box = 1; f.nextDue = ted;
+    L.poOdpovedi(f, { correct: false, timedOut: true, latencyMs: 5000, mode: "stage3" }, { index: 0, ted: ted });
+    ok(s.poradi.indexOf(id) < 0, "10×5 se dostalo do fronty zavádění");
+    ok(f.status === "zvladnuta", "10×5 zabralo místo mezi aktivními fakty (status " + f.status + ")");
+    L.aktualizujAktivni(s, f);
+    ok(s.aktivni.indexOf(id) < 0, "10×5 se propašovalo mezi aktivní fakty");
+    ok(f.stage === 3, "10×5 spadlo zpátky na úroveň " + f.stage + " místo psaní");
+    ok(f.box === 1, "10×5 si po chybě mělo srazit box na 1, má " + f.box);
+  });
+  t("pořadí zavádění má právě 36 faktů a začíná řadami 2 a 5", function () {
+    var p = L.poradiZavedeni();
+    ok(p.length === 36, "pořadí má " + p.length + " faktů, čekal 36");
+    ok(p[0] === "2x2", "první je " + p[0]);
+    ok(p.indexOf("7x8") === 35, "7×8 má být úplně poslední, je na indexu " + p.indexOf("7x8"));
+    var tezke = ["6x7", "6x8", "7x8", "7x9", "8x9"];
+    for (var i = 0; i < tezke.length; i++) ok(p.indexOf(tezke[i]) >= 24, tezke[i] + " je moc brzy (index " + p.indexOf(tezke[i]) + ")");
+  });
+  t("55 faktů celkem, z toho 36 jádro a 19 triviální", function () {
+    var vs = L.vsechnyFakty();
+    ok(vs.length === 55, "faktů je " + vs.length);
+    var jadro = vs.filter(L.jeJadro).length, triv = vs.filter(L.jeTrivialni).length;
+    ok(jadro === 36, "jádro má " + jadro);
+    ok(triv === 19, "triviálních je " + triv);
+  });
+
+  radky.push("");
+  radky.push("§12.5  komutativita");
+  t("{7,8} a {8,7} je jeden a týž objekt se sdíleným stavem", function () {
+    ok(L.idFaktu(7, 8) === L.idFaktu(8, 7), "id se liší");
+    var s = prazdnyStav();
+    var f1 = s.fakty[L.idFaktu(7, 8)], f2 = s.fakty[L.idFaktu(8, 7)];
+    ok(f1 === f2, "nejsou to tytéž objekty");
+    f1.stage = 3;
+    ok(f2.stage === 3, "stav se nesdílí");
+    var vs = L.vsechnyFakty(), videl = {};
+    for (var i = 0; i < vs.length; i++) { ok(!videl[vs[i].id], "duplicitní fakt " + vs[i].id); videl[vs[i].id] = true; }
+  });
+
+  radky.push("");
+  radky.push("§12.6  načtení stavu");
+  t("prázdný localStorage → čistý start", function () {
+    var s = nactiZRetezce(null);
+    ok(s && s.aktivni.length === 0 && s.poradi.length === 36, "nečekaný výchozí stav");
+  });
+  t("poškozený localStorage aplikaci nesloží", function () {
+    var vzorky = ["", "{", "null", "[]", "\"ahoj\"", "{\"fakty\":\"tohle není objekt\"}",
+                  "{\"fakty\":{\"7x8\":{\"stage\":\"páté\",\"box\":-99}}}", "{\"fakty\":{},\"aktivni\":\"ne\"}"];
+    for (var i = 0; i < vzorky.length; i++) {
+      var s = nactiZRetezce(vzorky[i]);
+      ok(s && s.fakty && Object.keys(s.fakty).length === 55, "vzorek " + i + " nevrátil použitelný stav");
+      ok(s.aktivni.length <= K.maxAktivnichFaktu, "vzorek " + i + ": rozbitý seznam aktivních");
+      var f = s.fakty["7x8"];
+      ok(f.stage >= 1 && f.stage <= 3, "vzorek " + i + ": stage mimo rozsah (" + f.stage + ")");
+      ok(f.box >= 0 && f.box <= 5, "vzorek " + i + ": box mimo rozsah (" + f.box + ")");
+    }
+  });
+  t("starší uložený stav se opraví: ×1 a ×10 se vyklidí z fronty učiva", function () {
+    var puvodni = novyStav();
+    var triv = L.idFaktu(10, 5), triv2 = L.idFaktu(1, 3);
+    puvodni.poradi.unshift(triv);                 // takhle to zapisovala stará verze
+    puvodni.aktivni.push(triv2);
+    puvodni.fakty[triv].status = "aktivni"; puvodni.fakty[triv].stage = 1;
+    puvodni.fakty[triv2].status = "aktivni"; puvodni.fakty[triv2].stage = 1;
+    var s2 = nactiZRetezce(JSON.stringify(puvodni));
+    ok(s2.poradi.indexOf(triv) < 0, "10×5 zůstalo ve frontě zavádění");
+    ok(s2.aktivni.indexOf(triv2) < 0, "1×3 zůstalo mezi aktivními fakty");
+    ok(s2.fakty[triv].stage === 3, "10×5 se nepřesunulo na úroveň psaní (je " + s2.fakty[triv].stage + ")");
+    ok(s2.fakty[triv].status === "zvladnuta", "10×5 nejede jako opakování");
+    ok(s2.poradi.length === 36, "vyklizením se poškodila fronta učiva (" + s2.poradi.length + " faktů)");
+  });
+  t("platná záloha se načte i s postupem", function () {
+    var puvodni = novyStav();
+    puvodni.fakty["7x8"].stage = 3; puvodni.fakty["7x8"].box = 5;
+    puvodni.fakty["7x8"].status = "zvladnuta";
+    puvodni.aktivni = ["2x2", "2x3"];
+    puvodni.dayStreak = 12;
+    var s = nactiZRetezce(JSON.stringify(puvodni));
+    ok(s.fakty["7x8"].stage === 3 && s.fakty["7x8"].box === 5, "postup se nepřenesl");
+    ok(s.dayStreak === 12, "denní série se nepřenesla");
+    ok(L.jeZvladnuty(s.fakty["7x8"]), "fakt se nepovažuje za zvládnutý");
+  });
+
+  radky.push("");
+  radky.push("§13  čeho se vyvarovat");
+  t("reverzní tvar se nikdy nenabídne u nezvládnutého faktu", function () {
+    var s = prazdnyStav(), rnd = nahodnyGenerator(55);
+    var f = s.fakty["7x8"];
+    f.maxStage = 1;
+    for (var i = 0; i < 300; i++) ok(L.vyberTvar(f, 1, rnd) === "soucin", "reverz u faktu s maxStage 1");
+    f.maxStage = 2;
+    var videlReverz = false;
+    for (var j = 0; j < 300; j++) if (L.vyberTvar(f, 1, rnd) !== "soucin") videlReverz = true;
+    ok(videlReverz, "u faktu s maxStage 2 se reverz nikdy neobjevil");
+  });
+  t("reverzní tvar se nenabídne tam, kde by neměl distraktory (řady ×1 a ×10)", function () {
+    var s = prazdnyStav(), rnd = nahodnyGenerator(56);
+    var ids = ["1x7", "7x10", "1x1", "10x10"];
+    for (var i = 0; i < ids.length; i++) {
+      var f = s.fakty[ids[i]];
+      f.maxStage = 3; f.box = 5;
+      for (var j = 0; j < 100; j++) ok(L.vyberTvar(f, 1, rnd) === "soucin", "reverz u " + ids[i]);
+    }
+  });
+  t("časový limit nikde nepřekročí 6 sekund", function () {
+    ok(K.limitStage1 <= 6 && K.limitStage2 <= 6 && K.limitStage3 <= 6 && K.limitZahrivaci <= 6,
+       "některý limit je nad 6 s — to už stačí na dopočítání");
+  });
+  t("relace má pevný konec", function () {
+    for (var d = 0; d < 5; d++) {
+      var dl = L.delkaRelace(d);
+      ok(dl > 0 && dl <= 60, (d + 1) + ". relace dne má délku " + dl);
+    }
+    ok(L.delkaRelace(1) < L.delkaRelace(0), "druhé kolo dne není kratší než první");
+    ok(L.delkaRelace(2) < L.delkaRelace(1), "třetí kolo dne není kratší než druhé");
+    ok(L.delkaRelace(9) === L.delkaRelace(2), "od třetího kola dál se délka má ustálit");
+    ok(L.maxNovych(L.delkaRelace(2)) >= 1, "v krátkém kole nejde zavést ani jeden nový příklad");
+    ok(L.maxNovych(L.delkaRelace(0)) > L.maxNovych(L.delkaRelace(2)),
+       "kratší kolo má přinášet míň nového učiva než plné");
+  });
+
+  var hlavicka = (padlo === 0 ? "VŠECHNO PROŠLO" : padlo + " TESTŮ NEPROŠLO") +
+                 "   (" + proslo + " OK, " + padlo + " chyb)\n" +
+                 "===========================================================\n";
+  $("testy-vystup").textContent = hlavicka + radky.join("\n") + "\n";
+  ukazObrazovku("testy");
+  return { proslo: proslo, padlo: padlo };
+}
+
+/* ============================================================================
+   22) START
+   ============================================================================ */
+function napoj(id, udalost, fn) {
+  var e = $(id);
+  if (e) e.addEventListener(udalost, fn);
+}
+
+function start() {
+  S = nacti();
+  pouzijNastaveni();
+
+  $("btn-zvuk").innerHTML = IK.zvukZap;
+  $("btn-nastaveni").innerHTML = IK.ozubene;
+  $("tr-zpet").innerHTML = IK.zpet;
+  $("tr-zvuk").innerHTML = IK.zvukZap;
+  $("mapa-zpet").innerHTML = IK.zpet;
+  $("pokrok-zpet").innerHTML = IK.zpet;
+  $("obj-zpet").innerHTML = IK.zpet;
+  $("obj-prepni").innerHTML = IK.smaz;
+  $("nast-zavri").innerHTML = IK.zavri;
+
+  /* --- úvod --- */
+  napoj("uvod-dal", "click", function () {
+    odemkniZvuk();
+    ukazObrazovku("tricetsest");
+    $("ts-oskar").innerHTML = osel();
+    $("ts-text").innerHTML = "Násobilka vypadá jako sto příkladů. Není. " +
+      "Protože <b>7 × 8 a 8 × 7 je to samé</b>, je jich jenom 55 — a devatenáct z nich " +
+      "jsou jedničky a desítky, které umíš už teď.<br><br>Zbývá <b>36</b>. To je jako 36 kartiček.";
+    rekni("Zbývá jich jenom třicet šest.");
+  });
+  napoj("ts-dal", "click", function () { odemkniZvuk(); spustZahrivaci(); });
+  napoj("rada-dal", "click", function () { odemkniZvuk(); dalsiOtazkaZahrivaci(); });
+
+  /* --- domů --- */
+  napoj("dl-trenink", "click", function () { spustTrenink(); });
+  napoj("dl-mapa", "click", function () { odemkniZvuk(); vykresliMapu(); });
+  napoj("dl-pokrok", "click", function () { odemkniZvuk(); vykresliPokrok(); });
+  napoj("dl-objevovna", "click", function () { odemkniZvuk(); OBJ.rezim = "mrizka"; OBJ.cislo = null; vykresliObjevovnu(); });
+  napoj("btn-zvuk", "click", function () {
+    odemkniZvuk();
+    S.nastaveni.zvuk = !S.nastaveni.zvuk;
+    if (!S.nastaveni.zvuk) tichoRec();
+    uloz(); pouzijNastaveni();
+    if (S.nastaveni.zvuk) zvukKlik();
+  });
+  napoj("btn-nastaveni", "click", otevriNastaveni);
+
+  /* --- trénink --- */
+  napoj("tr-zpet", "click", function () {
+    zrusCasovace();
+    REL = null;
+    vykresliDomu();
+  });
+  napoj("tr-zvuk", "click", function () {
+    S.nastaveni.zvuk = !S.nastaveni.zvuk;
+    if (!S.nastaveni.zvuk) tichoRec();
+    uloz(); pouzijNastaveni();
+  });
+
+  /* --- konec relace --- */
+  napoj("konec-mapa", "click", function () { vykresliMapu(); });
+  napoj("konec-domu", "click", function () { vykresliDomu(); });
+
+  /* --- ostatní obrazovky --- */
+  napoj("mapa-zpet", "click", vykresliDomu);
+  napoj("pokrok-zpet", "click", vykresliDomu);
+  napoj("obj-zpet", "click", vykresliDomu);
+  napoj("obj-prepni", "click", function () {
+    OBJ.rezim = OBJ.rezim === "mrizka" ? "klavesnice" : "mrizka";
+    OBJ.napsano = ""; OBJ.cislo = null;
+    vykresliObjevovnu();
+  });
+
+  /* --- nastavení --- */
+  napoj("nast-zavri", "click", function () { zavriNastaveni(); vykresliDomu(); });
+  napoj("nast-zvuk", "click", function () { S.nastaveni.zvuk = !S.nastaveni.zvuk; uloz(); pouzijNastaveni(); });
+  napoj("nast-rec", "click", function () { S.nastaveni.rec = !S.nastaveni.rec; if (!S.nastaveni.rec) tichoRec(); uloz(); pouzijNastaveni(); });
+  napoj("nast-pismo", "click", function () { S.nastaveni.velkePismo = !S.nastaveni.velkePismo; uloz(); pouzijNastaveni(); });
+  napoj("nast-motiv", "click", function () {
+    var poradi = ["auto", "light", "dark"];
+    S.nastaveni.motiv = poradi[(poradi.indexOf(S.nastaveni.motiv) + 1) % 3];
+    uloz(); pouzijNastaveni();
+  });
+  napoj("nast-zaloha", "click", zalohuj);
+  napoj("nast-obnova", "click", obnovZeZalohy);
+  napoj("nast-reset", "click", function () {
+    var hl = $("nast-hlaska");
+    if (hl.getAttribute("data-potvrd") !== "1") {
+      hl.setAttribute("data-potvrd", "1");
+      hl.textContent = "Opravdu smazat celý postup i všechna zvířátka? Klepněte na tlačítko ještě jednou.";
+      return;
+    }
+    hl.removeAttribute("data-potvrd");
+    S = novyStav();
+    ulozHned();
+    zavriNastaveni();
+    pouzijNastaveni();
+    ukazObrazovku("uvod");
+    $("uvod-lulu").innerHTML = lama();
+  });
+
+  /* --- přidej na plochu --- */
+  napoj("plocha-ok", "click", function () {
+    S.plochaSkryto = true; uloz();
+    $("zaves-plocha").classList.remove("je-videt");
+  });
+  napoj("plocha-pozdeji", "click", function () { $("zaves-plocha").classList.remove("je-videt"); });
+
+  /* --- pauza --- */
+  napoj("pauza-dal", "click", odpauzuj);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { zrusCasovace(); pauzni(); }
+  });
+  window.addEventListener("pagehide", function () { zrusCasovace(); ulozHned(); });
+  window.addEventListener("blur", function () {
+    if (REL && REL.faze === "otazka" && document.hidden) pauzni();
+  });
+
+  /* první dotyk odemkne zvuk i syntézu (iOS to jinak nedovolí) */
+  document.addEventListener("pointerdown", odemkniZvuk, { once: true });
+  document.addEventListener("touchstart", odemkniZvuk, { once: true, passive: true });
+
+  /* --- kam se má appka otevřít --- */
+  if (location.hash === "#testy") { spustTesty(); return; }
+  if (!S.zahrivaciHotovo) {
+    ukazObrazovku("uvod");
+    $("uvod-lulu").innerHTML = lama();
+    ukazVarovaniUlozeni($("uvod-varovani"));
+  } else {
+    vykresliDomu();
+    if (!S.plochaSkryto) pak(1200, nabidniPlochu);
+  }
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+else start();
+
+/* pro testování z konzole */
+window.NASOBILKA = { L: L, K: K, testy: spustTesty, stav: function () { return S; },
+                     relace: function () { return REL; } };
+
+})();
+</script>
