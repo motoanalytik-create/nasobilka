@@ -235,29 +235,62 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
 
 /* ---------- mřížka / mapa ---------- */
 .mrizka-obal { width:100%; display:flex; justify-content:center; }
-/* Přehledová mapa je obrázek pokroku, ne ovládací prvek — malá políčka nevadí,
-   ale posouvat se musí uvnitř sebe, ne celou stránkou. */
-.mrizka-svitek { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:4px; }
-.mrizka-svitek > .mrizka { min-width:340px; }
-@media (max-width:480px) { .mrizka { gap:3px; } }
+
+/* ---------- MAPA: jedna geometrie navždy (zadání v2, §1) ----------
+   Políčko má pevnou velikost v px. Nemění se mezi otázkami, relacemi ani
+   s postupem — jen podle třídy zařízení (telefon / tablet / desktop), aby se
+   „šestapadesátka bydlí tamhle dole vpravo" dala zapamatovat prostorově.
+   Když se mřížka nevejde, posouvá se uvnitř svého kontejneru. Nezmenšuje se. */
 .mrizka {
-  display:grid; grid-template-columns:repeat(11, 1fr);
-  gap:clamp(2px, .5vw, 5px); width:100%;
-  max-width:min(96vw, 62vh, 560px);
+  --policko:31px; --hlavicka:24px; --mezera:2px;
+  display:grid;
+  grid-template-columns:var(--hlavicka) repeat(10, var(--policko));
+  grid-template-rows:var(--hlavicka) repeat(10, var(--policko));
+  gap:var(--mezera);
+  width:max-content; height:max-content;
+  flex:none;
 }
-/* V režimu „najdi výsledek" se kreslí jen odemčené řady a sloupce a mřížka
-   dostane celou zbylou výšku obrazovky — políčko není čtverec, roztáhne se.
-   Nic se nesmí schovat pod okraj: na odpověď je pět vteřin, není čas scrollovat. */
+/* Třída zařízení se pozná podle OBOU rozměrů — otočením telefonu naležato se
+   velikost políčka nesmí změnit, jinak by se mapa při otočení přeskládala. */
+@media (min-width:540px) and (min-height:540px) { .mrizka { --policko:40px; --hlavicka:32px; --mezera:3px; } }
+@media (min-width:760px) and (min-height:700px) { .mrizka { --policko:48px; --hlavicka:36px; --mezera:4px; } }
+@media (min-width:1100px) and (min-height:760px) { .mrizka { --policko:52px; --hlavicka:40px; --mezera:5px; } }
+
+/* Kontejner, ve kterém se mapa posouvá. `margin:auto` na dítěti: když se vejde,
+   je uprostřed; když ne, začíná u kraje a dá se odscrollovat celá
+   (justify-content:center by levý okraj odřízl nedosažitelně). */
+.mrizka-svitek {
+  width:100%; overflow:auto; -webkit-overflow-scrolling:touch;
+  display:flex; padding:2px 2px 6px;
+}
+.mrizka-svitek > .mrizka { margin:auto; }
+/* V tréninku má mapa sedět hned pod hledaným číslem, ne uprostřed prázdna. */
+.telo.s-mapou .mrizka-svitek > .mrizka { margin:0 auto; }
+/* Odemčené políčko je tlačítko a má tak vypadat i ve světlém režimu, kde
+   šedá na šedé splývá. Zamčené zůstává šedé a ztlumené. */
+.mrizka.v-treninku .bunka.klikaci { background:var(--card); box-shadow:var(--shadow-sm); }
+.mrizka.v-treninku .bunka.zamcena { background:var(--stone); opacity:.45; box-shadow:none; }
+
 .levy { display:flex; flex-direction:column; gap:14px; flex:1 1 auto; min-height:0; }
+#obr-trenink.s-mapou { height:100dvh; max-height:100dvh; overflow:hidden; }
+/* Odpočet je vždycky u spodního okraje obrazovky — na okraji zorného pole,
+   kde je vidět, ale netlačí. Uprostřed mezi otázkou a odpovědí honil. */
+#obr-trenink .odpocet {
+  position:fixed; left:14px; right:14px; bottom:calc(10px + env(safe-area-inset-bottom));
+  width:auto; max-width:none; margin:0; height:6px; z-index:5; opacity:.6;
+}
+#obr-trenink .telo { padding-bottom:calc(30px + env(safe-area-inset-bottom)); }
 .telo.s-mapou .levy { flex:0 0 auto; }
 .telo.s-mapou .jeviste { flex:0 0 auto; }
 .telo.s-mapou .jeviste .maskot-box { display:none; }
 .telo.s-mapou #tr-odpoved { flex:1 1 auto; min-height:0; display:flex; }
-.telo.s-mapou .mrizka-obal { flex:1; min-height:0; align-items:stretch; }
+.telo.s-mapou .mrizka-svitek { flex:1; min-height:0; }
+/* na úzkém telefonu ať mapa využije i vodorovné okraje */
+@media (max-width:480px) { .telo.s-mapou #tr-odpoved { margin:0 -10px; } }
 
 /* Na šířku (telefon otočený naležato) je výšky málo a šířky dost:
-   otázka doleva, odpověď doprava. Otočení uprostřed příkladu tím nic nerozbije —
-   odpočet je CSS přechod, ten změnu rozměru přežije. */
+   otázka doleva, odpověď doprava. Mapa se tam nevejde na výšku — posouvá se,
+   podle zadání v2 se nikdy nezmenšuje. Primární zařízení je tablet. */
 @media (orientation:landscape) and (max-height:560px) {
   #obr-trenink .telo { flex-direction:row; align-items:stretch; gap:16px; }
   #obr-trenink .levy { flex:0 0 36%; min-width:180px; justify-content:center; }
@@ -268,32 +301,46 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
   #obr-trenink .jeviste .maskot-box { display:none; }
   #obr-trenink .volby { max-width:none; }
   #obr-trenink .klavesnice { max-width:320px; }
-  #obr-trenink .mrizka.v-treninku .bunka { min-height:38px; }
   .oprava .veta { font-size:clamp(30px, 6vw, 52px); }
 }
-.mrizka.v-treninku {
-  max-width:min(100%, 560px); gap:clamp(3px, 1.1vw, 8px);
-  height:100%; align-content:stretch;
-}
-.mrizka.v-treninku .bunka {
-  aspect-ratio:auto; min-height:44px;
-  font-size:clamp(15px, 4.4vw, 26px); border-radius:clamp(8px, 2vw, 14px);
-}
-.mrizka.v-treninku .bunka.hlavicka { min-height:0; font-size:clamp(13px, 3.6vw, 20px); }
-/* na úzkém telefonu ať mřížka využije i vodorovné okraje */
-@media (max-width:480px) { .telo.s-mapou #tr-odpoved { margin:0 -8px; } }
+
 .bunka {
-  aspect-ratio:1; border-radius:clamp(4px, 1vw, 9px);
+  position:relative; border-radius:calc(var(--policko, 31px) * .22);
   display:grid; place-items:center;
   font-family:var(--num); font-weight:600; font-variant-numeric:tabular-nums;
-  font-size:clamp(9px, 2.1vw, 17px); line-height:1;
+  font-size:calc(var(--policko, 31px) * .36); line-height:1;
   background:var(--stone); color:var(--stone-ink);
   transition:transform .12s ease, background .2s ease;
+  -webkit-user-select:none; user-select:none;
 }
-.bunka.hlavicka { background:transparent; color:var(--ink-soft); font-weight:800; font-size:clamp(9px, 2.2vw, 18px); }
+/* Dotyková plocha přesahuje do mezer: reálný cíl je o pár px větší než políčko,
+   aniž by se cokoli zvětšilo vizuálně. */
+.bunka.klikaci::after { content:""; position:absolute; inset:-4px; border-radius:inherit; }
+.bunka.zamcena { opacity:.35; }
+.bunka.pod-prstem { outline:3px solid var(--accent); outline-offset:1px; transform:scale(1.12); z-index:2; }
+
+/* Lupa nad prstem: co je pod ním, dokud drží. Platí, co pustí. */
+.lupa {
+  position:fixed; z-index:60; pointer-events:none; display:none;
+  transform:translate(-50%, -100%);
+  background:var(--card); color:var(--ink);
+  border-radius:18px; box-shadow:var(--shadow-lg);
+  padding:10px 20px 12px; white-space:nowrap; text-align:center;
+  font-family:var(--num); font-weight:600; font-size:38px; line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.lupa.je-videt { display:block; }
+.lupa.pod { transform:translate(-50%, 0); }
+.lupa::after {
+  content:""; position:absolute; left:50%; bottom:-9px; width:18px; height:18px;
+  background:var(--card); transform:translateX(-50%) rotate(45deg);
+  border-radius:3px; box-shadow:4px 4px 8px rgba(0,0,0,.06);
+}
+.lupa.pod::after { bottom:auto; top:-9px; }
+.bunka.hlavicka { background:transparent; color:var(--ink-soft); font-weight:800; font-size:calc(var(--policko, 31px) * .4); }
 .bunka.rohova { background:transparent; }
 .bunka.uci-se { background:var(--saffron-bg); color:var(--saffron-ink); }
-.bunka.zvladnuta { background:var(--jade-bg); color:var(--jade); font-size:clamp(11px, 2.6vw, 22px); }
+.bunka.zvladnuta { background:var(--jade-bg); color:var(--jade); font-size:calc(var(--policko, 31px) * .5); }
 .bunka.klikaci { cursor:pointer; box-shadow:var(--shadow-sm); }
 .bunka.klikaci:active { transform:scale(.9); }
 .bunka.nedostupna { opacity:.42; }
@@ -380,6 +427,36 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
 }
 .prep.je-zap { background:var(--accent); color:var(--accent-ink); }
 
+/* ---------- domovská obrazovka: cíl na dosah, týden ---------- */
+.cil-pas {
+  background:var(--card); border-radius:var(--r-md); box-shadow:var(--shadow-sm);
+  padding:12px 16px; display:grid; grid-template-columns:1fr auto; gap:8px 12px; align-items:center;
+}
+.cil-pas .cil-text { font-weight:700; color:var(--ink-soft); font-size:calc(15px * var(--scale)); }
+.cil-pas .cil-text b { color:var(--ink); }
+.cil-pas .cil-pocet { font-variant-numeric:tabular-nums; font-weight:800; color:var(--accent); font-size:calc(14px * var(--scale)); }
+.cil-pas .minibar { grid-column:1 / -1; }
+.minibar { height:8px; border-radius:99px; background:var(--stone); overflow:hidden; }
+.minibar-vypln { height:100%; background:var(--jade); border-radius:99px; transition:width .4s ease; }
+.chip {
+  display:inline-block; padding:6px 12px; border-radius:99px; background:var(--card-2);
+  color:var(--muted); font-weight:700; font-size:calc(13px * var(--scale)); align-self:flex-start;
+}
+.dlazd .eyebrow { font-size:calc(12px * var(--scale)); font-weight:800; letter-spacing:.06em; text-transform:uppercase; opacity:.7; }
+
+/* ---------- „Co si dneska vezmeme?" ---------- */
+.volba-rady { display:grid; gap:12px; width:100%; }
+.volba-rada {
+  background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-md);
+  padding:14px 18px; display:grid; grid-template-columns:auto 1fr auto; gap:6px 14px;
+  align-items:center; text-align:left; min-height:76px; transition:transform .12s ease;
+}
+.volba-rada:active { transform:scale(.97); }
+.volba-rada .cislo { font-family:var(--num); font-weight:600; font-size:calc(32px * var(--scale)); color:var(--accent); font-variant-numeric:tabular-nums; }
+.volba-rada .jm { font-weight:800; font-size:calc(19px * var(--scale)); }
+.volba-rada .zb { color:var(--muted); font-weight:700; font-size:calc(14px * var(--scale)); font-variant-numeric:tabular-nums; }
+.volba-rada .minibar { grid-column:2 / -1; }
+
 #testy-vystup { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:13px; white-space:pre-wrap; padding:16px; line-height:1.5; }
 </style>
 
@@ -429,11 +506,13 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
             <div class="bublina" style="flex:1" id="domu-pozdrav"></div>
           </div>
           <div id="domu-varovani" style="display:none"></div>
+          <div class="cil-pas" id="domu-cil"></div>
+          <div class="chip" id="domu-tyden"></div>
           <div class="dlazdice">
             <button class="dlazd hlavni siroka" id="dl-trenink">
-              <span class="emo">🎯</span>
-              <span class="nadp">Trénink</span>
-              <span class="pod" id="dl-trenink-pod">5 minut s Lulu</span>
+              <span class="eyebrow">Dneska</span>
+              <span class="nadp" id="dl-trenink-nadp">Trénink</span>
+              <span class="pod" id="dl-trenink-pod"></span>
             </button>
             <button class="dlazd" id="dl-mapa">
               <span class="emo">🗺️</span>
@@ -464,6 +543,22 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
         <h2 id="rada-nadpis" style="font-size:calc(26px * var(--scale)); text-align:center"></h2>
         <div class="tip" id="rada-tip"></div>
         <button class="tl" id="rada-dal">Zkusit</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VOLBA ŘADY — „Co si dneska vezmeme?" ============ -->
+  <section class="obr" id="obr-volba">
+    <div class="lista">
+      <button class="ikonbtn" id="volba-zpet" aria-label="Zpět"></button>
+      <div class="lista-mezera"></div>
+    </div>
+    <div class="telo stred">
+      <div class="centr" style="max-width:520px; width:100%">
+        <div class="maskot-box" id="volba-lulu"></div>
+        <h2 style="font-size:calc(26px * var(--scale)); text-align:center">Co si dneska vezmeme?</h2>
+        <div class="volba-rady" id="volba-rady"></div>
+        <button class="tl tiche mala" id="volba-lulu-vyber">Vyber ty, Lulu</button>
       </div>
     </div>
   </section>
@@ -625,6 +720,9 @@ h1,h2,h3 { margin:0; font-weight:800; letter-spacing:-.02em; }
     </div>
   </div>
 
+  <!-- lupa nad prstem v režimu „najdi výsledek" -->
+  <div class="lupa" id="lupa" aria-hidden="true"></div>
+
   <!-- ============ PAUZA ============ -->
   <div class="zaves" id="zaves-pauza">
     <div class="zaves-karta">
@@ -649,10 +747,12 @@ var K = {
      Záměrně stejné na všech třech úrovních. Pět vteřin nestačí na dopočítání
      ani na jedné z nich; jednotný limit znamená, že přechod na psaní nepřinese
      kromě jiného vstupu i skokové zrychlení. */
-  limitStage1: 5,
-  limitStage2: 5,
-  limitStage3: 5,
-  limitZahrivaci: 5,
+  limitStage1: 6,
+  limitStage2: 10,            // v mapě po vybavení ještě hledá a míří prstem — to s pamětí
+                              // nesouvisí. Doba vybavení se měří zvlášť jako čas do prvního
+                              // dotyku (zadání v2, §1).
+  limitStage3: 6,
+  limitZahrivaci: 6,
 
   /* --- dávkování --- */
   maxAktivnichFaktu: 6,       // kolik faktů se smí učit současně
@@ -691,6 +791,9 @@ var K = {
   novyKazdychNaStart: 3,      // jeden jediný fakt dokola není vybavování z paměti,
                               // jen ozvěna v krátkodobé paměti
   minFrontyVRelaci: 5,        // absolutní minimum příkladů ve frontě
+  stropNaPriklad: 6,          // víckrát se tentýž příklad v jedné relaci neobjeví, dokud
+                              // je z čeho brát jiný — i když se nedaří. Deset pokusů
+                              // o 2 × 2 za sebou nic nenaučí, jen otráví; zítra je taky den.
   maxOpakovaniPrikladu: 5,    // kolikrát nejvíc se má příklad v relaci objevit; z toho
                               // se dopočítá, kolik jich musí být ve frontě (40 / 5 = 8)
   zNejstarsichVybirat: 3,     // z kolika nejdéle neviděných se losuje (1 = tvrdá rotace)
@@ -699,8 +802,6 @@ var K = {
                               // hrozí zacyklení, tím častěji se proloží. 0 = nikdy.
 
   /* --- ostatní --- */
-  minSirkaPolicka: 44,        // pod tuhle šířku (px) políčko mapy nesmí klesnout;
-                              // když se odemčené řady přestanou vejít, ukáže se jen výřez
   rychlaOdpovedMs: 2500,      // pod tímhle to bereme jako „z paměti"
   animaceSpravneMs: 420,      // jak dlouho maskot slaví
   pauzaPoSpravneMs: 260       // než přijde další otázka
@@ -895,6 +996,9 @@ L.vyberDalsiFakt = function (fakty, frontaIds, ctx) {
   if (!kand.length) return null;
   var jine = kand.filter(function (f) { return f.id !== ctx.posledniId; });
   var zdroj = jine.length ? jine : kand;      // nikdy dvakrát po sobě, pokud je z čeho brát
+  // příklad, který už dnes přišel tolikrát, že by to bylo mlácení, dostane pokoj
+  var neprebrane = zdroj.filter(function (f) { return (f.videnoRelaci || 0) < K.stropNaPriklad; });
+  if (neprebrane.length) zdroj = neprebrane;
 
   var vRelaci = zdroj.filter(function (f) { return f.dueAt != null && f.dueAt <= ctx.index; });
   if (vRelaci.length) {
@@ -981,8 +1085,11 @@ L.poOdpovedi = function (f, vysledek, ctx) {
   if (f.stage > f.maxStage) f.maxStage = f.stage;
   f.posledniTs = ctx.ted;
   f.videnoRelaci++;
-  f.history.push({ ts: ctx.ted, mode: vysledek.mode, correct: !!vysledek.correct,
-                   latencyMs: vysledek.latencyMs, timedOut: !!vysledek.timedOut });
+  var zaznam = { ts: ctx.ted, mode: vysledek.mode, correct: !!vysledek.correct,
+                 latencyMs: vysledek.latencyMs, timedOut: !!vysledek.timedOut };
+  // V mapě je doba vybavení = čas do prvního dotyku; zbytek je míření prstem.
+  if (vysledek.firstTouchMs != null) zaznam.firstTouchMs = vysledek.firstTouchMs;
+  f.history.push(zaznam);
   while (f.history.length > 10) f.history.shift();
   L.naplanuj(f, ctx);
   if (f.stage >= K.stageProUvolneni && f.box >= K.boxProUvolneni) f.status = "zvladnuta";
@@ -1042,6 +1149,183 @@ L.aktualizujAktivni = function (stav, f) {
   return false;
 };
 
+/* --- mapa: jedna geometrie navždy (zadání v2, §1) ---
+   Tvar mřížky NIKDY nezávisí na stavu učení. Odemčenost řídí jen barvu a
+   klikatelnost. Proto je geometrie funkce bez parametrů — nemá z čeho se měnit. */
+L.geometrieMapy = function () {
+  var vse = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  return { rady: vse.slice(), sloupce: vse.slice() };
+};
+
+/* Které činitele jsou odemčené: jedničky a desítky vždy, dál řady rozpracovaných
+   a zvládnutých faktů jádra. Určuje jen, kam se smí klepnout. */
+L.odemceneCinitele = function (stav) {
+  var set = {}; set[1] = true; set[10] = true;
+  function pridej(f) { set[f.a] = true; set[f.b] = true; }
+  for (var i = 0; i < stav.aktivni.length; i++) { var a = stav.fakty[stav.aktivni[i]]; if (a) pridej(a); }
+  for (var id in stav.fakty) {
+    if (!Object.prototype.hasOwnProperty.call(stav.fakty, id)) continue;
+    var f = stav.fakty[id];
+    if (f.status === "zvladnuta" && f.a >= 2 && f.a <= 9 && f.b >= 2 && f.b <= 9) pridej(f);
+  }
+  var out = [];
+  for (var k in set) out.push(parseInt(k, 10));
+  out.sort(function (m, n) { return m - n; });
+  return out;
+};
+
+/* ============================================================================
+   ŘADA JAKO CÍL A DOMOVSKÁ OBRAZOVKA (zadání v2, §3.0)
+   Dítě nemyslí v 55 faktech, myslí v řadách. „Do celých šestek ti chybí tři"
+   je nejdůležitější věta v aplikaci — blízký cíl táhne, „55 políček" je
+   nekonečno. Všechno tady je čistá logika, aby se to dalo otestovat.
+   ============================================================================ */
+L.JMENA_RAD = {
+  1: ["jedničky", "jedniček"], 2: ["dvojky", "dvojek"], 3: ["trojky", "trojek"],
+  4: ["čtyřky", "čtyřek"], 5: ["pětky", "pětek"], 6: ["šestky", "šestek"],
+  7: ["sedmičky", "sedmiček"], 8: ["osmičky", "osmiček"], 9: ["devítky", "devítek"],
+  10: ["desítky", "desítek"]
+};
+/* pad: "nom" (šestky) nebo "gen" (do celých šestek, u šestek) */
+L.jmenoRady = function (n, pad) {
+  var j = L.JMENA_RAD[n];
+  if (!j) return "řada " + n;
+  return pad === "gen" ? j[1] : j[0];
+};
+L.slovoPocet = function (n) {
+  var slova = ["nula", "jeden", "dva", "tři", "čtyři", "pět", "šest", "sedm", "osm", "devět", "deset"];
+  return slova[n] != null ? slova[n] : String(n);
+};
+L.klicDne = function (ts) {
+  var d = new Date(ts == null ? Date.now() : ts);
+  var m = d.getMonth() + 1, den = d.getDate();
+  return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (den < 10 ? "0" : "") + den;
+};
+
+/* Řada ×n = deset faktů n×1 … n×10. */
+L.radaIds = function (n) {
+  var out = [];
+  for (var k = 1; k <= 10; k++) out.push(L.idFaktu(n, k));
+  return out;
+};
+L.stavRady = function (stav, n) {
+  var ids = L.radaIds(n), hotovo = 0, chybi = [];
+  for (var i = 0; i < ids.length; i++) {
+    var f = stav.fakty[ids[i]];
+    if (f && L.jeZvladnuty(f)) hotovo++; else chybi.push(ids[i]);
+  }
+  return { rada: n, celkem: ids.length, hotovo: hotovo, zbyva: chybi.length, chybi: chybi };
+};
+
+/* Nejbližší cíl: řada 2–9, které chybí nejmíň. Při shodě ta, na které se
+   zrovna pracuje, pak pořadí v učivu. Jedničky a desítky nejsou cíl. */
+L.PORADI_CILU = [2, 5, 3, 4, 9, 6, 7, 8];
+L.nejblizsiCil = function (stav) {
+  var rozpracovane = {};
+  for (var i = 0; i < stav.aktivni.length; i++) {
+    var a = stav.fakty[stav.aktivni[i]];
+    if (a) { rozpracovane[a.a] = true; rozpracovane[a.b] = true; }
+  }
+  var nej = null, nejSkore = Infinity;
+  for (var n = 2; n <= 9; n++) {
+    var st = L.stavRady(stav, n);
+    if (st.zbyva === 0) continue;
+    var skore = st.zbyva * 100 + (rozpracovane[n] ? 0 : 50) + L.PORADI_CILU.indexOf(n);
+    if (skore < nejSkore) { nejSkore = skore; nej = st; }
+  }
+  return nej;
+};
+
+/* Kolik dní tenhle týden (od pondělí do dneška) se cvičilo. Cíl, který se dá
+   splnit i po vynechaném dni — nemoc ani výlet nesmí být selhání. */
+L.tydenDni = function (denniLog, ted) {
+  var d = new Date(ted == null ? Date.now() : ted);
+  var odPondeli = (d.getDay() + 6) % 7;
+  var dni = 0;
+  for (var i = 0; i <= odPondeli; i++) {
+    var x = new Date(d.getFullYear(), d.getMonth(), d.getDate() - odPondeli + i);
+    var z = denniLog ? denniLog[L.klicDne(x.getTime())] : null;
+    if (z && z.relaci > 0) dni++;
+  }
+  return { dni: dni, ze: 7, dnesDen: odPondeli + 1 };
+};
+
+/* Co nabídnout na výběr: nejbližší cíl, řady rozpracovaných faktů, další řada
+   v učivu. Nic navíc — ať volba nepřeskakuje pořadí zavádění z v1 víc, než
+   musí. Nejvýš tři; méně než dvě znamená, že není z čeho vybírat. */
+L.nabidkaRad = function (stav) {
+  var out = [], mam = {};
+  function pridej(n) {
+    if (n < 2 || n > 9 || mam[n]) return;
+    if (L.stavRady(stav, n).zbyva === 0) return;
+    mam[n] = true; out.push(n);
+  }
+  var cil = L.nejblizsiCil(stav);
+  if (cil) pridej(cil.rada);
+  var pocty = {};
+  for (var i = 0; i < stav.aktivni.length; i++) {
+    var f = stav.fakty[stav.aktivni[i]];
+    if (!f) continue;
+    pocty[f.a] = (pocty[f.a] || 0) + 1;
+    if (f.b !== f.a) pocty[f.b] = (pocty[f.b] || 0) + 1;
+  }
+  Object.keys(pocty).map(Number).sort(function (m, n) { return pocty[n] - pocty[m] || m - n; }).forEach(pridej);
+  if (stav.poradi.length) {
+    var d = stav.fakty[stav.poradi[0]];
+    if (d) { pridej(d.a); pridej(d.b); }
+  }
+  return out.slice(0, 3);
+};
+
+/* Který fakt zavést jako další: první v pořadí učiva, který patří do vybrané
+   řady; bez volby (nebo když v ní nic není) prostě první v pořadí. */
+L.dalsiKZavedeni = function (stav, cinitel) {
+  if (cinitel) {
+    for (var i = 0; i < stav.poradi.length; i++) {
+      var f = stav.fakty[stav.poradi[i]];
+      if (f && (f.a === cinitel || f.b === cinitel)) return stav.poradi[i];
+    }
+  }
+  return stav.poradi.length ? stav.poradi[0] : null;
+};
+
+/* Co dneska může získat — hlavní dlaždice slibuje, neúčtuje. Od nejsilnějšího:
+   dodělat řadu na dosah → odemknout zvířátko → posunout se u řady → udržet. */
+L.slibDne = function (stav, zvire) {
+  zvire = zvire || function () { return "🐾"; };
+  var cil = L.nejblizsiCil(stav);
+  if (cil && cil.zbyva <= 3) {
+    var naDosah = true;
+    for (var i = 0; i < cil.chybi.length; i++) {
+      var f = stav.fakty[cil.chybi[i]];
+      if (!f || f.stage < 3) { naDosah = false; break; }
+    }
+    if (naDosah) {
+      return { typ: "rada", rada: cil.rada, chybi: cil.zbyva,
+        text: "Dneska můžeš dodělat " + L.jmenoRady(cil.rada) + " — " +
+              (cil.zbyva === 1 ? "chybí ti poslední příklad." : "chybí ti " + L.slovoPocet(cil.zbyva) + "."),
+        kratce: "dodělat " + L.jmenoRady(cil.rada) };
+    }
+  }
+  var kandidat = null;
+  for (var j = 0; j < stav.aktivni.length; j++) {
+    var g = stav.fakty[stav.aktivni[j]];
+    if (g && g.stage === 3 && g.box >= 2 && (!kandidat || g.box > kandidat.box)) kandidat = g;
+  }
+  if (kandidat) {
+    var e = zvire(kandidat.id);
+    return { typ: "zvire", id: kandidat.id, emoji: e,
+      text: "Dneska můžeš odemknout nové zvířátko " + e + " — za " + kandidat.a + " × " + kandidat.b + ".",
+      kratce: "odemknout " + e };
+  }
+  if (cil) {
+    return { typ: "posun", rada: cil.rada, chybi: cil.zbyva,
+      text: "Dneska se posuneš u " + L.jmenoRady(cil.rada, "gen") + " — do celých ti chybí " + L.slovoPocet(cil.zbyva) + ".",
+      kratce: "posunout " + L.jmenoRady(cil.rada) };
+  }
+  return { typ: "hotovo", text: "Máš celou násobilku. Dneska si ji jen udržíš v hlavě.", kratce: "udržet formu" };
+};
+
 /* --- kdy je políčko v mapě zelené --- */
 L.jeZvladnuty = function (f) {
   return f.stage >= K.stageProUvolneni && f.box >= K.boxProUvolneni;
@@ -1055,12 +1339,15 @@ L.rozklady = function (n) {
   return out;
 };
 
-/* --- průměrná latence správných odpovědí (pro „kde to drhne") --- */
+/* --- průměrná doba vybavení u správných odpovědí (pro „kde to drhne") ---
+   U mapy se bere čas do prvního dotyku, ne do trefení políčka. */
 L.prumernaLatence = function (f) {
   var soucet = 0, pocet = 0;
   for (var i = 0; i < f.history.length; i++) {
     var h = f.history[i];
-    if (h.correct && !h.timedOut && h.latencyMs != null) { soucet += h.latencyMs; pocet++; }
+    if (!h.correct || h.timedOut) continue;
+    var t = (h.firstTouchMs != null) ? h.firstTouchMs : h.latencyMs;
+    if (t != null) { soucet += t; pocet++; }
   }
   return pocet ? soucet / pocet : null;
 };
@@ -1192,11 +1479,7 @@ function ulozHned() {
   catch (e) { ulozeniJde = false; }
 }
 
-function dnesniKlic(ts) {
-  var d = new Date(ts == null ? Date.now() : ts);
-  var m = d.getMonth() + 1, den = d.getDate();
-  return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (den < 10 ? "0" : "") + den;
-}
+function dnesniKlic(ts) { return L.klicDne(ts); }
 
 /* ============================================================================
    4) ZVUK A ŘEČ (§10)
@@ -1378,7 +1661,7 @@ function el(tag, tridy, text) {
   if (text != null) e.textContent = text;
   return e;
 }
-var OBRAZOVKY = ["uvod","tricetsest","domu","radaUvod","zavedeni","trenink","konec","mapa","pokrok","objevovna","testy"];
+var OBRAZOVKY = ["uvod","tricetsest","domu","volba","radaUvod","zavedeni","trenink","konec","mapa","pokrok","objevovna","testy"];
 var aktualniObrazovka = null;
 function ukazObrazovku(jmeno) {
   zrusCasovace();
@@ -1476,6 +1759,7 @@ function novaRelace(rezim) {
     poz: L.novyPozicniStav(),
     aktualni: null,
     novychVRelaci: 0,
+    vybranyCinitel: null,               // řada, kterou si dnes vybrala (§3.0 c)
     zahrivaciBloky: [], zahrivaciBlok: 0, zahrivaciPoz: 0,
     staty: { zodpovezeno: 0, spravne: 0, zpameti: 0, odemcena: [], soucetLatence: 0 }
   };
@@ -1510,10 +1794,21 @@ function sestavFrontu() {
   //    proto zvládnutými, u kterých je opakování nejblíž. Zopakovat si něco,
   //    co už umí, není trest, ale oddech mezi novými příklady.
   var chceme = L.minFronty(REL ? REL.delka : K.delkyRelaci[0]);
+  var pref = REL ? REL.vybranyCinitel : null;
+  function zVybraneRady(id) { var f = S.fakty[id]; return !!(pref && f && (f.a === pref || f.b === pref)); }
+  if (pref) {
+    // opakování raději z řady, kterou si vybrala — ať kolo chutná po ní celé
+    zvladnute.sort(function (m, n) {
+      return (zVybraneRady(n.id) - zVybraneRady(m.id)) || ((m.nextDue || 0) - (n.nextDue || 0));
+    });
+  }
   for (i = 0; i < zvladnute.length && out.length < chceme; i++) {
     if (uzMam[zvladnute[i].id]) continue;
     out.push(zvladnute[i].id); uzMam[zvladnute[i].id] = true;
   }
+  // Vybraná řada dopředu: pravidla výběru (splatnost, odstupy) zůstávají,
+  // řadí se jen při shodě. Stabilní sort tu stačí.
+  if (pref) out.sort(function (m, n) { return zVybraneRady(n) - zVybraneRady(m); });
   return out;
 }
 
@@ -1597,9 +1892,42 @@ function spustTrenink() {
     var f = S.fakty[id];
     f.dueAt = null; f.konecRelace = false; f.videnoRelaci = 0;
   }
+  var nabidka = L.nabidkaRad(S);
+  if (nabidka.length >= 2) return obrazovkaVolby(nabidka);
+  zacniOtazky();
+}
+
+function zacniOtazky() {
   ukazObrazovku("trenink");
   aktualizujPostup();
   dalsiOtazka();
+}
+
+/* „Co si dneska vezmeme?" — dvě tři řady na výběr (zadání v2, §3.0 c).
+   Mění „něco mě nutí" na „já jsem si vybrala". Volba jen naklání pořadí,
+   pravidla učení nechává být. */
+function obrazovkaVolby(nabidka) {
+  ukazObrazovku("volba");
+  $("volba-lulu").innerHTML = lama();
+  var box = $("volba-rady");
+  box.innerHTML = "";
+  nabidka.forEach(function (n) {
+    var st = L.stavRady(S, n);
+    var b = el("button", "volba-rada");
+    b.appendChild(el("span", "cislo", "×" + n));
+    b.appendChild(el("span", "jm", L.jmenoRady(n)));
+    b.appendChild(el("span", "zb", st.zbyva === 1 ? "chybí poslední" : "chybí " + st.zbyva));
+    var bar = el("div", "minibar"), v = el("div", "minibar-vypln");
+    v.style.width = Math.round(st.hotovo / st.celkem * 100) + "%";
+    bar.appendChild(v); b.appendChild(bar);
+    b.addEventListener("click", function () {
+      if (!REL) return;
+      odemkniZvuk(); zvukKlik();
+      REL.vybranyCinitel = n;
+      zacniOtazky();
+    });
+    box.appendChild(b);
+  });
 }
 
 function dalsiOtazka() {
@@ -1610,7 +1938,7 @@ function dalsiOtazka() {
   var prescas = (Date.now() - REL.start) > K.maxMinutRelace * 60000;
   if (REL.index >= REL.delka || prescas) return konecRelace();
 
-  if (potrebaZavest()) return obrazovkaZavedeni(S.poradi[0]);
+  if (potrebaZavest()) return obrazovkaZavedeni(L.dalsiKZavedeni(S, REL.vybranyCinitel));
 
   var fronta = sestavFrontu();
   var f = L.vyberDalsiFakt(S.fakty, fronta, {
@@ -1663,12 +1991,15 @@ function vykresliOtazku() {
 
   var telo = $("obr-trenink").querySelector(".telo");
   telo.classList.toggle("s-mapou", A.stage === 2);
+  $("obr-trenink").classList.toggle("s-mapou", A.stage === 2);
 
   if (A.stage === 2) {
     z.innerHTML = '<div class="otazka-popis">Najdi to v mapě</div>' +
                   '<div class="velke-cislo">' + A.f.product + '</div>';
     o.innerHTML = "";
-    o.appendChild(mrizkaProTrenink());
+    var svitek = mrizkaProTrenink();
+    o.appendChild(svitek);
+    nastavDotykMapy(svitek);
   } else if (A.stage === 3) {
     z.innerHTML = '<div class="otazka" id="tr-veta">' +
       zadaniHTML(A, '<span class="displej je-prazdny" id="tr-displej"></span>') + '</div>';
@@ -1737,6 +2068,8 @@ function odpovez(hodnota, vyprselo) {
   var A = REL.aktualni, f = A.f;
   var latence = Date.now() - A.start;
   var spravne = !vyprselo && hodnota === A.spravna;
+  // V mapě je doba vybavení = čas do prvního dotyku; zbytek je míření prstem.
+  var vybaveni = (A.stage === 2 && A.prvniDotyk) ? (A.prvniDotyk - A.start) : latence;
 
   REL.index++;
   REL.staty.zodpovezeno++;
@@ -1747,15 +2080,16 @@ function odpovez(hodnota, vyprselo) {
   if (REL.rezim === "zahrivaci") {
     noveZvladnuto = zahrivaciVyhodnoceni(f, spravne, vyprselo, latence, A.mode);
   } else {
-    L.poOdpovedi(f, { correct: spravne, timedOut: !!vyprselo, latencyMs: latence, mode: A.mode }, ctx());
+    L.poOdpovedi(f, { correct: spravne, timedOut: !!vyprselo, latencyMs: latence, mode: A.mode,
+                      firstTouchMs: (A.stage === 2 && A.prvniDotyk) ? vybaveni : null }, ctx());
     noveZvladnuto = !byloZvladnuto && L.jeZvladnuty(f);
     L.aktualizujAktivni(S, f);
   }
 
   if (spravne) {
     REL.staty.spravne++;
-    REL.staty.soucetLatence += latence;
-    if (latence <= K.rychlaOdpovedMs) REL.staty.zpameti++;
+    REL.staty.soucetLatence += vybaveni;
+    if (vybaveni <= K.rychlaOdpovedMs) REL.staty.zpameti++;
   }
   if (noveZvladnuto) REL.staty.odemcena.push(f.id);
   uloz();
@@ -1832,6 +2166,7 @@ function ukazOpravu(vyprselo) {
   }
 
   telo.classList.remove("s-mapou");
+  $("obr-trenink").classList.remove("s-mapou");
   z.innerHTML = "";
   z.appendChild(box);
   o.innerHTML = "";
@@ -1887,127 +2222,136 @@ function aktualizujPostup() {
                   aby se do nich dalo trefit prstem i na telefonu.
                   Čísla se v tréninku NEVYKRESLUJÍ — to by byla nápověda.
    ============================================================================ */
-function odemceneCinitele() {
-  var set = {}; set[1] = true; set[10] = true;
-  function pridej(f) { set[f.a] = true; set[f.b] = true; }
-  for (var i = 0; i < S.aktivni.length; i++) { var a = S.fakty[S.aktivni[i]]; if (a) pridej(a); }
-  for (var id in S.fakty) {
-    if (!Object.prototype.hasOwnProperty.call(S.fakty, id)) continue;
-    var f = S.fakty[id];
-    if (f.status === "zvladnuta" && f.a >= 2 && f.a <= 9 && f.b >= 2 && f.b <= 9) pridej(f);
-  }
-  var out = [];
-  for (var k in set) out.push(parseInt(k, 10));
-  out.sort(function (m, n) { return m - n; });
-  return out;
-}
+function odemceneCinitele() { return L.odemceneCinitele(S); }
 
+/* Postaví vždy celých 10 × 10 s hlavičkami. Velikost políčka určuje CSS
+   (pevné px podle třídy zařízení), tady se o rozměr nerozhoduje nikdy.
+   opt.vzhled(b, f, r, c, klikaci) obarví políčko, opt.klikaci(f, r, c) řekne,
+   jestli se na něj smí klepnout, opt.klik(r, c, b) je obsluha (kde není lupa). */
 function postavMrizku(opt) {
-  var rady = opt.rady, sloupce = opt.sloupce;
+  var g = L.geometrieMapy();
   var m = el("div", "mrizka" + (opt.vTreninku ? " v-treninku" : ""));
-  m.style.gridTemplateColumns = "repeat(" + (sloupce.length + 1) + ", 1fr)";
-  if (opt.vTreninku) {
-    // hlavička nahoře co nejmenší, zbytek výšky rovnoměrně mezi řady
-    m.style.gridTemplateRows = "auto repeat(" + rady.length + ", minmax(" + minVyskaPolicka() + "px, 1fr))";
-  }
   m.appendChild(el("div", "bunka rohova hlavicka", "×"));
-  for (var c = 0; c < sloupce.length; c++) m.appendChild(el("div", "bunka hlavicka", String(sloupce[c])));
-  for (var r = 0; r < rady.length; r++) {
-    m.appendChild(el("div", "bunka hlavicka", String(rady[r])));
-    for (var j = 0; j < sloupce.length; j++) {
+  for (var c = 0; c < g.sloupce.length; c++) m.appendChild(el("div", "bunka hlavicka", String(g.sloupce[c])));
+  for (var r = 0; r < g.rady.length; r++) {
+    m.appendChild(el("div", "bunka hlavicka", String(g.rady[r])));
+    for (var j = 0; j < g.sloupce.length; j++) {
       (function (rr, cc) {
         var f = S.fakty[L.idFaktu(rr, cc)];
         var b = el("div", "bunka");
         b.setAttribute("data-soucin", rr * cc);
         b.setAttribute("data-r", rr); b.setAttribute("data-c", cc);
-        if (opt.vzhled) opt.vzhled(b, f, rr, cc);
-        if (opt.klik) {
+        var klikaci = opt.klikaci ? !!opt.klikaci(f, rr, cc) : !!opt.klik;
+        if (opt.vzhled) opt.vzhled(b, f, rr, cc, klikaci);
+        if (klikaci) {
           b.classList.add("klikaci");
           b.setAttribute("role", "button");
           b.setAttribute("aria-label", rr + " krát " + cc);
-          b.addEventListener("click", function () { opt.klik(rr, cc, b); });
+          if (opt.klik) b.addEventListener("click", function () { opt.klik(rr, cc, b); });
+        } else if (opt.vTreninku) {
+          b.classList.add("zamcena");          // vidět ano, klepnout ne
         }
         m.appendChild(b);
-      })(rady[r], sloupce[j]);
+      })(g.rady[r], g.sloupce[j]);
     }
   }
   return m;
 }
 
-/* Kolik činitelů se do mřížky ještě vejde, aby políčko zůstalo trefitelné.
-   Mřížka je čtvercová, takže rozhoduje ten těsnější z obou rozměrů — na výšku
-   je limitem portrét, na šířku (otočený telefon) zase nízká obrazovka. */
-function jeNaSirku() {
-  return (window.innerWidth || 0) > (window.innerHeight || 0) && (window.innerHeight || 0) <= 560;
-}
-function minVyskaPolicka() { return jeNaSirku() ? 38 : K.minSirkaPolicka; }
-
-function kolikCinitelu() {
-  var mezera = 5;
-  var naSirku = jeNaSirku();
-
-  var sirka = Math.min((window.innerWidth || 390) - 8, 560);
-  var dleSirky = Math.floor((sirka + mezera) / (K.minSirkaPolicka + mezera)) - 1;
-
-  var vyska = (window.innerHeight || 844) - 56 - 30;       // horní lišta a okraje
-  if (!naSirku) vyska -= 138;                              // v portrétu je nad mřížkou i zadání a odpočet
-  var dleVysky = Math.floor((vyska + mezera) / (minVyskaPolicka() + mezera)) - 1;
-
-  return Math.max(3, Math.min(dleSirky, dleVysky, 10));
+/* Mřížka pro režim „najdi výsledek". Zamčená políčka zůstávají na místě,
+   jen ztlumená — tabulka má pořád stejný tvar, ať se učí cokoli. */
+function mrizkaProTrenink() {
+  var odemcene = {};
+  odemceneCinitele().forEach(function (n) { odemcene[n] = true; });
+  var svitek = el("div", "mrizka-svitek");
+  var m = postavMrizku({
+    vTreninku: true,
+    // Mezi odemčenými políčky žádné rozlišení. Kdyby zvládnutá svítila zeleně,
+    // hledané by bylo vždycky jedno z nezelených — nápověda vydatná jako prst.
+    vzhled: null,
+    klikaci: function (f, r, c) { return !!(odemcene[r] && odemcene[c]); }
+  });
+  pripojLupu(m);
+  svitek.appendChild(m);
+  return svitek;
 }
 
-/* Na telefonu se odemčené řady nakonec přestanou vejít. Místo scvrknutých
-   políček ukážeme výřez tabulky — vždycky takový, aby v něm hledané políčko
-   bylo. Hlavičky řádků a sloupců zůstávají, takže mapa dává dál smysl. */
-function vyrezMapy(cinitele, a, b) {
-  var max = kolikCinitelu();
-  if (cinitele.length <= max) return cinitele;
-  var iA = cinitele.indexOf(a), iB = cinitele.indexOf(b);
-  if (iA < 0 || iB < 0) return cinitele.slice(0, max);
-  var od = Math.min(iA, iB), doo = Math.max(iA, iB);
+/* Lupa nad prstem (zadání v2, §1). Políčko má na telefonu ~31 px, dětský prst
+   ho zakryje celé. Při dotyku se proto nad prstem ukáže, na čem zrovna je
+   („7 × 8"); dokud drží, může popojet — a platí, co PUSTÍ. Přesnost bez změny
+   rozvržení. První dotyk se zároveň zapíše jako doba vybavení. */
+function pripojLupu(mrizka) {
+  var lupa = $("lupa");
+  var aktualni = null, pointerId = null;
 
-  if (doo - od + 1 <= max) {                  // souvislý výřez, ten se čte nejlíp
-    var minStart = Math.max(0, doo - max + 1);
-    var maxStart = Math.min(od, cinitele.length - max);
-    var start = minStart + Math.floor(Math.random() * (maxStart - minStart + 1));
-    return cinitele.slice(start, start + max);
+  function policko(x, y) {
+    var e = document.elementFromPoint(x, y);
+    if (!e || !e.closest) return null;
+    var b = e.closest(".bunka.klikaci");
+    return (b && mrizka.contains(b)) ? b : null;
+  }
+  function ukaz(b, x, y) {
+    if (aktualni && aktualni !== b) aktualni.classList.remove("pod-prstem");
+    aktualni = b;
+    if (!b) { lupa.classList.remove("je-videt"); return; }
+    b.classList.add("pod-prstem");
+    lupa.textContent = b.getAttribute("data-r") + " × " + b.getAttribute("data-c");
+    var nad = y > 130;                        // u horního okraje se lupa ukáže pod prstem
+    lupa.style.left = x + "px";
+    lupa.style.top = (nad ? y - 28 : y + 28) + "px";
+    lupa.classList.toggle("pod", !nad);
+    lupa.classList.add("je-videt");
+  }
+  function konec(b) {
+    if (aktualni) aktualni.classList.remove("pod-prstem");
+    aktualni = null; pointerId = null;
+    lupa.classList.remove("je-videt");
+    if (b && REL && REL.faze === "otazka" && REL.aktualni) {
+      REL.aktualni.klikleEl = b;              // obarví se až podle výsledku
+      odpovez(parseInt(b.getAttribute("data-soucin"), 10), false);
+    }
   }
 
-  // Činitelé jsou od sebe moc daleko (třeba 2 a 9). Vezmeme oba a dorovnáme
-  // náhodnými dalšími — hlavičky řádků a sloupců drží mapu čitelnou i tak.
-  var mam = {}, vybrane = [];
-  function pridej(x) { if (!mam[x]) { mam[x] = true; vybrane.push(x); } }
-  pridej(a); pridej(b);
-  var zbytek = L.zamichej(cinitele.filter(function (x) { return !mam[x]; }), Math.random);
-  while (vybrane.length < max && zbytek.length) pridej(zbytek.shift());
-  vybrane.sort(function (m, n) { return m - n; });
-  return vybrane;
+  mrizka.addEventListener("pointerdown", function (e) {
+    if (!REL || REL.faze !== "otazka" || !REL.aktualni) return;
+    if (e.button != null && e.button !== 0) return;
+    var b = policko(e.clientX, e.clientY);
+    if (!b) return;
+    if (!REL.aktualni.prvniDotyk) REL.aktualni.prvniDotyk = Date.now();
+    pointerId = e.pointerId;
+    try { mrizka.setPointerCapture(e.pointerId); } catch (x) {}
+    e.preventDefault();
+    ukaz(b, e.clientX, e.clientY);
+  });
+  mrizka.addEventListener("pointermove", function (e) {
+    if (pointerId === null || e.pointerId !== pointerId) return;
+    ukaz(policko(e.clientX, e.clientY), e.clientX, e.clientY);
+  });
+  mrizka.addEventListener("pointerup", function (e) {
+    if (pointerId === null || e.pointerId !== pointerId) return;
+    var b = policko(e.clientX, e.clientY);
+    try { mrizka.releasePointerCapture(e.pointerId); } catch (x) {}
+    konec(b);
+  });
+  mrizka.addEventListener("pointercancel", function (e) {
+    if (pointerId === null || e.pointerId !== pointerId) return;
+    konec(null);
+  });
 }
 
-function mrizkaProTrenink() {
-  var cinitele = odemceneCinitele();
-  if (REL && REL.aktualni) cinitele = vyrezMapy(cinitele, REL.aktualni.f.a, REL.aktualni.f.b);
-  var obal = el("div", "mrizka-obal");
-  var m = postavMrizku({
-    rady: cinitele, sloupce: cinitele, vTreninku: true,
-    // Políčka jsou schválně všechna stejná. Kdyby zvládnuté svítily zeleně,
-    // hledané políčko by bylo vždycky jedno z těch nezelených — a to je nápověda,
-    // stejně vydatná jako napsat rovnou „7 × 8".
-    vzhled: null,
-    klik: function (r, c, b) {
-      if (!REL || REL.faze !== "otazka") return;
-      REL.aktualni.klikleEl = b;      // obarví se až podle výsledku
-      odpovez(r * c, false);
-    }
-  });
-  obal.appendChild(m);
-  return obal;
+/* Lupa potřebuje, aby tah prstem po mapě neposouval stránku (touch-action:none).
+   Když se ale mapa do kontejneru nevejde, musí jít odscrollovat — pak se tah
+   nechá prohlížeči a platí jen prosté klepnutí. Rozhodne se až po vykreslení. */
+function nastavDotykMapy(svitek) {
+  var m = svitek && svitek.querySelector(".mrizka");
+  if (!m) return;
+  var vejdeSe = svitek.scrollHeight <= svitek.clientHeight + 1 &&
+                svitek.scrollWidth <= svitek.clientWidth + 1;
+  m.style.touchAction = vejdeSe ? "none" : "auto";
 }
 
 function mrizkaPrehled() {
-  var vsechny = [1,2,3,4,5,6,7,8,9,10];
   return postavMrizku({
-    rady: vsechny, sloupce: vsechny,
     vzhled: function (b, f) {
       if (!f) return;
       if (L.jeZvladnuty(f)) { b.classList.add("zvladnuta"); b.textContent = PORADI_ZVIRAT[f.id]; }
@@ -2137,7 +2481,8 @@ function konecRelace() {
   staty.appendChild(statKarta(st.zodpovezeno, "příkladů"));
   staty.appendChild(statKarta(st.zpameti, "z paměti (do 2,5 s)"));
   staty.appendChild(statKarta(zvladnutychCelkem + " / 55", "zvířátek ve sbírce"));
-  if (S.dayStreak > 1) staty.appendChild(statKarta(S.dayStreak, "dní v řadě"));
+  var tydenKonec = L.tydenDni(S.denniLog);
+  staty.appendChild(statKarta(tydenKonec.dni + " ze 7", "dní tenhle týden"));
 
   var od = $("konec-odemceno");
   od.innerHTML = "";
@@ -2197,6 +2542,7 @@ function vykresliMapu() {
   var svitek = el("div", "mrizka-svitek");
   svitek.appendChild(mrizkaPrehled());
   obal.appendChild(svitek);
+  obal.style.width = "100%";
 }
 
 /* ============================================================================
@@ -2211,7 +2557,8 @@ function vykresliPokrok() {
   var staty = el("div", "statrada");
   staty.appendChild(statKarta(zvl + " / 55", "zvířátek ve sbírce"));
   staty.appendChild(statKarta(spocitejStage3(), "umím zpaměti"));
-  staty.appendChild(statKarta(S.dayStreak, S.dayStreak === 1 ? "den v řadě" : "dní v řadě"));
+  var tydenPokrok = L.tydenDni(S.denniLog);
+  staty.appendChild(statKarta(tydenPokrok.dni + " ze 7", "dní tenhle týden"));
   c.appendChild(staty);
 
   /* --- sbírka --- */
@@ -2300,10 +2647,8 @@ function vykresliObjevovnu() {
   var vstup = $("obj-vstup");
   vstup.innerHTML = "";
   if (OBJ.rezim === "mrizka") {
-    var vsechny = [1,2,3,4,5,6,7,8,9,10];
     var svitek = el("div", "mrizka-svitek");
     svitek.appendChild(postavMrizku({
-      rady: vsechny, sloupce: vsechny,
       vzhled: function (b, f, r, c) { b.textContent = String(r * c); b.classList.add("uci-se"); },
       klik: function (r, c, b) {
         odemkniZvuk(); zvukKlik();
@@ -2503,28 +2848,44 @@ function nabidniPlochu() {
 /* ============================================================================
    19) DOMOVSKÁ OBRAZOVKA
    ============================================================================ */
-var POZDRAVY = [
-  "Tak co, dáme pět minut?",
-  "Jsem připravená. A ty?",
-  "Dneska to půjde samo, uvidíš.",
-  "Krátce a každý den — to je celý trik."
-];
 function vykresliDomu() {
   ukazObrazovku("domu");
   $("domu-lulu").innerHTML = lama();
   var zvl = spocitejZvladnute();
   var dnes = S.denniLog[dnesniKlic()];
-  $("domu-pozdrav").textContent = dnes && dnes.relaci
-    ? "Dneska už jsi cvičila — a to je to hlavní. Klidně si dej ještě jedno kolo."
-    : (S.dayStreak > 1 ? "Máš " + S.dayStreak + " dní v řadě. Nepřerušíme to?" : POZDRAVY[Math.floor(Math.random() * POZDRAVY.length)]);
+  var slib = L.slibDne(S, function (id) { return PORADI_ZVIRAT[id]; });
+  var cil = L.nejblizsiCil(S);
+  var tyden = L.tydenDni(S.denniLog);
+
+  // Lulu slibuje, co dneska získá — ne co ji to bude stát.
+  $("domu-pozdrav").textContent = slib.text +
+    (dnes && dnes.relaci ? " Dneska už jsi cvičila, ale klidně ještě kousek." : "");
+
+  // Nejbližší cíl je vidět pořád. Blízký cíl táhne, „55 políček" je nekonečno.
+  var cilEl = $("domu-cil");
+  cilEl.innerHTML = "";
+  if (cil) {
+    var popis = el("div", "cil-text");
+    popis.innerHTML = "Do celých <b>" + L.jmenoRady(cil.rada, "gen") + "</b> ti chybí <b>" + cil.zbyva + "</b>";
+    var bar = el("div", "minibar"), v = el("div", "minibar-vypln");
+    v.style.width = Math.round(cil.hotovo / cil.celkem * 100) + "%";
+    bar.appendChild(v);
+    cilEl.appendChild(popis);
+    cilEl.appendChild(el("div", "cil-pocet", cil.hotovo + " z " + cil.celkem));
+    cilEl.appendChild(bar);
+  } else {
+    cilEl.appendChild(el("div", "cil-text", "Máš celou násobilku!"));
+  }
+  $("domu-tyden").textContent = "Tenhle týden: " + tyden.dni + " ze 7 dní";
+
+  // Hlavní dlaždice: slib velkým písmem, cena malým.
+  $("dl-trenink-nadp").textContent = slib.kratce.charAt(0).toUpperCase() + slib.kratce.slice(1);
+  var poradi = relaciDnes(), delka = L.delkaRelace(poradi);
+  var uvod = poradi === 0 ? "celé kolo" : (poradi === 1 ? "kratší kolo" : "poslední kolečko");
+  $("dl-trenink-pod").textContent = uvod + " · " + delka + " příkladů";
+
   $("dl-mapa-pod").textContent = zvl + " z 55 políček je zelených";
   $("dl-pokrok-pod").textContent = spocitejStage3() + " příkladů umíš zpaměti";
-  // Ať je dopředu vidět, jak dlouhé kolo ji čeká — pokračování je kratší.
-  var poradi = relaciDnes();
-  var delka = L.delkaRelace(poradi);
-  var uvod = poradi === 0 ? "Celé kolo" : (poradi === 1 ? "Kratší kolo" : "Poslední kolečko");
-  $("dl-trenink-pod").textContent = uvod + " · " + delka + " příkladů" +
-    (S.poradi.length ? "" : " · samé opakování");
   ukazVarovaniUlozeni($("domu-varovani"));
   pouzijNastaveni();
 }
@@ -2675,6 +3036,20 @@ function spustTesty() {
       L.poOdpovedi(f, { correct: q % 3 !== 0, timedOut: false, latencyMs: 1500, mode: "test" }, { index: q, ted: ted });
       posledni = f.id;
     }
+  });
+  t("i když se nedaří, tentýž příklad nepřijde v relaci víc než " + K.stropNaPriklad + "krát", function () {
+    var s = prazdnyStav(), ted = Date.now(), posledni = null, pocty = {};
+    // fronta jako v appce: pár rozpracovaných + zvládnuté na proložení
+    var fronta = ["2x2", "2x3", "2x4", "3x3", "1x2", "1x3", "1x4", "1x5", "1x6", "1x7"];
+    fronta.forEach(function (id) { s.fakty[id].status = "aktivni"; s.fakty[id].box = 1; });
+    for (var q = 0; q < 40; q++) {
+      var f = L.vyberDalsiFakt(s.fakty, fronta, { index: q, posledniId: posledni, ted: ted + q * 4000 });
+      pocty[f.id] = (pocty[f.id] || 0) + 1;
+      // 2×2 se nedaří nikdy, ostatní jdou
+      L.poOdpovedi(f, { correct: f.id !== "2x2", timedOut: f.id === "2x2", latencyMs: 2000, mode: "t" }, { index: q, ted: ted + q * 4000 });
+      posledni = f.id;
+    }
+    ok(pocty["2x2"] <= K.stropNaPriklad, "2×2 přišlo " + pocty["2x2"] + "krát");
   });
   t("respektuje nextDue — splatný fakt má přednost před nesplatným", function () {
     var s = prazdnyStav(), ted = 1000000;
@@ -2947,6 +3322,139 @@ function spustTesty() {
   });
 
   radky.push("");
+  radky.push("v2 §1  mapa má jednu geometrii navždy");
+  t("rozměr mřížky se nemění, ať se učí cokoli", function () {
+    var s = prazdnyStav();
+    var g0 = L.geometrieMapy();
+    ok(g0.rady.length === 10 && g0.sloupce.length === 10, "mřížka není 10×10");
+    // postupně měníme, co je aktivní a zvládnuté — geometrie musí zůstat
+    var scenare = [
+      function () {},
+      function () { L.zavedNovy(s, { index: 0, ted: 1 }); },
+      function () { for (var i = 0; i < 5; i++) L.zavedNovy(s, { index: i, ted: 1 }); },
+      function () { var f = s.fakty["7x8"]; f.stage = 3; f.box = 5; f.status = "zvladnuta"; },
+      function () { s.aktivni.length = 0; }
+    ];
+    var videneOdemcene = {};
+    for (var i = 0; i < scenare.length; i++) {
+      scenare[i]();
+      var g = L.geometrieMapy();
+      ok(g.rady.join(",") === g0.rady.join(",") && g.sloupce.join(",") === g0.sloupce.join(","),
+         "scénář " + i + ": geometrie se změnila na " + g.rady.length + "×" + g.sloupce.length);
+      videneOdemcene[L.odemceneCinitele(s).join(",")] = true;
+    }
+    ok(Object.keys(videneOdemcene).length >= 2,
+       "odemčené činitele se mezi scénáři vůbec nezměnily — test by nic neprokázal");
+  });
+  t("odemčenost řídí klikatelnost, ne tvar: zamčené políčko je vidět, ale nejde na něj klepnout", function () {
+    var s = prazdnyStav();
+    var od = L.odemceneCinitele(s);
+    ok(od.indexOf(1) >= 0 && od.indexOf(10) >= 0, "jedničky a desítky mají být odemčené vždy");
+    ok(od.indexOf(7) < 0, "sedmička je odemčená, i když se nic neučí");
+    L.zavedNovy(s, { index: 0, ted: 1 });                 // 2×2
+    od = L.odemceneCinitele(s);
+    ok(od.indexOf(2) >= 0, "po zavedení 2×2 má být dvojka odemčená");
+    ok(L.geometrieMapy().rady.indexOf(7) >= 0, "sedmá řada z mapy zmizela — má zůstat, jen zamčená");
+  });
+  t("v mapě se ukládá čas do prvního dotyku a bere se jako doba vybavení", function () {
+    var s = prazdnyStav(), f = s.fakty["6x7"], c = { index: 0, ted: 1 };
+    L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 4200, firstTouchMs: 1300, mode: "stage2" }, c);
+    L.poOdpovedi(f, { correct: true, timedOut: false, latencyMs: 1500, mode: "stage1" }, c);
+    var h = f.history[0];
+    ok(h.firstTouchMs === 1300, "firstTouchMs se neuložilo");
+    var prum = L.prumernaLatence(f);
+    ok(Math.abs(prum - 1400) < 1, "průměr má být (1300 + 1500) / 2 = 1400, je " + prum);
+  });
+
+  radky.push("");
+  radky.push("v2 §3.0  domovská obrazovka slibuje, neúčtuje");
+  function stavPoZahrivani() {
+    var s = prazdnyStav(), vs = L.vsechnyFakty(), ted = Date.now();
+    for (var i = 0; i < vs.length; i++) {
+      var f = s.fakty[vs[i].id];
+      if (L.jeTrivialni(f)) { f.stage = 3; f.maxStage = 3; f.box = 4; f.status = "zvladnuta"; f.nextDue = ted + 86400000; }
+    }
+    return s;
+  }
+  function zvladni(s, id) { var f = s.fakty[id]; f.stage = 3; f.maxStage = 3; f.box = 5; f.status = "zvladnuta";
+    var i = s.poradi.indexOf(id); if (i >= 0) s.poradi.splice(i, 1); }
+  t("nejbližší cíl je řada, které chybí nejmíň — a říká, kolik", function () {
+    var s = stavPoZahrivani();
+    ["2x6", "3x6", "4x6", "5x6", "6x6"].forEach(function (id) { zvladni(s, id); });   // šestky: 1,10 + 5 = 7 z 10
+    var cil = L.nejblizsiCil(s);
+    ok(cil && cil.rada === 6, "cíl má být šestky, je " + (cil && cil.rada));
+    ok(cil.hotovo === 7 && cil.zbyva === 3, "šestky mají 7 z 10, hlásí " + cil.hotovo + " z " + cil.celkem);
+    ok(cil.chybi.indexOf("6x7") >= 0 && cil.chybi.indexOf("6x8") >= 0 && cil.chybi.indexOf("6x9") >= 0,
+       "chybějící mají být 6×7, 6×8, 6×9, jsou " + cil.chybi.join(","));
+    ok(L.jmenoRady(6, "gen") === "šestek" && L.jmenoRady(6) === "šestky", "špatné skloňování řady");
+  });
+  t("cíl nikdy není dokončená řada ani jedničky či desítky", function () {
+    var s = stavPoZahrivani();
+    for (var n = 2; n <= 9; n++) L.radaIds(n).forEach(function (id) { zvladni(s, id); });
+    ok(L.nejblizsiCil(s) === null, "po celé násobilce nemá být žádný cíl");
+    var s2 = stavPoZahrivani();
+    var c2 = L.nejblizsiCil(s2);
+    ok(c2 && c2.rada >= 2 && c2.rada <= 9, "cíl je mimo řady 2–9: " + (c2 && c2.rada));
+  });
+  t("slib dne: řada na dosah má přednost, jinak zvířátko, jinak posun", function () {
+    var s = stavPoZahrivani();
+    ["2x6", "3x6", "4x6", "5x6", "6x6"].forEach(function (id) { zvladni(s, id); });
+    ["6x7", "6x8", "6x9"].forEach(function (id) { var f = s.fakty[id]; f.status = "aktivni"; f.stage = 3; f.maxStage = 3; f.box = 2;
+      s.aktivni.push(id); var i = s.poradi.indexOf(id); if (i >= 0) s.poradi.splice(i, 1); });
+    var a = L.slibDne(s, function () { return "🦔"; });
+    ok(a.typ === "rada" && a.rada === 6, "s třemi rozpracovanými šestkami na úrovni 3 má slíbit řadu, slíbil " + a.typ);
+    ok(a.text.indexOf("šestky") >= 0 && a.text.indexOf("tři") >= 0, "text slibu: " + a.text);
+    s.fakty["6x9"].stage = 1;                                        // jedna šestka ještě není na dosah
+    var b = L.slibDne(s, function () { return "🦔"; });
+    ok(b.typ === "zvire" && b.text.indexOf("🦔") >= 0, "má slíbit zvířátko, slíbil " + b.typ + ": " + b.text);
+    s.aktivni.forEach(function (id) { s.fakty[id].box = 1; });        // nic není těsně před zelenou
+    var c = L.slibDne(s);
+    ok(c.typ === "posun" && c.text.indexOf("šestek") >= 0, "má slíbit posun u šestek, slíbil " + c.typ + ": " + c.text);
+    var s2 = prazdnyStav();
+    for (var n = 1; n <= 10; n++) L.radaIds(n).forEach(function (id) { zvladni(s2, id); });
+    ok(L.slibDne(s2).typ === "hotovo", "po celé násobilce má slíbit udržení");
+    [a, b, c].forEach(function (x) { ok(x.text.indexOf("příkladů") < 0, "slib nesmí účtovat počet příkladů: " + x.text); });
+  });
+  t("týden: počítá jen dny od pondělí do dneška, ve kterých se cvičilo", function () {
+    var log = {};
+    var streda = new Date(2026, 8, 30, 15, 0).getTime();        // 30. 9. 2026 je středa
+    log[L.klicDne(streda)] = { relaci: 1 };
+    log[L.klicDne(streda - 86400000)] = { relaci: 2 };            // úterý
+    log[L.klicDne(streda - 2 * 86400000)] = { relaci: 0 };        // pondělí bez relace
+    log[L.klicDne(streda - 3 * 86400000)] = { relaci: 1 };        // neděle — minulý týden
+    log[L.klicDne(streda + 86400000)] = { relaci: 1 };            // čtvrtek — budoucnost, sem nepatří
+    var t1 = L.tydenDni(log, streda);
+    ok(t1.dni === 2 && t1.ze === 7, "středa: čekal 2 ze 7, dostal " + t1.dni + " ze " + t1.ze);
+    ok(t1.dnesDen === 3, "středa má být třetí den týdne, hlásí " + t1.dnesDen);
+    var t2 = L.tydenDni({}, streda);
+    ok(t2.dni === 0, "prázdný deník má dát 0, dal " + t2.dni);
+  });
+  t("nabídka řad: dvě až tři nedokončené, obsahuje nejbližší cíl, nic navíc", function () {
+    var s = stavPoZahrivani();
+    var n0 = L.nabidkaRad(s);                                     // nic rozpracovaného: jen další v učivu
+    ok(n0.length >= 1 && n0.length <= 3, "nabídka má " + n0.length + " řad");
+    n0.forEach(function (r) { ok(L.stavRady(s, r).zbyva > 0, "nabídnuta dokončená řada " + r); ok(r >= 2 && r <= 9, "nabídnuta řada " + r); });
+    ["2x6", "3x6", "4x6", "5x6", "6x6"].forEach(function (id) { zvladni(s, id); });
+    L.zavedNovy(s, { index: 0, ted: 1 }); L.zavedNovy(s, { index: 1, ted: 1 });   // 2×2, 2×3 rozpracované
+    var n1 = L.nabidkaRad(s);
+    ok(n1.length >= 2 && n1.length <= 3, "nabídka má " + n1.length + " řad, čekal 2–3");
+    ok(n1.indexOf(6) >= 0, "nejbližší cíl (šestky) v nabídce chybí: " + n1.join(","));
+    ok(n1.indexOf(2) >= 0, "rozpracované dvojky v nabídce chybí: " + n1.join(","));
+    ok(new Set(n1).size === n1.length, "v nabídce se řada opakuje");
+  });
+  t("volba řady nakloní zavádění, ale nerozbije pořadí učiva", function () {
+    var s = stavPoZahrivani();
+    ok(L.dalsiKZavedeni(s, null) === s.poradi[0], "bez volby má jít první v pořadí");
+    var id9 = L.dalsiKZavedeni(s, 9);
+    var f9 = s.fakty[id9];
+    ok(f9 && (f9.a === 9 || f9.b === 9), "s volbou devítek má přijít devítka, přišlo " + id9);
+    ok(s.poradi.indexOf(id9) >= 0, "vybraný fakt musí být z fronty učiva");
+    ok(L.dalsiKZavedeni(s, 42) === s.poradi[0], "neexistující řada → první v pořadí");
+    s.poradi.length = 0;
+    ok(L.dalsiKZavedeni(s, 9) === null, "prázdná fronta → null");
+  });
+
+  radky.push("");
   radky.push("§12.5  komutativita");
   t("{7,8} a {8,7} je jeden a týž objekt se sdíleným stavem", function () {
     ok(L.idFaktu(7, 8) === L.idFaktu(8, 7), "id se liší");
@@ -3024,9 +3532,10 @@ function spustTesty() {
       for (var j = 0; j < 100; j++) ok(L.vyberTvar(f, 1, rnd) === "soucin", "reverz u " + ids[i]);
     }
   });
-  t("časový limit nikde nepřekročí 6 sekund", function () {
-    ok(K.limitStage1 <= 6 && K.limitStage2 <= 6 && K.limitStage3 <= 6 && K.limitZahrivaci <= 6,
-       "některý limit je nad 6 s — to už stačí na dopočítání");
+  t("limit u vybavování nepřekročí 6 sekund; v mapě smí být 8 (míření prstem)", function () {
+    ok(K.limitStage1 <= 6 && K.limitStage3 <= 6 && K.limitZahrivaci <= 6,
+       "některý limit u vybavování je nad 6 s — to už stačí na dopočítání");
+    ok(K.limitStage2 <= 10, "limit v mapě je " + K.limitStage2 + " s, víc než 10 nedává smysl");
   });
   t("relace má pevný konec", function () {
     for (var d = 0; d < 5; d++) {
@@ -3066,6 +3575,7 @@ function start() {
   $("tr-zpet").innerHTML = IK.zpet;
   $("tr-zvuk").innerHTML = IK.zvukZap;
   $("mapa-zpet").innerHTML = IK.zpet;
+  $("volba-zpet").innerHTML = IK.zpet;
   $("pokrok-zpet").innerHTML = IK.zpet;
   $("obj-zpet").innerHTML = IK.zpet;
   $("obj-prepni").innerHTML = IK.smaz;
@@ -3086,6 +3596,11 @@ function start() {
 
   /* --- domů --- */
   napoj("dl-trenink", "click", function () { spustTrenink(); });
+  napoj("volba-zpet", "click", function () { REL = null; vykresliDomu(); });
+  napoj("volba-lulu-vyber", "click", function () {
+    if (!REL) return vykresliDomu();
+    odemkniZvuk(); REL.vybranyCinitel = null; zacniOtazky();
+  });
   napoj("dl-mapa", "click", function () { odemkniZvuk(); vykresliMapu(); });
   napoj("dl-pokrok", "click", function () { odemkniZvuk(); vykresliPokrok(); });
   napoj("dl-objevovna", "click", function () { odemkniZvuk(); OBJ.rezim = "mrizka"; OBJ.cislo = null; vykresliObjevovnu(); });
